@@ -166,8 +166,9 @@ import sys
 import pyxb.utils.utility
 
 packages = [
-        'pyxb', 'pyxb.namespace', 'pyxb.binding', 'pyxb.utils', 'pyxb.xmlschema',
-        "pyxb.bundles"
+        'pyxb_114', 'pyxb_114.namespace', 'pyxb_114.binding',
+        'pyxb_114.utils', 'pyxb_114.xmlschema',
+        "pyxb_114.bundles"
         ]
 package_data = {}
 
@@ -203,7 +204,7 @@ for possible_bundle in possible_bundles:
         packages.extend(b_packages)
         package_data.update(b_data)
 
-setup(name='PyXB_114',
+setup(name='PyXB',
       description = 'PyXB ("pixbee") is a pure Python package that generates Python source code for classes that correspond to data structures defined by XMLSchema.',
       author='Peter A. Bigot',
       author_email='pabigot@users.sourceforge.net',
@@ -240,7 +241,7 @@ The major goals of PyXB are:
   + include and import directives
   + constraints on simple types
 ''',
-      provides=[ 'PyXB_114' ],
+      provides=[ 'PyXB' ],
       packages=packages,
       package_data=package_data,
       # I normally keep these in $purelib, but distutils won't tell me where that is.
