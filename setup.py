@@ -203,7 +203,7 @@ for possible_bundle in possible_bundles:
         packages.extend(b_packages)
         package_data.update(b_data)
 
-setup(name='PyXB',
+setup(name='PyXB_114',
       description = 'PyXB ("pixbee") is a pure Python package that generates Python source code for classes that correspond to data structures defined by XMLSchema.',
       author='Peter A. Bigot',
       author_email='pabigot@users.sourceforge.net',
@@ -240,7 +240,7 @@ The major goals of PyXB are:
   + include and import directives
   + constraints on simple types
 ''',
-      provides=[ 'PyXB' ],
+      provides=[ 'PyXB_114' ],
       packages=packages,
       package_data=package_data,
       # I normally keep these in $purelib, but distutils won't tell me where that is.
@@ -255,4 +255,3 @@ The major goals of PyXB are:
                       , 'Topic :: Software Development :: Code Generators'
                       , 'Topic :: Text Processing :: Markup :: XML'
                       ] )
-
