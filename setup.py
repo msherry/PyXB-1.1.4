@@ -241,7 +241,7 @@ The major goals of PyXB are:
   + include and import directives
   + constraints on simple types
 ''',
-      provides=[ 'PyXB' ],
+      provides=[ 'PyXB_114' ],
       packages=packages,
       package_data=package_data,
       # I normally keep these in $purelib, but distutils won't tell me where that is.
