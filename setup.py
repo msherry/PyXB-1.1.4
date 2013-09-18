@@ -204,7 +204,7 @@ for possible_bundle in possible_bundles:
         packages.extend(b_packages)
         package_data.update(b_data)
 
-setup(name='PyXB',
+setup(name='PyXB_114',
       description = 'PyXB ("pixbee") is a pure Python package that generates Python source code for classes that correspond to data structures defined by XMLSchema.',
       author='Peter A. Bigot',
       author_email='pabigot@users.sourceforge.net',
@@ -247,7 +247,7 @@ The major goals of PyXB are:
       # I normally keep these in $purelib, but distutils won't tell me where that is.
       # We don't need them in the installation anyway.
       #data_files= [ ('pyxb_114/standard/schemas', glob.glob(os.path.join(*'pyxb_114/standard/schemas/*.xsd'.split('/'))) ) ],
-      scripts=[ 'scripts/pyxbgen', 'scripts/pyxbwsdl', 'scripts/pyxbdump' ],
+      scripts=[ 'scripts/pyxbgen_114', 'scripts/pyxbwsdl_114', 'scripts/pyxbdump_114' ],
       cmdclass = { 'test' : test,
                    'update_version' : update_version },
       classifiers = [ 'Development Status :: 5 - Production/Stable'
