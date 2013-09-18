@@ -1,15 +1,15 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
 schema_path = '%s/../schemas/test-union.xsd' % (os.path.dirname(__file__),)
-code = pyxb.binding.generate.GeneratePython(schema_location=schema_path)
+code = pyxb_114.binding.generate.GeneratePython(schema_location=schema_path)
 #file('code.py', 'w').write(code)
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -69,22 +69,22 @@ class TestUnion (unittest.TestCase):
         self.assertRaises(UnrecognizedElementError, CreateFromDocument, '<myelement>un</myelement>')
 
     def testMyElementDOM (self):
-        self.assertEqual(0, myElement.createFromDOM(pyxb.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest">0</myElement>').documentElement))
+        self.assertEqual(0, myElement.createFromDOM(pyxb_114.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest">0</myElement>').documentElement))
         self.assertEqual(0, CreateFromDocument('<myElement xmlns="URN:unionTest">0</myElement>'))
 
-        self.assertEqual(english.one, myElement.createFromDOM(pyxb.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest">one</myElement>').documentElement))
-        self.assertEqual(welsh.un, myElement.createFromDOM(pyxb.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest">un</myElement>').documentElement))
+        self.assertEqual(english.one, myElement.createFromDOM(pyxb_114.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest">one</myElement>').documentElement))
+        self.assertEqual(welsh.un, myElement.createFromDOM(pyxb_114.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest">un</myElement>').documentElement))
 
-        self.assertEqual(english.one, myElement.createFromDOM(pyxb.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest">one<!-- with comment --></myElement>').documentElement))
-        self.assertEqual(welsh.un, myElement.createFromDOM(pyxb.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest"><!-- with comment -->un</myElement>').documentElement))
+        self.assertEqual(english.one, myElement.createFromDOM(pyxb_114.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest">one<!-- with comment --></myElement>').documentElement))
+        self.assertEqual(welsh.un, myElement.createFromDOM(pyxb_114.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest"><!-- with comment -->un</myElement>').documentElement))
 
-        self.assertEqual(english.one, myElement.createFromDOM(pyxb.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest"> one <!-- with comment and whitespace --></myElement>').documentElement))
-        self.assertRaises(BadTypeValueError, myElement.createFromDOM, pyxb.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest"><!-- whitespace is error for welsh --> un</myElement>').documentElement)
+        self.assertEqual(english.one, myElement.createFromDOM(pyxb_114.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest"> one <!-- with comment and whitespace --></myElement>').documentElement))
+        self.assertRaises(BadTypeValueError, myElement.createFromDOM, pyxb_114.utils.domutils.StringToDOM('<myElement xmlns="URN:unionTest"><!-- whitespace is error for welsh --> un</myElement>').documentElement)
 
-        self.assertEqual(english.one, myElement.createFromDOM(pyxb.utils.domutils.StringToDOM('''<myElement xmlns="URN:unionTest"><!-- whitespace is collapsed for english -->
+        self.assertEqual(english.one, myElement.createFromDOM(pyxb_114.utils.domutils.StringToDOM('''<myElement xmlns="URN:unionTest"><!-- whitespace is collapsed for english -->
 one
 </myElement>''').documentElement))
-        self.assertRaises(BadTypeValueError, myElement.createFromDOM, pyxb.utils.domutils.StringToDOM('''<myElement xmlns="URN:unionTest"><!--whitespace is only reduced for welsh -->
+        self.assertRaises(BadTypeValueError, myElement.createFromDOM, pyxb_114.utils.domutils.StringToDOM('''<myElement xmlns="URN:unionTest"><!--whitespace is only reduced for welsh -->
 un
 </myElement>''').documentElement)
 

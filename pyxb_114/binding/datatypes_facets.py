@@ -1,5 +1,5 @@
 """Generated file that augments the standard schema L{datatype
-definitions<pyxb.binding.datatypes>} with their respective
+definitions<pyxb_114.binding.datatypes>} with their respective
 U{constraining facets<http://www.w3.org/TR/xmlschema-2/index.html#rf-facets>}.  At
 one time, the C{maintainer/xsdfacet.py} script could be used to
 generate this.  No idea if that's still true.

@@ -1,4 +1,4 @@
-from pyxb.utils.domutils import BindingDOMSupport
+from pyxb_114.utils.domutils import BindingDOMSupport
 import unittest
 
 import bindings._A as A

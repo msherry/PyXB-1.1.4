@@ -1,6 +1,6 @@
-import pyxb
+import pyxb_114
 import unittest
-import pyxb.binding.datatypes as xsd
+import pyxb_114.binding.datatypes as xsd
 
 class Test_gYear (unittest.TestCase):
     def testBasic (self):

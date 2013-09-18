@@ -1,22 +1,22 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
 schema_path = '%s/../schemas/test-facets.xsd' % (os.path.dirname(__file__),)
-code = pyxb.binding.generate.GeneratePython(schema_location=schema_path)
+code = pyxb_114.binding.generate.GeneratePython(schema_location=schema_path)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
 class TestFacets (unittest.TestCase):
     def testQuantity (self):
         xml = '<quantity xmlns="URN:test-facets">35</quantity>'
-        instance = CreateFromDOM(pyxb.utils.domutils.StringToDOM(xml).documentElement)
+        instance = CreateFromDOM(pyxb_114.utils.domutils.StringToDOM(xml).documentElement)
         self.assertEqual(35, instance)
         for (k,v) in globals().items():
             if k.startswith('_STD_ANON'):

@@ -1,19 +1,19 @@
-import pyxb
-import pyxb.xmlschema.structures
-import pyxb.utils.domutils
+import pyxb_114
+import pyxb_114.xmlschema.structures
+import pyxb_114.utils.domutils
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
 def CreateDocumentationNode (content):
-    xmls = '<xs:annotation xmlns:xs="%s"><xs:documentation>%s</xs:documentation></xs:annotation>' % (pyxb.namespace.XMLSchema.uri(), content)
-    dom = pyxb.utils.domutils.StringToDOM(xmls)
+    xmls = '<xs:annotation xmlns:xs="%s"><xs:documentation>%s</xs:documentation></xs:annotation>' % (pyxb_114.namespace.XMLSchema.uri(), content)
+    dom = pyxb_114.utils.domutils.StringToDOM(xmls)
     node = dom.documentElement
-    nsc = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(node)
+    nsc = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(node)
     if nsc.targetNamespace() is None:
         nsc.finalizeTargetNamespace()
-    return pyxb.xmlschema.structures.Annotation.CreateFromDOM(node)
+    return pyxb_114.xmlschema.structures.Annotation.CreateFromDOM(node)
 
 
 class TestTrac_0045 (unittest.TestCase):

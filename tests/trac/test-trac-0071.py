@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
@@ -43,14 +43,14 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 '''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -66,7 +66,7 @@ class TestTrac_0071 (unittest.TestCase):
         value_type = value_element.typeDefinition()
         newdoc.template = 'anewtemplate'
 
-        field = field_type('title', pyxb.BIND('foo', lang='ENG'), _element=field_element)
+        field = field_type('title', pyxb_114.BIND('foo', lang='ENG'), _element=field_element)
         self.assertTrue(isinstance(field.value_, list))
         self.assertEqual(1, len(field.value_))
         self.assertTrue(isinstance(field.value_[0], value_type))
@@ -74,22 +74,22 @@ class TestTrac_0071 (unittest.TestCase):
         self.assertEqual('<field><name>title</name><value lang="ENG">foo</value></field>', field.toxml("utf-8", root_only=True))
 
         field = field_type(name='title', _element=field_element)
-        field.value_.append(pyxb.BIND('foo', lang='ENG'))
+        field.value_.append(pyxb_114.BIND('foo', lang='ENG'))
         self.assertTrue(isinstance(field.value_, list))
         self.assertEqual(1, len(field.value_))
-        self.assertTrue(isinstance(field.value_[0], pyxb.BIND))
+        self.assertTrue(isinstance(field.value_[0], pyxb_114.BIND))
         field.validateBinding()
-        self.assertTrue(isinstance(field.value_[0], pyxb.BIND))
+        self.assertTrue(isinstance(field.value_[0], pyxb_114.BIND))
         self.assertEqual('<field><name>title</name><value lang="ENG">foo</value></field>', field.toxml("utf-8", root_only=True))
 
         '''
 
         NOT YET FINISHED
 
-        newdoc.timespan.append(pyxb.BIND( # Single timespan
-                pyxb.BIND( # First field instance
+        newdoc.timespan.append(pyxb_114.BIND( # Single timespan
+                pyxb_114.BIND( # First field instance
                     'title',
-                    pyxb.BIND('foo', lang='ENG')
+                    pyxb_114.BIND('foo', lang='ENG')
                     ),
                 start='-INF', end='+INF'))
         newdoc.validateBinding()
@@ -98,10 +98,10 @@ class TestTrac_0071 (unittest.TestCase):
         print newdoc.toxml("utf-8")
         newdoc.timespan[:] = []
         
-        newdoc.timespan.append(pyxb.BIND( # Single timespan
-                pyxb.BIND( # First field instance
+        newdoc.timespan.append(pyxb_114.BIND( # Single timespan
+                pyxb_114.BIND( # First field instance
                     name='title',
-                    value=pyxb.BIND('foo', lang='ENG')
+                    value=pyxb_114.BIND('foo', lang='ENG')
                     ),
                 start='-INF', end='+INF'))
         newdoc.validateBinding()
@@ -110,10 +110,10 @@ class TestTrac_0071 (unittest.TestCase):
         print newdoc.toxml("utf-8")
         newdoc.timespan[:] = []
 
-        newdoc.timespan.append(pyxb.BIND( # Single timespan
-                pyxb.BIND( # First field instance
+        newdoc.timespan.append(pyxb_114.BIND( # Single timespan
+                pyxb_114.BIND( # First field instance
                     name='title',
-                    value_=pyxb.BIND('foo', lang='ENG')
+                    value_=pyxb_114.BIND('foo', lang='ENG')
                     ),
                 start='-INF', end='+INF'))
         newdoc.validateBinding()

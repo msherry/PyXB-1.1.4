@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
-import pyxb.binding.datatypes as xs
+import pyxb_114.binding.datatypes as xs
 
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
@@ -58,14 +58,14 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 '''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
-from pyxb import BIND
+from pyxb_114.exceptions_ import *
+from pyxb_114 import BIND
 
 import unittest
 
@@ -76,11 +76,11 @@ class TestTrac0039 (unittest.TestCase):
     """Creating nested anonymous elements"""
     def testShallowSet (self):
         w = shallow()
-        self.assertRaises(pyxb.BadTypeValueError, SET_optional, w, 5)
+        self.assertRaises(pyxb_114.BadTypeValueError, SET_optional, w, 5)
         w.optional = BIND(5)
         self.assertTrue(w.optional.deep is None)
         self.assertTrue(isinstance(w.optional.value(), xs.int))
-        self.assertRaises(pyxb.BadTypeValueError, SET_optional, w, BIND('string'))
+        self.assertRaises(pyxb_114.BadTypeValueError, SET_optional, w, BIND('string'))
         w.optional = BIND(6, deep=1)
         self.assertEqual(w.optional.value(), 6)
         self.assertEqual(w.optional.deep, 1)
@@ -88,8 +88,8 @@ class TestTrac0039 (unittest.TestCase):
     def testShallowCTOR (self):
         w = shallow(BIND(5))
         self.assertTrue(isinstance(w.optional.value(), xs.int))
-        self.assertRaises(pyxb.UnexpectedNonElementContentError, shallow, 5)
-        self.assertRaises(pyxb.UnexpectedNonElementContentError, shallow, BIND('string'))
+        self.assertRaises(pyxb_114.UnexpectedNonElementContentError, shallow, 5)
+        self.assertRaises(pyxb_114.UnexpectedNonElementContentError, shallow, BIND('string'))
 
     def testDeep (self):
         w = wrapper(BIND(BIND(4, deep=4), BIND('hi')))

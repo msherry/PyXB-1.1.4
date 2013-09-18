@@ -1,9 +1,9 @@
 import GeoCoder
-from pyxb import BIND
+from pyxb_114 import BIND
 import sys
-import pyxb.utils.domutils as domutils
-import pyxb.bundles.wssplat.soap11 as soapenv
-import pyxb.bundles.wssplat.soapenc as soapenc
+import pyxb_114.utils.domutils as domutils
+import pyxb_114.bundles.wssplat.soap11 as soapenv
+import pyxb_114.bundles.wssplat.soapenc as soapenc
 import urllib2
 
 address = '1600 Pennsylvania Ave., Washington, DC'

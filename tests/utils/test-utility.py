@@ -1,6 +1,6 @@
 import unittest
-from pyxb.utils.utility import *
-from pyxb.utils.utility import _DeconflictSymbols_mixin
+from pyxb_114.utils.utility import *
+from pyxb_114.utils.utility import _DeconflictSymbols_mixin
 
 class DST_base (_DeconflictSymbols_mixin):
     _ReservedSymbols = set([ 'one', 'two' ])
@@ -532,8 +532,8 @@ class TestUniqueIdentifier (unittest.TestCase):
     def testRepr (self):
         u1 = UniqueIdentifier()
         rep = repr(u1)
-        self.assertEqual('pyxb.utils.utility.UniqueIdentifier(%s)' % (repr(u1.uid()),), repr(u1))
-        import pyxb.utils.utility
+        self.assertEqual('pyxb_114.utils.utility.UniqueIdentifier(%s)' % (repr(u1.uid()),), repr(u1))
+        import pyxb_114.utils.utility
         u1b = eval(repr(u1))
         self.assertEqual(id(u1), id(u1b))
 

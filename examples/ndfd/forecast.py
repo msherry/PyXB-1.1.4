@@ -1,7 +1,7 @@
 import xml.dom.minidom
 import DWML
 import datetime
-import pyxb.binding.datatypes as xsd
+import pyxb_114.binding.datatypes as xsd
 import urllib2
 import time
 import sys

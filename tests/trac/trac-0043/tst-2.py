@@ -1,6 +1,6 @@
 import unittest
 import B
-from pyxb import BIND
+from pyxb_114 import BIND
 
 class Trac43_2 (unittest.TestCase):
 

@@ -13,11 +13,11 @@ import inspect
 
 # Utility function to identify classes of interest
 def _isSupersedable (cls):
-    return inspect.isclass(cls) and issubclass(cls, pyxb.binding.basis._DynamicCreate_mixin)
+    return inspect.isclass(cls) and issubclass(cls, pyxb_114.binding.basis._DynamicCreate_mixin)
 
 def _injectClasses ():
     import sys
-    import pyxb.binding.basis
+    import pyxb_114.binding.basis
     
     # All PyXB complex type definitions in the original module
     raw_classes = set([_o for (_, _o) in inspect.getmembers(raw_custom) if _isSupersedable(_o)])

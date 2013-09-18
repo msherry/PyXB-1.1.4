@@ -1,1 +1,1 @@
-from pyxb.bundles.wssplat.raw.wscoor import *
+from pyxb_114.bundles.wssplat.raw.wscoor import *

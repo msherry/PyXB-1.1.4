@@ -1,2 +1,2 @@
-"""pyxb.utils -- Utilities for the PyWXSB package.
+"""pyxb_114.utils -- Utilities for the PyWXSB package.
 """

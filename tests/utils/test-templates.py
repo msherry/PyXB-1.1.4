@@ -1,5 +1,5 @@
 import unittest
-from pyxb.utils.templates import *
+from pyxb_114.utils.templates import *
 
 _dictionary = { 'one' : 'un'
               , 'two' : 'dau'

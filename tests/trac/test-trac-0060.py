@@ -1,8 +1,8 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
-from pyxb.namespace.builtin import XMLSchema_instance as XSI
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
+from pyxb_114.namespace.builtin import XMLSchema_instance as XSI
 
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
@@ -44,14 +44,14 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 </xs:schema>'''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -97,13 +97,13 @@ class TestTrac_0060 (unittest.TestCase):
 
     def testWildcardIntegerBad (self):
         xmls = '<wildcard>%s</wildcard>' % (self.BadInteger,)
-        self.assertRaises(pyxb.BadTypeValueError, CreateFromDocument, xmls)
+        self.assertRaises(pyxb_114.BadTypeValueError, CreateFromDocument, xmls)
 
     def testWildcardUntyped (self):
         xmls = '<wildcard>%s</wildcard>' % (self.UntypedIntegerElement,)
         wc = CreateFromDocument(xmls)
         instance = wc.wildcardElements()[0]
-        self.assertFalse(isinstance(instance, pyxb.binding.basis._TypeBinding_mixin))
+        self.assertFalse(isinstance(instance, pyxb_114.binding.basis._TypeBinding_mixin))
 
     def testWildcardTyped (self):
         xmls = '<wildcard>%s</wildcard>' % (self.TypedElement,)
@@ -117,7 +117,7 @@ class TestTrac_0060 (unittest.TestCase):
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, String))
         self.assertEqual(self.NotAnInteger, instance.child)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, String))
@@ -129,7 +129,7 @@ class TestTrac_0060 (unittest.TestCase):
         self.assertTrue(isinstance(instance, Integer))
         self.assertTrue(isinstance(instance.child, long))
         self.assertEqual(self.AnInteger, instance.child)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, Integer))
@@ -140,35 +140,35 @@ class TestTrac_0060 (unittest.TestCase):
     def testStrict (self):
         self.assertEqual(XSI.ProcessTypeAttribute(), XSI.PT_strict)
         xmls = '<wildcard>%s</wildcard>' % (self.ConflictString,)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDOM, dom)
 
         xmls = '<wildcard>%s</wildcard>' % (self.ConflictStringInteger,)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDOM, dom)
 
         xmls = '<wildcard>%s</wildcard>' % (self.BogusTypedElement,)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDocument, xmls)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDocument, xmls)
 
         xmls = '<wildcard>%s</wildcard>' % (self.BogusTypedInteger,)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDocument, xmls)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDocument, xmls)
 
         xmls = self.makeWC(self.BaseUntyped)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDOM, dom)
 
         xmls = self.makeWC(self.BaseForeign)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDOM, dom)
 
         xmls = self.makeWC(self.BaseUnknown)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.BadDocumentError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.BadDocumentError, CreateFromDOM, dom)
 
 
     def testLax (self):
@@ -179,7 +179,7 @@ class TestTrac_0060 (unittest.TestCase):
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, String))
         self.assertEqual(self.NotAnInteger, instance.child)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, String))
@@ -190,7 +190,7 @@ class TestTrac_0060 (unittest.TestCase):
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, String))
         self.assertEqual('%d' % (self.AnInteger,), instance.child)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, String))
@@ -199,11 +199,11 @@ class TestTrac_0060 (unittest.TestCase):
         xmls = '<wildcard>%s</wildcard>' % (self.BogusTypedElement,)
         wc = CreateFromDocument(xmls)
         instance = wc.wildcardElements()[0]
-        self.assertFalse(isinstance(instance, pyxb.binding.basis._TypeBinding_mixin))
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        self.assertFalse(isinstance(instance, pyxb_114.binding.basis._TypeBinding_mixin))
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
-        self.assertFalse(isinstance(instance, pyxb.binding.basis._TypeBinding_mixin))
+        self.assertFalse(isinstance(instance, pyxb_114.binding.basis._TypeBinding_mixin))
 
         xmls = '<wildcard>%s</wildcard>' % (self.BogusTypedInteger,)
         wc = CreateFromDocument(xmls)
@@ -211,7 +211,7 @@ class TestTrac_0060 (unittest.TestCase):
         self.assertTrue(isinstance(instance, Integer))
         self.assertTrue(isinstance(instance.child, long))
         self.assertEqual(self.AnInteger, instance.child)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, Integer))
@@ -219,25 +219,25 @@ class TestTrac_0060 (unittest.TestCase):
         self.assertEqual(self.AnInteger, instance.child)
 
         xmls = self.makeWC(self.BaseUntyped)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDOM, dom)
 
         xmls = self.makeWC(self.BaseForeign)
         wc = CreateFromDocument(xmls)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, Foreign))
         self.assertEqual(self.NotAnInteger, instance.child)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, Foreign))
         self.assertEqual(self.NotAnInteger, instance.child)
 
         xmls = self.makeWC(self.BaseUnknown)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDOM, dom)
 
 
     def testSkip (self):
@@ -246,16 +246,16 @@ class TestTrac_0060 (unittest.TestCase):
 
         # skip uses element name to force to integer, which content doesn't match
         xmls = '<wildcard>%s</wildcard>' % (self.ConflictString,)
-        self.assertRaises(pyxb.BadTypeValueError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.BadTypeValueError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.BadTypeValueError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.BadTypeValueError, CreateFromDOM, dom)
 
         xmls = '<wildcard>%s</wildcard>' % (self.ConflictStringInteger,)
         wc = CreateFromDocument(xmls)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, Integer))
         self.assertEqual(self.AnInteger, instance.child)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, Integer))
@@ -264,11 +264,11 @@ class TestTrac_0060 (unittest.TestCase):
         xmls = '<wildcard>%s</wildcard>' % (self.BogusTypedElement,)
         wc = CreateFromDocument(xmls)
         instance = wc.wildcardElements()[0]
-        self.assertFalse(isinstance(instance, pyxb.binding.basis._TypeBinding_mixin))
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        self.assertFalse(isinstance(instance, pyxb_114.binding.basis._TypeBinding_mixin))
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
-        self.assertFalse(isinstance(instance, pyxb.binding.basis._TypeBinding_mixin))
+        self.assertFalse(isinstance(instance, pyxb_114.binding.basis._TypeBinding_mixin))
 
         xmls = '<wildcard>%s</wildcard>' % (self.BogusTypedInteger,)
         wc = CreateFromDocument(xmls)
@@ -276,7 +276,7 @@ class TestTrac_0060 (unittest.TestCase):
         self.assertTrue(isinstance(instance, Integer))
         self.assertTrue(isinstance(instance.child, long))
         self.assertEqual(self.AnInteger, instance.child)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
         wc = CreateFromDOM(dom)
         instance = wc.wildcardElements()[0]
         self.assertTrue(isinstance(instance, Integer))
@@ -284,29 +284,29 @@ class TestTrac_0060 (unittest.TestCase):
         self.assertEqual(self.AnInteger, instance.child)
 
         xmls = self.makeWC(self.BaseUntyped)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDOM, dom)
 
         xmls = self.makeWC(self.BaseString)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDOM, dom)
 
         xmls = self.makeWC(self.BaseInteger)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDOM, dom)
 
         xmls = self.makeWC(self.BaseForeign)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDOM, dom)
 
         xmls = self.makeWC(self.BaseUnknown)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDocument, xmls)
-        dom = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.AbstractInstantiationError, CreateFromDOM, dom)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDocument, xmls)
+        dom = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, CreateFromDOM, dom)
 
 
 if __name__ == '__main__':

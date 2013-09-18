@@ -28,18 +28,18 @@ converting it back into document format.
 import xml.dom
 import saxutils
 import StringIO
-import pyxb.namespace
+import pyxb_114.namespace
 
 def _DumpDOM (n, depth=0):
     """Utility function to print a DOM tree."""
     
     pfx = ' ' * depth
     if (xml.dom.Node.ELEMENT_NODE == n.nodeType):
-        print '%sElement[%d] %s %s with %d children' % (pfx, n._indexInParent(), n, pyxb.namespace.ExpandedName(n.name), len(n.childNodes))
-        ins = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(n).inScopeNamespaces()
+        print '%sElement[%d] %s %s with %d children' % (pfx, n._indexInParent(), n, pyxb_114.namespace.ExpandedName(n.name), len(n.childNodes))
+        ins = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(n).inScopeNamespaces()
         print '%s%s' % (pfx, ' ; '.join([ '%s=%s' % (_k, _v.uri()) for (_k, _v) in ins.items()]))
         for (k, v) in n.attributes.items():
-            print '%s %s=%s' % (pfx, pyxb.namespace.ExpandedName(k), v)
+            print '%s %s=%s' % (pfx, pyxb_114.namespace.ExpandedName(k), v)
         for cn in n.childNodes:
             _DumpDOM(cn, depth+1)
     elif (xml.dom.Node.TEXT_NODE == n.nodeType):
@@ -74,7 +74,7 @@ class _DOMSAXHandler (saxutils.BaseSAXHandler):
         (this_state, parent_state, ns_ctx, name_en) = super(_DOMSAXHandler, self).startElementNS(name, qname, attrs)
         this_state.__attributes = NamedNodeMap()
         for name in attrs.getNames():
-            attr_en = pyxb.namespace.ExpandedName(name)
+            attr_en = pyxb_114.namespace.ExpandedName(name)
             value = attrs.getValue(name)
             this_state.__attributes._addItem(Attr(expanded_name=attr_en, namespace_context=ns_ctx, value=value, location=this_state.location()))
 
@@ -117,15 +117,15 @@ def parseString (text, **kw):
     tree."""
     # XML parser doesn't really like unicode strings
     if isinstance(text, unicode):
-        text = text.encode(pyxb._InputEncoding)
+        text = text.encode(pyxb_114._InputEncoding)
     return parse(StringIO.StringIO(text), **kw)
 
-class Node (xml.dom.Node, pyxb.utils.utility.Locatable_mixin):
+class Node (xml.dom.Node, pyxb_114.utils.utility.Locatable_mixin):
     """Base for the minimal DOM interface required by PyXB."""
     def __init__ (self, node_type, **kw):
         location = kw.pop('location', None)
         if location is not None:
-            pyxb.utils.utility.Locatable_mixin.__init__(self, location=location)
+            pyxb_114.utils.utility.Locatable_mixin.__init__(self, location=location)
         self.__nodeType = node_type
         self.__parentNode = None
         self.__childNodes = []
@@ -147,7 +147,7 @@ class Node (xml.dom.Node, pyxb.utils.utility.Locatable_mixin):
         return self.__name
     @property
     def expanded_name (self):
-        return pyxb.namespace.ExpandedName(self.__namespaceURI, self.__localName)
+        return pyxb_114.namespace.ExpandedName(self.__namespaceURI, self.__localName)
     __namespaceURI = None
     namespaceURI = property(lambda _s: _s.__namespaceURI)
     __localName = None
@@ -224,7 +224,7 @@ class NamedNodeMap (dict):
 
     def _addItem (self, attr):
         self[attr.name] = attr.value
-        assert pyxb.namespace.resolution.NamespaceContext.GetNodeContext(attr) is not None
+        assert pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(attr) is not None
         self.__members.append(attr)
 
     def _getAttr (self, name):

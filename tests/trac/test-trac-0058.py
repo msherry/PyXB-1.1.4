@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 
 import os.path
 xsd='''
@@ -11,14 +11,14 @@ xsd='''
 '''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 

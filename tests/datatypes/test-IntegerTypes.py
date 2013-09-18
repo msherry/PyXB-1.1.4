@@ -1,6 +1,6 @@
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 import unittest
-import pyxb.binding.datatypes as xsd
+import pyxb_114.binding.datatypes as xsd
 
 class _TestIntegerType (object):
     """Base class for testing any datatype that descends from integer.

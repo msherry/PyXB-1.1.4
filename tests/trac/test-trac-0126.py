@@ -1,5 +1,5 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
@@ -13,30 +13,30 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
   </element>
 </schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
 class TestTrac0126 (unittest.TestCase):
     def tearDown (self):
-        pyxb.RequireValidWhenGenerating(True)
-        pyxb.RequireValidWhenParsing(True)
+        pyxb_114.RequireValidWhenGenerating(True)
+        pyxb_114.RequireValidWhenParsing(True)
 
     def testBasic (self):
         instance = Element()
         self.assertEqual(None, instance.Required)
         self.assertEqual(None, instance.Optional)
         
-        pyxb.RequireValidWhenGenerating(False)
+        pyxb_114.RequireValidWhenGenerating(False)
         self.assertEqual('<Element/>', instance.toDOM().documentElement.toxml("utf-8"))
-        pyxb.RequireValidWhenGenerating(True)
-        self.assertRaises(pyxb.MissingAttributeError, instance.toDOM)
+        pyxb_114.RequireValidWhenGenerating(True)
+        self.assertRaises(pyxb_114.MissingAttributeError, instance.toDOM)
         instance.Required = 'value'
         xmls = instance.toDOM().documentElement.toxml("utf-8");
         self.assertEqual('<Element Required="value"/>', xmls)

@@ -1,6 +1,6 @@
 from raw.soapbind12 import *
-import pyxb.bundles.wssplat.raw.soapbind12 as raw_soapbind12
-from pyxb.bundles.wssplat.wsdl11 import _WSDL_binding_mixin, _WSDL_port_mixin, _WSDL_operation_mixin
+import pyxb_114.bundles.wssplat.raw.soapbind12 as raw_soapbind12
+from pyxb_114.bundles.wssplat.wsdl11 import _WSDL_binding_mixin, _WSDL_port_mixin, _WSDL_operation_mixin
 
 class tBinding (raw_soapbind12.tBinding, _WSDL_binding_mixin):
     pass

@@ -16,14 +16,14 @@
 using a SAX parser."""
 
 import xml.dom
-import pyxb.namespace
-import pyxb.utils.saxutils
-import pyxb.utils.saxdom
-import pyxb.utils.utility
+import pyxb_114.namespace
+import pyxb_114.utils.saxutils
+import pyxb_114.utils.saxdom
+import pyxb_114.utils.utility
 import basis
-from pyxb.namespace.builtin import XMLSchema_instance as XSI
+from pyxb_114.namespace.builtin import XMLSchema_instance as XSI
 
-class _SAXElementState (pyxb.utils.saxutils.SAXElementState):
+class _SAXElementState (pyxb_114.utils.saxutils.SAXElementState):
     """State required to generate bindings for a specific element.
 
     If the document being parsed includes references to unrecognized elements,
@@ -104,12 +104,12 @@ class _SAXElementState (pyxb.utils.saxutils.SAXElementState):
 
         # Note whether the node is marked nil
         if attrs.has_key(self.__XSINilTuple):
-            kw['_nil'] = pyxb.binding.datatypes.boolean(attrs.getValue(self.__XSINilTuple))
+            kw['_nil'] = pyxb_114.binding.datatypes.boolean(attrs.getValue(self.__XSINilTuple))
 
         if content is None:
             content = []
         self.__bindingInstance = new_object_factory(*content, **kw)
-        if isinstance(self.__bindingInstance, pyxb.utils.utility.Locatable_mixin):
+        if isinstance(self.__bindingInstance, pyxb_114.utils.utility.Locatable_mixin):
             self.__bindingInstance._setLocation(self.location())
 
         # Record the namespace context so users of the binding can
@@ -121,9 +121,9 @@ class _SAXElementState (pyxb.utils.saxutils.SAXElementState):
         # that names are pairs of (namespaceURI, localName), just like we
         # want them to be.
         for attr_name in self.__attributes.getNames():
-            attr_en = pyxb.namespace.ExpandedName(attr_name)
+            attr_en = pyxb_114.namespace.ExpandedName(attr_name)
             # Ignore xmlns and xsi attributes; we've already handled those
-            if attr_en.namespace() in ( pyxb.namespace.XMLNamespaces, XSI ):
+            if attr_en.namespace() in ( pyxb_114.namespace.XMLNamespaces, XSI ):
                 continue
             self.__bindingInstance._setAttribute(attr_en, attrs.getValue(attr_name))
 
@@ -138,7 +138,7 @@ class _SAXElementState (pyxb.utils.saxutils.SAXElementState):
         Invoking this transitions the parser into DOM mode, creating a new DOM
         document that will represent this element including its content."""
         assert not self.__domDocument
-        self.__domDocument = pyxb.utils.saxdom.Document(namespace_context=self.namespaceContext())
+        self.__domDocument = pyxb_114.utils.saxdom.Document(namespace_context=self.namespaceContext())
         self.__domDepth = 0
         return self.startDOMElement(attrs)
 
@@ -146,26 +146,26 @@ class _SAXElementState (pyxb.utils.saxutils.SAXElementState):
         """Actions upon entering an element that is part of a DOM subtree."""
         self.__domDepth += 1
         #print 'Enter level %d with %s' % (self.__domDepth, self.expandedName())
-        self.__attributes = pyxb.utils.saxdom.NamedNodeMap()
+        self.__attributes = pyxb_114.utils.saxdom.NamedNodeMap()
         ns_ctx = self.namespaceContext()
         for name in attrs.getNames():
-            attr_en = pyxb.namespace.ExpandedName(name)
-            self.__attributes._addItem(pyxb.utils.saxdom.Attr(expanded_name=attr_en, namespace_context=ns_ctx, value=attrs.getValue(name), location=self.location()))
+            attr_en = pyxb_114.namespace.ExpandedName(name)
+            self.__attributes._addItem(pyxb_114.utils.saxdom.Attr(expanded_name=attr_en, namespace_context=ns_ctx, value=attrs.getValue(name), location=self.location()))
 
     def endDOMElement (self):
         """Actions upon leaving an element that is part of a DOM subtree."""
         ns_ctx = self.namespaceContext()
-        element = pyxb.utils.saxdom.Element(namespace_context=ns_ctx, expanded_name=self.expandedName(), attributes=self.__attributes, location=self.location())
+        element = pyxb_114.utils.saxdom.Element(namespace_context=ns_ctx, expanded_name=self.expandedName(), attributes=self.__attributes, location=self.location())
         for ( content, element_use, maybe_element ) in self.content():
             if isinstance(content, xml.dom.Node):
                 element.appendChild(content)
             else:
-                element.appendChild(pyxb.utils.saxdom.Text(content, namespace_context=ns_ctx))
+                element.appendChild(pyxb_114.utils.saxdom.Text(content, namespace_context=ns_ctx))
         #print 'Leaving level %d with %s' % (self.__domDepth, self.expandedName())
         self.__domDepth -= 1
         if 0 == self.__domDepth:
             self.__domDocument.appendChild(element)
-            #pyxb.utils.saxdom._DumpDOM(self.__domDocument)
+            #pyxb_114.utils.saxdom._DumpDOM(self.__domDocument)
             self.__domDepth = None
             self.__domDocument = None
         parent_state = self.parentState()
@@ -218,27 +218,27 @@ class _SAXElementState (pyxb.utils.saxutils.SAXElementState):
         else:
             #print 'Extending %s by content %s' % (self.__bindingInstance, self.__content,)
             for (content, element_use, maybe_element) in self.__content:
-                self.__bindingInstance.append(content, element_use, maybe_element, require_validation=pyxb._ParsingRequiresValid)
+                self.__bindingInstance.append(content, element_use, maybe_element, require_validation=pyxb_114._ParsingRequiresValid)
         parent_state = self.parentState()
         if parent_state is not None:
             parent_state.addElementContent(self.__bindingInstance, self.__elementUse)
         # As CreateFromDOM does, validate the resulting element
         if self.__bindingInstance._element() is None:
             self.__bindingInstance._setElement(self.__elementBinding)
-        if pyxb._ParsingRequiresValid:
+        if pyxb_114._ParsingRequiresValid:
             self.__bindingInstance.validateBinding()
         return self.__bindingInstance
 
-class PyXBSAXHandler (pyxb.utils.saxutils.BaseSAXHandler):
+class PyXBSAXHandler (pyxb_114.utils.saxutils.BaseSAXHandler):
     """A SAX handler class which generates a binding instance for a document
     through a streaming parser.
 
     An example of using this to parse the document held in the string C{xmls} is::
 
-      import pyxb.binding.saxer
+      import pyxb_114.binding.saxer
       import StringIO
 
-      saxer = pyxb.binding.saxer.make_parser()
+      saxer = pyxb_114.binding.saxer.make_parser()
       handler = saxer.getContentHandler()
       saxer.parse(StringIO.StringIO(xml))
       instance = handler.rootObject()
@@ -261,11 +261,11 @@ class PyXBSAXHandler (pyxb.utils.saxutils.BaseSAXHandler):
         @return: An instance of L{basis._TypeBinding_mixin} (most usually a
         L{basis.complexTypeDefinition}.
 
-        @raise pyxb.UnrecognizedElementError: No binding could be found to
+        @raise pyxb_114.UnrecognizedElementError: No binding could be found to
         match the top-level element in the document."""
         if not isinstance(self.__rootObject, basis._TypeBinding_mixin):
             # Happens if the top-level element got processed as a DOM instance.
-            raise pyxb.UnrecognizedElementError(dom_node=self.__rootObject)
+            raise pyxb_114.UnrecognizedElementError(dom_node=self.__rootObject)
         return self.__rootObject
     __rootObject = None
 
@@ -284,7 +284,7 @@ class PyXBSAXHandler (pyxb.utils.saxutils.BaseSAXHandler):
 
         @keyword element_state_constructor: Overridden with the value
         L{_SAXElementState} before invoking the L{superclass
-        constructor<pyxb.utils.saxutils.BaseSAXHandler.__init__>}.
+        constructor<pyxb_114.utils.saxutils.BaseSAXHandler.__init__>}.
         """
 
         kw.setdefault('element_state_constructor', _SAXElementState)
@@ -343,7 +343,7 @@ class PyXBSAXHandler (pyxb.utils.saxutils.BaseSAXHandler):
         # Update the enclosing complex type definition for this
         # element state.
         assert type_class is not None
-        if issubclass(type_class, pyxb.binding.basis.complexTypeDefinition):
+        if issubclass(type_class, pyxb_114.binding.basis.complexTypeDefinition):
             this_state.setEnclosingCTD(type_class)
         else:
             this_state.setEnclosingCTD(parent_state.enclosingCTD())
@@ -381,11 +381,11 @@ class PyXBSAXHandler (pyxb.utils.saxutils.BaseSAXHandler):
             self.__rootObject = binding_object
 
 def make_parser (*args, **kw):
-    """Extend L{pyxb.utils.saxutils.make_parser} to change the default
+    """Extend L{pyxb_114.utils.saxutils.make_parser} to change the default
     C{content_handler_constructor} to be L{PyXBSAXHandler}.
     """
     kw.setdefault('content_handler_constructor', PyXBSAXHandler)
-    return pyxb.utils.saxutils.make_parser(*args, **kw)
+    return pyxb_114.utils.saxutils.make_parser(*args, **kw)
 
 ## Local Variables:
 ## fill-column:78

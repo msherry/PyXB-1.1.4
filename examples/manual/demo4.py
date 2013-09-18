@@ -1,4 +1,4 @@
-import pyxb
+import pyxb_114
 import po3
 import address
 
@@ -15,7 +15,7 @@ print addr.toxml("utf-8")
 try:
     ny = address.USState('NY')
     assert False
-except pyxb.BadTypeValueError, e:
+except pyxb_114.BadTypeValueError, e:
     print e
 
 

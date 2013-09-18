@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 import xml.dom.minidom
 import StringIO
 
@@ -12,14 +12,14 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 </xs:schema>'''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -31,25 +31,25 @@ class TestTrac_0074 (unittest.TestCase):
         try:
             dom_instance = CreateFromDOM(dom.documentElement)
             self.fail('DOM creation succeeded')
-        except pyxb.UnrecognizedElementError, e:
+        except pyxb_114.UnrecognizedElementError, e:
             self.assertEqual(t0p, e.element_name)
             self.assertEqual(dom.documentElement, e.dom_node)
 
-        saxdom = pyxb.utils.saxdom.parseString(xmls)
+        saxdom = pyxb_114.utils.saxdom.parseString(xmls)
         try:
             saxdom_instance = CreateFromDOM(saxdom)
             self.fail('SAXDOM creation succeeded')
-        except pyxb.UnrecognizedElementError, e:
+        except pyxb_114.UnrecognizedElementError, e:
             self.assertEqual(t0p, e.element_name)
             self.assertEqual(saxdom.documentElement, e.dom_node)
 
-        saxer = pyxb.binding.saxer.make_parser()
+        saxer = pyxb_114.binding.saxer.make_parser()
         handler = saxer.getContentHandler()
         saxer.parse(StringIO.StringIO(xmls))
         try:
             sax_instance = handler.rootObject()
             self.fail('SAXER creation succeeded')
-        except pyxb.UnrecognizedElementError, e:
+        except pyxb_114.UnrecognizedElementError, e:
             self.assertEqual(t0p, e.element_name)
 
 if __name__ == '__main__':

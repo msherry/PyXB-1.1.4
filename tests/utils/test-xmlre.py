@@ -1,5 +1,5 @@
-import pyxb.utils.xmlre as xmlre
-import pyxb.utils.unicode as unicode
+import pyxb_114.utils.xmlre as xmlre
+import pyxb_114.utils.unicode as unicode
 import re
 
 import unittest

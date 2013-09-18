@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
-import pyxb.binding.datatypes as xs
+import pyxb_114.binding.datatypes as xs
 
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
@@ -24,13 +24,13 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 	<xs:element name="multi" type="tMultiAggregate"/>
 </xs:schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -46,8 +46,8 @@ class TestTrac0032 (unittest.TestCase):
         self.assertEqual(1, len(instance.content()))
         self.assertTrue(instance.validateBinding())
 
-        self.assertRaises(pyxb.BadTypeValueError, SET_li, instance, 1)
-        self.assertRaises(pyxb.BadTypeValueError, SET_li, instance, [[1,2,3], [2,3,4]])
+        self.assertRaises(pyxb_114.BadTypeValueError, SET_li, instance, 1)
+        self.assertRaises(pyxb_114.BadTypeValueError, SET_li, instance, [[1,2,3], [2,3,4]])
 
         instance = aggregate([1,2,3])
         self.assertEqual(3, len(instance.li))
@@ -72,8 +72,8 @@ class TestTrac0032 (unittest.TestCase):
 
     def testMulti (self):
         instance = multi()
-        self.assertRaises(pyxb.BadTypeValueError, SET_li, instance, 1)
-        self.assertRaises(pyxb.BadTypeValueError, SET_li, instance, [1, 2, 3])
+        self.assertRaises(pyxb_114.BadTypeValueError, SET_li, instance, 1)
+        self.assertRaises(pyxb_114.BadTypeValueError, SET_li, instance, [1, 2, 3])
         instance.li = [[1,2,3], [2,3,4]]
         self.assertEqual(2, len(instance.li))
         self.assertTrue(instance.validateBinding())
@@ -84,8 +84,8 @@ class TestTrac0032 (unittest.TestCase):
         self.assertTrue(instance.validateBinding())
         self.assertEqual(2, len(instance.content()))
 
-        self.assertRaises(pyxb.UnrecognizedContentError, multi, [[1,2,3], [2,3,4]])
-        self.assertRaises(pyxb.BadTypeValueError, multi, li=[1,2,3])
+        self.assertRaises(pyxb_114.UnrecognizedContentError, multi, [[1,2,3], [2,3,4]])
+        self.assertRaises(pyxb_114.BadTypeValueError, multi, li=[1,2,3])
 
         instance = multi(li=[[1,2,3],[2,3,4]])
         self.assertEqual(2, len(instance.li))
@@ -94,7 +94,7 @@ class TestTrac0032 (unittest.TestCase):
 
         instance = multi(li=[])
         instance.li.append(xs.int(1))
-        self.assertRaises(pyxb.BindingValidationError, instance.validateBinding)
+        self.assertRaises(pyxb_114.BindingValidationError, instance.validateBinding)
 
         instance = CreateFromDocument('<multi><li>1</li></multi>')
         self.assertEqual(1, len(instance.li))

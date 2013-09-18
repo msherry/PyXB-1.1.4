@@ -3,7 +3,7 @@
 # Validate the Japanese GML bindings
 
 import os.path
-import pyxb.utils.saxutils
+import pyxb_114.utils.saxutils
 import fgd_gml
 import unittest
 
@@ -11,7 +11,7 @@ import unittest
 # Japanese encodings.  libxml2 can.  It is not necessary to explicitly
 # reference libxml2 anywhere else, although this test does so to ensure
 # the test doesn't fail just because libxml2 is not installed.
-pyxb.utils.saxutils.SetCreateParserModules(['drv_libxml2'])
+pyxb_114.utils.saxutils.SetCreateParserModules(['drv_libxml2'])
 
 class ExampleUnicode_JP (unittest.TestCase):
 

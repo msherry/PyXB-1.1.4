@@ -26,13 +26,13 @@ instance.
 L{Wildcard} holds content-related information used in the content model.
 """
 
-import pyxb
-import pyxb.namespace
+import pyxb_114
+import pyxb_114.namespace
 import basis
 
 import xml.dom
 
-class ContentState_mixin (pyxb.cscRoot):
+class ContentState_mixin (pyxb_114.cscRoot):
     """Declares methods used by classes that hold state while validating a
     content model component."""
 
@@ -93,7 +93,7 @@ class ContentState_mixin (pyxb.cscRoot):
         """
         pass
 
-class ContentModel_mixin (pyxb.cscRoot):
+class ContentModel_mixin (pyxb_114.cscRoot):
     """Declares methods used by classes representing content model components."""
 
     def newState (self, parent_particle_state):
@@ -165,7 +165,7 @@ class ContentModel_mixin (pyxb.cscRoot):
         raise Exception('ContentState_mixin._validate not implemented in %s' % (type(self),))
 
 
-class AttributeUse (pyxb.cscRoot):
+class AttributeUse (pyxb_114.cscRoot):
     """A helper class that encapsulates everything we need to know
     about the way an attribute is used within a binding class.
 
@@ -187,7 +187,7 @@ class AttributeUse (pyxb.cscRoot):
     """Private Python attribute used in instances to hold the attribute value"""
 
     __dataType = None
-    """The L{pyxb.binding.basis.simpleTypeDefinition} for values of the attribute"""
+    """The L{pyxb_114.binding.basis.simpleTypeDefinition} for values of the attribute"""
 
     __unicodeDefault = None
     """The default attribute value as a unicode string, or C{None}"""
@@ -208,10 +208,10 @@ class AttributeUse (pyxb.cscRoot):
         """Create an AttributeUse instance.
 
         @param name: The name by which the attribute is referenced in the XML
-        @type name: L{pyxb.namespace.ExpandedName}
+        @type name: L{pyxb_114.namespace.ExpandedName}
 
         @param id: The Python identifier for the attribute within the
-        containing L{pyxb.basis.binding.complexTypeDefinition}.  This is a
+        containing L{pyxb_114.basis.binding.complexTypeDefinition}.  This is a
         public identifier, derived from the local part of the attribute name
         and modified to be unique, and is usually used as the name of the
         attribute's inspector method.
@@ -219,12 +219,12 @@ class AttributeUse (pyxb.cscRoot):
 
         @param key: The string used to store the attribute
         value in the dictionary of the containing
-        L{pyxb.basis.binding.complexTypeDefinition}.  This is mangled so
+        L{pyxb_114.basis.binding.complexTypeDefinition}.  This is mangled so
         that it is unique among and is treated as a Python private member.
         @type key: C{str}
 
         @param data_type: The class reference to the subclass of
-        L{pyxb.binding.basis.simpleTypeDefinition} of which the attribute
+        L{pyxb_114.binding.basis.simpleTypeDefinition} of which the attribute
         values must be instances.
         @type data_type: C{type}
 
@@ -240,19 +240,19 @@ class AttributeUse (pyxb.cscRoot):
 
         @keyword required: If C{True}, indicates that the attribute must appear
         in the DOM node used to create an instance of the corresponding
-        L{pyxb.binding.basis.complexTypeDefinition}.  The default value is
+        L{pyxb_114.binding.basis.complexTypeDefinition}.  The default value is
         C{False}.  No more that one of L{required} and L{prohibited} should be
         assigned C{True}.
         @type required: C{bool}
 
         @keyword prohibited: If C{True}, indicates that the attribute must
         B{not} appear in the DOM node used to create an instance of the
-        corresponding L{pyxb.binding.basis.complexTypeDefinition}.  The
+        corresponding L{pyxb_114.binding.basis.complexTypeDefinition}.  The
         default value is C{False}.  No more that one of L{required} and
         L{prohibited} should be assigned C{True}.
         @type prohibited: C{bool}
 
-        @raise pyxb.BadTypeValueError: the L{unicode_default} cannot be used
+        @raise pyxb_114.BadTypeValueError: the L{unicode_default} cannot be used
         to initialize an instance of L{data_type}
         """
         
@@ -270,7 +270,7 @@ class AttributeUse (pyxb.cscRoot):
     def name (self):
         """The expanded name of the element.
 
-        @rtype: L{pyxb.namespace.ExpandedName}
+        @rtype: L{pyxb_114.namespace.ExpandedName}
         """
         return self.__name
     
@@ -311,14 +311,14 @@ class AttributeUse (pyxb.cscRoot):
         return self.__key
 
     def dataType (self):
-        """The subclass of L{pyxb.binding.basis.simpleTypeDefinition} of which any attribute value must be an instance."""
+        """The subclass of L{pyxb_114.binding.basis.simpleTypeDefinition} of which any attribute value must be an instance."""
         return self.__dataType
 
     def __getValue (self, ctd_instance):
         """Retrieve the value information for this attribute in a binding instance.
 
         @param ctd_instance: The instance object from which the attribute is to be retrieved.
-        @type ctd_instance: subclass of L{pyxb.binding.basis.complexTypeDefinition}
+        @type ctd_instance: subclass of L{pyxb_114.binding.basis.complexTypeDefinition}
         @return: C{(provided, value)} where C{provided} is a C{bool} and
         C{value} is C{None} or an instance of the attribute's datatype.
 
@@ -357,25 +357,25 @@ class AttributeUse (pyxb.cscRoot):
 
         @param ctd_instance : An instance of a complex type definition.
 
-        @raise pyxb.ProhibitedAttributeError: when instance has attribute but must not
-        @raise pyxb.MissingAttributeError: when instance lacks attribute but
+        @raise pyxb_114.ProhibitedAttributeError: when instance has attribute but must not
+        @raise pyxb_114.MissingAttributeError: when instance lacks attribute but
         must have it (including when a required fixed-value attribute is
         missing).
-        @raise pyxb.BindingValidationError: when instance has attribute but its value is not acceptable
+        @raise pyxb_114.BindingValidationError: when instance has attribute but its value is not acceptable
         """
         (provided, value) = self.__getValue(ctd_instance)
         if value is not None:
             if self.__prohibited:
-                raise pyxb.ProhibitedAttributeError('Value given for prohibited attribute %s' % (self.__name,))
+                raise pyxb_114.ProhibitedAttributeError('Value given for prohibited attribute %s' % (self.__name,))
             if self.__required and not provided:
                 assert self.__fixed
-                raise pyxb.MissingAttributeError('Fixed required attribute %s was never set' % (self.__name,))
+                raise pyxb_114.MissingAttributeError('Fixed required attribute %s was never set' % (self.__name,))
             if not self.__dataType._IsValidValue(value):
-                raise pyxb.BindingValidationError('Attribute %s value type %s not %s' % (self.__name, type(value), self.__dataType))
+                raise pyxb_114.BindingValidationError('Attribute %s value type %s not %s' % (self.__name, type(value), self.__dataType))
             self.__dataType.XsdConstraintsOK(value)
         else:
             if self.__required:
-                raise pyxb.MissingAttributeError('Required attribute %s does not have a value' % (self.__name,))
+                raise pyxb_114.MissingAttributeError('Required attribute %s does not have a value' % (self.__name,))
 
     def set (self, ctd_instance, new_value):
         """Set the value of the attribute.
@@ -384,7 +384,7 @@ class AttributeUse (pyxb.cscRoot):
 
         @param ctd_instance: The binding instance for which the attribute
         value is to be set
-        @type ctd_instance: subclass of L{pyxb.binding.basis.complexTypeDefinition}
+        @type ctd_instance: subclass of L{pyxb_114.binding.basis.complexTypeDefinition}
         @param new_value: The value for the attribute
         @type new_value: An C{xml.dom.Node} instance, or any value that is
         permitted as the input parameter to the C{Factory} method of the
@@ -397,7 +397,7 @@ class AttributeUse (pyxb.cscRoot):
             unicode_value = self.__name.getAttribute(new_value)
             if unicode_value is None:
                 if self.__required:
-                    raise pyxb.MissingAttributeError('Required attribute %s from %s not found' % (self.__name, ctd_instance._ExpandedName or type(ctd_instance)))
+                    raise pyxb_114.MissingAttributeError('Required attribute %s from %s not found' % (self.__name, ctd_instance._ExpandedName or type(ctd_instance)))
                 provided = False
                 unicode_value = self.__unicodeDefault
             if unicode_value is None:
@@ -408,14 +408,14 @@ class AttributeUse (pyxb.cscRoot):
                 new_value = unicode_value
         elif new_value is None:
             if self.__required:
-                raise pyxb.MissingAttributeError('Required attribute %s in %s may not be set to None' % (self.__name, ctd_instance._ExpandedName or type(ctd_instance)))
+                raise pyxb_114.MissingAttributeError('Required attribute %s in %s may not be set to None' % (self.__name, ctd_instance._ExpandedName or type(ctd_instance)))
             provided = False
         if provided and self.__prohibited:
-            raise pyxb.ProhibitedAttributeError('Value given for prohibited attribute %s' % (self.__name,))
+            raise pyxb_114.ProhibitedAttributeError('Value given for prohibited attribute %s' % (self.__name,))
         if (new_value is not None) and (not isinstance(new_value, self.__dataType)):
             new_value = self.__dataType.Factory(new_value, _from_xml=from_xml)
         if self.__fixed and (new_value != self.__defaultValue):
-            raise pyxb.AttributeChangeError('Attempt to change value of fixed attribute %s' % (self.__name,))
+            raise pyxb_114.AttributeChangeError('Attempt to change value of fixed attribute %s' % (self.__name,))
         self.__setValue(ctd_instance, new_value, provided)
         return new_value
 
@@ -451,7 +451,7 @@ class ElementUse (ContentState_mixin, ContentModel_mixin):
     def name (self):
         """The expanded name of the element.
 
-        @rtype: L{pyxb.namespace.ExpandedName}
+        @rtype: L{pyxb_114.namespace.ExpandedName}
         """
         return self.__name
     __name = None
@@ -498,17 +498,17 @@ class ElementUse (ContentState_mixin, ContentModel_mixin):
         """Create an ElementUse instance.
 
         @param name: The name by which the element is referenced in the XML
-        @type name: L{pyxb.namespace.ExpandedName}
+        @type name: L{pyxb_114.namespace.ExpandedName}
 
         @param id: The Python name for the element within the containing
-        L{pyxb.basis.binding.complexTypeDefinition}.  This is a public
+        L{pyxb_114.basis.binding.complexTypeDefinition}.  This is a public
         identifier, albeit modified to be unique, and is usually used as the
         name of the element's inspector method or property.
         @type id: C{str}
 
         @param key: The string used to store the element
         value in the dictionary of the containing
-        L{pyxb.basis.binding.complexTypeDefinition}.  This is mangled so
+        L{pyxb_114.basis.binding.complexTypeDefinition}.  This is mangled so
         that it is unique among and is treated as a Python private member.
         @type key: C{str}
 
@@ -516,7 +516,7 @@ class ElementUse (ContentState_mixin, ContentModel_mixin):
         have multiple instances of this element.  As a consequence, the value
         of the element will be a list.  If C{False}, the value will be C{None}
         if the element is absent, and a reference to an instance of the type
-        identified by L{pyxb.binding.basis.element.typeDefinition} if present.
+        identified by L{pyxb_114.binding.basis.element.typeDefinition} if present.
         @type is_plural: C{bool}
 
         @param element_binding: Reference to the class that serves as the
@@ -568,10 +568,10 @@ class ElementUse (ContentState_mixin, ContentModel_mixin):
 
     def append (self, ctd_instance, value):
         """Add the given value as another instance of this element within the binding instance.
-        @raise pyxb.StructuralBadDocumentError: invoked on an element use that is not plural
+        @raise pyxb_114.StructuralBadDocumentError: invoked on an element use that is not plural
         """
         if not self.isPlural():
-            raise pyxb.StructuralBadDocumentError('Cannot append to element with non-plural multiplicity')
+            raise pyxb_114.StructuralBadDocumentError('Cannot append to element with non-plural multiplicity')
         values = self.value(ctd_instance)
         if basis._TypeBinding_mixin._PerformValidation:
             value = self.__elementBinding.compatibleValue(value)
@@ -583,7 +583,7 @@ class ElementUse (ContentState_mixin, ContentModel_mixin):
         """Convert the given value to DOM as an instance of this element.
 
         @param dom_support: Helper for managing DOM properties
-        @type dom_support: L{pyxb.utils.domutils.BindingDOMSupport}
+        @type dom_support: L{pyxb_114.utils.domutils.BindingDOMSupport}
         @param parent: The DOM node within which this element should be generated.
         @type parent: C{xml.dom.Element}
         @param value: The content for this element.  May be text (if the
@@ -596,7 +596,7 @@ class ElementUse (ContentState_mixin, ContentModel_mixin):
                 element_binding = value._element()
             assert element_binding is not None
             if element_binding.abstract():
-                raise pyxb.DOMGenerationError('Element %s is abstract but content %s not associated with substitution group member' % (self.name(), value))
+                raise pyxb_114.DOMGenerationError('Element %s is abstract but content %s not associated with substitution group member' % (self.name(), value))
             element = dom_support.createChildElement(element_binding.name(), parent)
             elt_type = element_binding.typeDefinition()
             val_type = type(value)
@@ -610,13 +610,13 @@ class ElementUse (ContentState_mixin, ContentModel_mixin):
                 tns_prefix = dom_support.namespacePrefix(value._ExpandedName.namespace())
                 if tns_prefix is not None:
                     val_type_qname = '%s:%s' % (tns_prefix, val_type_qname)
-                dom_support.addAttribute(element, pyxb.namespace.XMLSchema_instance.createExpandedName('type'), val_type_qname)
+                dom_support.addAttribute(element, pyxb_114.namespace.XMLSchema_instance.createExpandedName('type'), val_type_qname)
             value._toDOM_csc(dom_support, element)
         elif isinstance(value, (str, unicode)):
             element = dom_support.createChildElement(self.name(), parent)
             element.appendChild(dom_support.document().createTextNode(value))
         else:
-            raise pyxb.LogicError('toDOM with unrecognized value type %s: %s' % (type(value), value))
+            raise pyxb_114.LogicError('toDOM with unrecognized value type %s: %s' % (type(value), value))
 
     def _description (self, name_only=False, user_documentation=True):
         if name_only:
@@ -659,7 +659,7 @@ class ElementUse (ContentState_mixin, ContentModel_mixin):
         try:
             self.setOrAppend(instance, self.__elementBinding.compatibleValue(value, _convert_string_values=False))
             return True
-        except pyxb.BadTypeValueError, e:
+        except pyxb_114.BadTypeValueError, e:
             pass
         #print '%s %s %s in %s' % (instance, value, element_use, self)
         return False
@@ -695,8 +695,8 @@ class Wildcard (ContentState_mixin, ContentModel_mixin):
         Valid values are:
 
          - L{Wildcard.NC_any}
-         - A tuple ( L{Wildcard.NC_not}, a L{namespace<pyxb.namespace.Namespace>} instance )
-         - set(of L{namespace<pyxb.namespace.Namespace>} instances)
+         - A tuple ( L{Wildcard.NC_not}, a L{namespace<pyxb_114.namespace.Namespace>} instance )
+         - set(of L{namespace<pyxb_114.namespace.Namespace>} instances)
 
         Namespaces are represented by their URIs.  Absence is
         represented by C{None}, both in the "not" pair and in the set.
@@ -722,8 +722,8 @@ class Wildcard (ContentState_mixin, ContentModel_mixin):
         if nsv is None:
             return None
         if isinstance(nsv, basestring):
-            nsv = pyxb.namespace.NamespaceForURI(nsv, create_if_missing=True)
-        assert isinstance(nsv, pyxb.namespace.Namespace), 'unexpected non-namespace %s' % (nsv,)
+            nsv = pyxb_114.namespace.NamespaceForURI(nsv, create_if_missing=True)
+        assert isinstance(nsv, pyxb_114.namespace.Namespace), 'unexpected non-namespace %s' % (nsv,)
         return nsv
 
     def __init__ (self, *args, **kw):
@@ -749,7 +749,7 @@ class Wildcard (ContentState_mixin, ContentModel_mixin):
         ns = None
         if isinstance(value, xml.dom.Node):
             if value.namespaceURI is not None:
-                ns = pyxb.namespace.NamespaceForURI(value.namespaceURI)
+                ns = pyxb_114.namespace.NamespaceForURI(value.namespaceURI)
         elif isinstance(value, basis._TypeBinding_mixin):
             elt = value._element()
             if elt is not None:
@@ -759,7 +759,7 @@ class Wildcard (ContentState_mixin, ContentModel_mixin):
         else:
             # Assume that somebody will handle the conversion to xs:anyType
             pass
-        if isinstance(ns, pyxb.namespace.Namespace) and ns.isAbsentNamespace():
+        if isinstance(ns, pyxb_114.namespace.Namespace) and ns.isAbsentNamespace():
             ns = None
         if self.NC_any == self.__namespaceConstraint:
             return True
@@ -923,7 +923,7 @@ class ChoiceState (ContentState_mixin):
                 except Exception, e:
                     pass
             #print 'Missing components %s' % ("\n".join([ "\n  ".join([str(_p2.term()) for _p2 in _p.particle().term().particles()]) for _p in self.__choices ]),)
-            raise pyxb.MissingContentError('choice')
+            raise pyxb_114.MissingContentError('choice')
         self.__activeChoice.verifyComplete()
 
     # CS.notifyFailure:ChoiceState
@@ -988,7 +988,7 @@ class AllState (ContentState_mixin):
         if particle_ok and (0 == len(self.__choices)):
             self.__parentParticleState.incrementCount()
 
-class ParticleState (pyxb.cscRoot):
+class ParticleState (pyxb_114.cscRoot):
 
     __parentState = None
     """The L{ContentState_mixin} which contains the mode for which this is state."""
@@ -1027,7 +1027,7 @@ class ParticleState (pyxb.cscRoot):
     def verifyComplete (self):
         """Check whether the particle's occurrence constraints are satisfied.
 
-        @raise pyxb.MissingContentError: Particle requires additional content to be satisfied."""
+        @raise pyxb_114.MissingContentError: Particle requires additional content to be satisfied."""
 
         # @TODO@ Set a flag so we can make verifyComplete safe to call
         # multiple times?
@@ -1040,7 +1040,7 @@ class ParticleState (pyxb.cscRoot):
         # If we're still not satisfied, raise an error
         if not self.__particle.satisfiesOccurrences(self.__count):
             #print 'PS.VC %s incomplete' % (self,)
-            raise pyxb.MissingContentError('incomplete')
+            raise pyxb_114.MissingContentError('incomplete')
 
         # If we are satisfied, tell the parent
         if self.__parentState is not None:
@@ -1074,7 +1074,7 @@ class ParticleState (pyxb.cscRoot):
         context, the caller may raise this exception, or may try an
         alternative content model.
 
-        @raise pyxb.UnexpectedElementError: if the value satisfies the particle,
+        @raise pyxb_114.UnexpectedElementError: if the value satisfies the particle,
         but having done so exceeded the allowable number of instances of the
         term.
         """
@@ -1097,14 +1097,14 @@ class ParticleState (pyxb.cscRoot):
         #print 'PS.STEP %s: %s' % (self, consumed)
         if consumed:
             if not self.__particle.meetsMaximum(self.__count):
-                raise pyxb.UnexpectedElementError('too many')
+                raise pyxb_114.UnexpectedElementError('too many')
         else:
             if self.__parentState is not None:
                 self.__parentState.notifyFailure(self, self.__particle.satisfiesOccurrences(self.__count))
             if not self.__particle.meetsMinimum(self.__count):
                 # @TODO@ Use better exception; changing this will require
                 # changing some unit tests.
-                underflow_exc = pyxb.MissingElementError(content=value, container=instance)
+                underflow_exc = pyxb_114.MissingElementError(content=value, container=instance)
         return (consumed, underflow_exc)
 
     def __str__ (self):

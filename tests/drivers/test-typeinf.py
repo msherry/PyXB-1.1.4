@@ -1,12 +1,12 @@
-import pyxb
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 
 from xml.dom import Node
 
 import os.path
 schema_path = '%s/../schemas/test-typeinf.xsd' % (os.path.dirname(__file__),)
-code = pyxb.binding.generate.GeneratePython(schema_location=schema_path)
+code = pyxb_114.binding.generate.GeneratePython(schema_location=schema_path)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)

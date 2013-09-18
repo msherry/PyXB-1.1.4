@@ -1,1 +1,1 @@
-from pyxb.bundles.wssplat.raw.soapenc import *
+from pyxb_114.bundles.wssplat.raw.soapenc import *

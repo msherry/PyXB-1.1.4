@@ -1,14 +1,14 @@
-import pyxb.binding.generate
+import pyxb_114.binding.generate
 from xml.dom import Node
 
 import os.path
 schema_path = '%s/../schemas/test-deconflict.xsd' % (os.path.dirname(__file__),)
-code = pyxb.binding.generate.GeneratePython(schema_location=schema_path)
+code = pyxb_114.binding.generate.GeneratePython(schema_location=schema_path)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 

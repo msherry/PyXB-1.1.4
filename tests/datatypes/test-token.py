@@ -1,6 +1,6 @@
-import pyxb
+import pyxb_114
 import unittest
-import pyxb.binding.datatypes as xsd
+import pyxb_114.binding.datatypes as xsd
 
 class Test_token (unittest.TestCase):
     Cases = [ ('Internal spaces are ok', None),
@@ -24,7 +24,7 @@ class Test_token (unittest.TestCase):
     def testInvalid (self):
         for (lexical, value) in self.Cases:
             if value is not None:
-                self.assertRaises(pyxb.BadTypeValueError, xsd.token, lexical)
+                self.assertRaises(pyxb_114.BadTypeValueError, xsd.token, lexical)
 
 if __name__ == '__main__':
     unittest.main()

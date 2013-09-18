@@ -1,6 +1,6 @@
-from pyxb.bundles.wssplat.raw.httpbind import *
-import pyxb.bundles.wssplat.raw.httpbind as raw_httpbind
-from pyxb.bundles.wssplat.wsdl11 import _WSDL_binding_mixin, _WSDL_port_mixin, _WSDL_operation_mixin
+from pyxb_114.bundles.wssplat.raw.httpbind import *
+import pyxb_114.bundles.wssplat.raw.httpbind as raw_httpbind
+from pyxb_114.bundles.wssplat.wsdl11 import _WSDL_binding_mixin, _WSDL_port_mixin, _WSDL_operation_mixin
 
 class bindingType (raw_httpbind.bindingType, _WSDL_binding_mixin):
     pass

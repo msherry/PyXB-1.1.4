@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
-import pyxb.binding.datatypes as xs
+import pyxb_114.binding.datatypes as xs
 
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
@@ -54,13 +54,13 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 
 </xs:schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -80,7 +80,7 @@ class TestTrac0038 (unittest.TestCase):
         self.assertTrue(isinstance(w, welsh))
         self.assertEqual(w, welsh.dau)
         self.assertEqual(w, tUnion.dau)
-        self.assertRaises(pyxb.BadTypeValueError, union, 'deux')
+        self.assertRaises(pyxb_114.BadTypeValueError, union, 'deux')
         n = union('ni')
         self.assertEqual(n, tUnion.ni)
 

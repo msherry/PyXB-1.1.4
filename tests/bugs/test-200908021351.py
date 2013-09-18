@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 
 whatever = 'whatever200908021351'
 import os.path
@@ -37,14 +37,14 @@ import unittest
 
 class TestBug_200908021351 (unittest.TestCase):
     def testBasic (self):
-        generator = pyxb.binding.generate.Generator(allow_absent_module=True, generate_to_files=False)
+        generator = pyxb_114.binding.generate.Generator(allow_absent_module=True, generate_to_files=False)
         generator.addSchema(decl_xsd)
         generator.addModuleName('decl')
         generator.addSchema(use_xsd)
         generator.addModuleName('use')
         modules = generator.bindingModules()
         self.assertEqual(2, len(modules))
-        ns = pyxb.namespace.NamespaceForURI(whatever)
+        ns = pyxb_114.namespace.NamespaceForURI(whatever)
         self.assertTrue(ns is not None)
         ad = ns.createExpandedName('lang').attributeDeclaration()
         self.assertTrue(ad is not None)

@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
@@ -26,14 +26,14 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 '''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 import xml.dom
@@ -51,16 +51,16 @@ class TestTrac_0053 (unittest.TestCase):
         instance = CreateFromDocument(xmls);
         self.assertEqual("value", instance.eattr)
         # Creation from DOM takes a different code path
-        domn = pyxb.utils.domutils.StringToDOM(xmls)
+        domn = pyxb_114.utils.domutils.StringToDOM(xmls)
         instance = CreateFromDOM(domn);
         self.assertEqual("value", instance.eattr)
 
     def testExtMissingRequired (self):
         xmls = '<ext/>'
-        self.assertRaises(pyxb.MissingAttributeError, CreateFromDocument, xmls)
+        self.assertRaises(pyxb_114.MissingAttributeError, CreateFromDocument, xmls)
         # Creation from DOM takes a different code path
-        domn = pyxb.utils.domutils.StringToDOM(xmls)
-        self.assertRaises(pyxb.MissingAttributeError, CreateFromDOM, domn)
+        domn = pyxb_114.utils.domutils.StringToDOM(xmls)
+        self.assertRaises(pyxb_114.MissingAttributeError, CreateFromDOM, domn)
 
 if __name__ == '__main__':
     unittest.main()

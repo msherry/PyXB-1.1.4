@@ -1,12 +1,12 @@
 import unittest
-from pyxb.utils.domutils import *
+from pyxb_114.utils.domutils import *
 from xml.dom import Node
 import xml.dom
-import pyxb.namespace
+import pyxb_114.namespace
 
 class TestInScopeNames (unittest.TestCase):
     def show (self, node):
-        xmlns_map = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(node).inScopeNamespaces()
+        xmlns_map = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(node).inScopeNamespaces()
         #print '%s: %s' % (node.nodeName, ' ; '.join([ '%s=%s' % (_k, _v.uri()) for (_k, _v) in xmlns_map.items()]))
         return xmlns_map
 
@@ -26,7 +26,7 @@ class TestInScopeNames (unittest.TestCase):
 </book>'''
         book = StringToDOM(xml).documentElement
         self.assertEqual('book', book.localName)
-        ns_ctx = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(book)
+        ns_ctx = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(book)
         xmlns_map = self.show(book)
         self.assertEqual(3, len(xmlns_map))
         self.assertEqual('http://www.w3.org/XML/1998/namespace', xmlns_map['xml'].uri())
@@ -76,7 +76,7 @@ class TestInScopeNames (unittest.TestCase):
     </table>
   </Beers>'''
         Beers = StringToDOM(xml).documentElement
-        ns_ctx = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(Beers)
+        ns_ctx = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(Beers)
         xmlns_map = self.show(Beers)
         self.assertEqual(1, len(xmlns_map))
         self.assertEqual('http://www.w3.org/XML/1998/namespace', xmlns_map['xml'].uri())
@@ -104,9 +104,9 @@ class TestNamespaceURIs (unittest.TestCase):
     # Make sure we agree with xml.dom on what the core namespace URIs are
     def testURI (self):
         self.assertTrue(xml.dom.EMPTY_NAMESPACE is None)
-        self.assertEqual(xml.dom.XML_NAMESPACE, pyxb.namespace.XML.uri())
-        self.assertEqual(xml.dom.XMLNS_NAMESPACE, pyxb.namespace.XMLNamespaces.uri())
-        self.assertEqual(xml.dom.XHTML_NAMESPACE, pyxb.namespace.XHTML.uri())
+        self.assertEqual(xml.dom.XML_NAMESPACE, pyxb_114.namespace.XML.uri())
+        self.assertEqual(xml.dom.XMLNS_NAMESPACE, pyxb_114.namespace.XMLNamespaces.uri())
+        self.assertEqual(xml.dom.XHTML_NAMESPACE, pyxb_114.namespace.XHTML.uri())
 
 if '__main__' == __name__:
     unittest.main()

@@ -1,1 +1,1 @@
-from pyxb.bundles.wssplat.raw.wsoap import *
+from pyxb_114.bundles.wssplat.raw.wsoap import *

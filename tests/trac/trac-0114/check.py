@@ -1,6 +1,6 @@
 import noi
 import unittest
-import pyxb
+import pyxb_114
 import xml.dom.minidom
 
 def first_element_child (n):

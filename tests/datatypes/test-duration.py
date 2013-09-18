@@ -1,7 +1,7 @@
-import pyxb
+import pyxb_114
 import unittest
 import datetime
-import pyxb.binding.datatypes as xsd
+import pyxb_114.binding.datatypes as xsd
 
 class Test_duration (unittest.TestCase):
     def testBasic (self):
@@ -42,7 +42,7 @@ class Test_duration (unittest.TestCase):
         self.assertFalse(v.negativeDuration())
         self.assertEqual('P1347M', v.xsdLiteral())
 
-        self.assertRaises(pyxb.BadTypeValueError, xsd.duration, 'P-1347M')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.duration, 'P-1347M')
         v = xsd.duration('-P1347M')
         self.assertEqual(0, v.days)
         self.assertEqual(0, v.seconds)
@@ -51,7 +51,7 @@ class Test_duration (unittest.TestCase):
         self.assertTrue(v.negativeDuration())
         self.assertEqual('-P1347M', v.xsdLiteral())
 
-        self.assertRaises(pyxb.BadTypeValueError, xsd.duration, 'P1Y2MT')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.duration, 'P1Y2MT')
 
         v = xsd.duration('P3DT4H7M')
 
@@ -97,8 +97,8 @@ class Test_duration (unittest.TestCase):
         self.assertEqual(3, v.days)
         self.assertEqual(14842, v.seconds)
         self.assertEqual('P3DT4H7M22.5S', v.xsdLiteral())
-        self.assertRaises(pyxb.BadTypeValueError, xsd.duration)
-        self.assertRaises(pyxb.BadTypeValueError, xsd.duration, 4)
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.duration)
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.duration, 4)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,8 +1,8 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.binding.content
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.binding.content
+import pyxb_114.utils.domutils
 import xml.dom.minidom
 
 import os.path
@@ -20,14 +20,14 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 </xs:schema>'''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -47,7 +47,7 @@ class TestTrac_0075 (unittest.TestCase):
 
     def testNotAnElementError (self):
         elt = tTop._UseForTag('inner')
-        self.assertTrue(isinstance(elt, pyxb.binding.content.ElementUse))
+        self.assertTrue(isinstance(elt, pyxb_114.binding.content.ElementUse))
         try:
             elt = tTop._UseForTag('notInner')
             self.fail('Found non-existent inner element')

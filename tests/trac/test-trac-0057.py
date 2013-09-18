@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 
 # Thanks to agrimstrup for this example
 
@@ -26,14 +26,14 @@ xsd='''
 '''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -44,23 +44,23 @@ class TestTrac_0057 (unittest.TestCase):
         return v.toxml("utf-8")
 
     def tearDown (self):
-        pyxb.RequireValidWhenGenerating(True)
-        pyxb.RequireValidWhenParsing(True)
+        pyxb_114.RequireValidWhenGenerating(True)
+        pyxb_114.RequireValidWhenParsing(True)
 
     def testDefault (self):
-        self.assertTrue(pyxb._GenerationRequiresValid)
-        self.assertTrue(pyxb._ParsingRequiresValid)
-        self.assertRaises(pyxb.UnrecognizedContentError, CreateFromDocument, self.XMLS)
-        doc = pyxb.utils.domutils.StringToDOM(self.XMLS)
-        self.assertRaises(pyxb.UnrecognizedContentError, CreateFromDOM, doc)
+        self.assertTrue(pyxb_114._GenerationRequiresValid)
+        self.assertTrue(pyxb_114._ParsingRequiresValid)
+        self.assertRaises(pyxb_114.UnrecognizedContentError, CreateFromDocument, self.XMLS)
+        doc = pyxb_114.utils.domutils.StringToDOM(self.XMLS)
+        self.assertRaises(pyxb_114.UnrecognizedContentError, CreateFromDOM, doc)
         
     def testDisable (self):
-        pyxb.RequireValidWhenParsing(False)
+        pyxb_114.RequireValidWhenParsing(False)
         instance = CreateFromDocument(self.XMLS)
-        self.assertRaises(pyxb.DOMGenerationError, self.exec_toxml, instance)
-        doc = pyxb.utils.domutils.StringToDOM(self.XMLS)
+        self.assertRaises(pyxb_114.DOMGenerationError, self.exec_toxml, instance)
+        doc = pyxb_114.utils.domutils.StringToDOM(self.XMLS)
         instance = CreateFromDOM(doc)
-        pyxb.RequireValidWhenGenerating(False) 
+        pyxb_114.RequireValidWhenGenerating(False) 
         xml = instance.toxml("utf-8", root_only=True)
         self.assertEquals(xml, self.XMLS)
 

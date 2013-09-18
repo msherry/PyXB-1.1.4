@@ -3,8 +3,8 @@ import unittest
 import base
 import absent
 
-import pyxb.utils.domutils
-pyxb.utils.domutils.BindingDOMSupport.DeclareNamespace(base.Namespace, 'base')
+import pyxb_114.utils.domutils
+pyxb_114.utils.domutils.BindingDOMSupport.DeclareNamespace(base.Namespace, 'base')
 
 class TestTrac0119 (unittest.TestCase):
 
@@ -13,7 +13,7 @@ class TestTrac0119 (unittest.TestCase):
         m = base.Message(c)
         xmls = m.toxml("utf-8")
         # Cannot resolve absent namespace in base module
-        self.assertRaises(pyxb.SchemaValidationError, base.CreateFromDocument, xmls)
+        self.assertRaises(pyxb_114.SchemaValidationError, base.CreateFromDocument, xmls)
         # Can resolve it in absent module
         instance = absent.CreateFromDocument(xmls)
         self.assertEquals(xmls, instance.toxml("utf-8"))
@@ -27,7 +27,7 @@ class TestTrac0119 (unittest.TestCase):
 </base:Message>
 '''
         # Cannot resolve absent namespace in base module
-        self.assertRaises(pyxb.SchemaValidationError, base.CreateFromDocument, xmls)
+        self.assertRaises(pyxb_114.SchemaValidationError, base.CreateFromDocument, xmls)
         # Can resolve it in absent module
         instance = absent.CreateFromDocument(xmls)
         self.assertEquals('hi', instance.command.payload)
@@ -44,7 +44,7 @@ class TestTrac0119 (unittest.TestCase):
 </Message>
 '''
         # Cannot resolve absent namespace in base module
-        self.assertRaises(pyxb.SchemaValidationError, base.CreateFromDocument, xmls)
+        self.assertRaises(pyxb_114.SchemaValidationError, base.CreateFromDocument, xmls)
         # Can resolve it in absent module
         instance = absent.CreateFromDocument(xmls)
         self.assertEquals('hi', instance.command.payload)

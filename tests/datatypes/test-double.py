@@ -1,5 +1,5 @@
 import unittest
-import pyxb.binding.datatypes as xsd
+import pyxb_114.binding.datatypes as xsd
 
 class Test_double (unittest.TestCase):
     def testRange (self):

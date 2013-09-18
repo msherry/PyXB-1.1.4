@@ -1,8 +1,8 @@
 # Undeclared XML namespace
 
-import pyxb.binding.generate
-import pyxb.utils.domutils
-import pyxb.binding.datatypes as xs
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
+import pyxb_114.binding.datatypes as xs
 from xml.dom import Node
 
 import os.path
@@ -31,13 +31,13 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
   <xs:element name="structure" type="tStructure"/>
 </xs:schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -81,7 +81,7 @@ class TestTrac0037 (unittest.TestCase):
         
     def testAttribute (self):
         #i = structure(attr='three')
-        #self.assertRaises(pyxb.BindingValidationError, i.validateBinding)
+        #self.assertRaises(pyxb_114.BindingValidationError, i.validateBinding)
         i = structure(attr=4)
         self.assertTrue(i.validateBinding())
         i = structure(attr='two')

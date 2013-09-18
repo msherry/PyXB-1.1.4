@@ -17,11 +17,11 @@
 import re
 import os
 import errno
-import pyxb
+import pyxb_114
 
 # Import utility routines that are not from PyXB so have distinct
 # licensing.
-from pyxb.utils.activestate import *
+from pyxb_114.utils.activestate import *
 
 def QuotedEscaped (s):
     """Convert a string into a literal value that can be used in Python source.
@@ -218,14 +218,14 @@ def PrepareIdentifier (s, in_use, aux_keywords=frozenset(), private=False, prote
         s = '_' + s
     return MakeUnique(s, in_use)
 
-# @todo: descend from pyxb.cscRoot, if we import pyxb
+# @todo: descend from pyxb_114.cscRoot, if we import pyxb_114
 class _DeconflictSymbols_mixin (object):
     """Mix-in used to deconflict public symbols in classes that may be
     inherited by generated binding classes.
 
-    Some classes, like the L{pyxb.binding.basis.element} or
-    L{pyxb.binding.basis.simpleTypeDefinition} classes in
-    L{pyxb.binding.basis}, have public symbols associated with
+    Some classes, like the L{pyxb_114.binding.basis.element} or
+    L{pyxb_114.binding.basis.simpleTypeDefinition} classes in
+    L{pyxb_114.binding.basis}, have public symbols associated with
     functions and variables.  It is possible that an XML schema might
     include tags and attribute names that match these symbols.  To
     avoid conflict, the reserved symbols marked in this class are
@@ -281,14 +281,14 @@ def NormalizeWhitespace (text, preserve=False, replace=False, collapse=False):
         return text
     if collapse:
         return __MultiSpace_re.sub(' ', text).strip()
-    # pyxb not imported here; could be.
+    # pyxb_114 not imported here; could be.
     raise Exception('NormalizeWhitespace: No normalization specified')
 
 class Graph:
     """Represent a directed graph with arbitrary objects as nodes.
 
     This is used in the L{code
-    generator<pyxb.binding.generate.Generator>} to determine order
+    generator<pyxb_114.binding.generate.Generator>} to determine order
     dependencies among components within a namespace, and schema that
     comprise various namespaces.  An edge from C{source} to C{target}
     indicates that some aspect of C{source} requires that some aspect
@@ -769,7 +769,7 @@ class UniqueIdentifier (object):
     An instance of this class compares equal to, and hashes equivalent
     to, the uid string.  When C{str}'d, the result is the uid; when
     C{repr}'d, the result is a constructor call to
-    C{pyxb.utils.utility.UniqueIdentifier}.
+    C{pyxb_114.utils.utility.UniqueIdentifier}.
     """
 
     # A map from UID string to the instance that represents it
@@ -848,7 +848,7 @@ class UniqueIdentifier (object):
         return self.uid()
 
     def __repr__ (self):
-        return 'pyxb.utils.utility.UniqueIdentifier(%s)' % (repr(self.uid()),)
+        return 'pyxb_114.utils.utility.UniqueIdentifier(%s)' % (repr(self.uid()),)
 
 import datetime
 import calendar
@@ -962,7 +962,7 @@ class LocalTimeZone (datetime.tzinfo):
         tt = time.localtime(time.mktime(tt))
         return tt.tm_isdst > 0
 
-class PrivateTransient_mixin (pyxb.cscRoot):
+class PrivateTransient_mixin (pyxb_114.cscRoot):
     """Emulate the B{transient} keyword from Java for private member
     variables.
 
@@ -973,12 +973,12 @@ class PrivateTransient_mixin (pyxb.cscRoot):
     corresponding private variable "_Class__s" will be removed from
     the state dictionary.  This is used to eliminate unnecessary
     fields from instances placed in L{namespace
-    archives<pyxb.namespace.archive.NamespaceArchive>} without having
+    archives<pyxb_114.namespace.archive.NamespaceArchive>} without having
     to implement a C{__getstate__} method in every class in the
     instance hierarchy.
 
     For an example, see
-    L{pyxb.xmlschema.structures._SchemaComponent_mixin}
+    L{pyxb_114.xmlschema.structures._SchemaComponent_mixin}
 
     If you use this, it is your responsibility to define the
     C{__PrivateTransient} class variable and add to it the required
@@ -1019,11 +1019,11 @@ class PrivateTransient_mixin (pyxb.cscRoot):
         # are being pickled, generally by accidently leaving a
         # reference to one in an instance private member.
         #for (k, v) in state.items():
-        #    import pyxb.namespace
+        #    import pyxb_114.namespace
         #    import xml.dom
-        #    import pyxb.xmlschema.structures
-        #    if isinstance(v, (pyxb.namespace.resolution.NamespaceContext, xml.dom.Node, pyxb.xmlschema.structures.Schema)):
-        #        raise pyxb.LogicError('Unexpected instance of %s key %s in %s' % (type(v), k, self))
+        #    import pyxb_114.xmlschema.structures
+        #    if isinstance(v, (pyxb_114.namespace.resolution.NamespaceContext, xml.dom.Node, pyxb_114.xmlschema.structures.Schema)):
+        #        raise pyxb_114.LogicError('Unexpected instance of %s key %s in %s' % (type(v), k, self))
 
         return state
 
@@ -1037,13 +1037,13 @@ def GetMatchingFiles (path, pattern=None, default_path_wildcard=None, default_pa
       files = GetMatchingFiles('&bundles//:+',
                                pattern=re.compile('.*\.wxs$'),
                                default_path_wildcard='+',
-                               default_path='/usr/local/pyxb/nsarchives',
+                               default_path='/usr/local/pyxb_114/nsarchives',
                                prefix_pattern='&',
-                               prefix_substituend='/opt/pyxb')
+                               prefix_substituend='/opt/pyxb_114')
 
     to obtain all files that can be recursively found within
-    C{/opt/pyxb/bundles}, or non-recursively within
-    C{/usr/local/pyxb/nsarchives}.
+    C{/opt/pyxb_114/bundles}, or non-recursively within
+    C{/usr/local/pyxb_114/nsarchives}.
 
     @param path: A colon separated list of directories in which the
     search should be performed.  If a path entry ends with C{//}, any
@@ -1146,7 +1146,7 @@ class Location (object):
             return '<unknownLocation>'
         return '%s[%s:%s]' % (self.locationBase, self.lineNumber, self.columnNumber)
 
-class Locatable_mixin (pyxb.cscRoot):
+class Locatable_mixin (pyxb_114.cscRoot):
     __location = None
 
     def __init__ (self, *args, **kw):

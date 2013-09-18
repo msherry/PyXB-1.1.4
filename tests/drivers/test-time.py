@@ -1,17 +1,17 @@
-import pyxb
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 
 from xml.dom import Node
 
 import os.path
 schema_path = '%s/../schemas/time.xsd' % (os.path.dirname(__file__),)
-code = pyxb.binding.generate.GeneratePython(schema_location=schema_path)
+code = pyxb_114.binding.generate.GeneratePython(schema_location=schema_path)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 def make_tTime (*args, **kw):
     for cls in [ tXMTime, tISO8601 ]:
@@ -51,7 +51,7 @@ class TestTime (unittest.TestCase):
         self.assertEqual(instance.time.timetuple(), t.time.timetuple())
 
     def testAbstract (self):
-        self.assertRaises(pyxb.AbstractInstantiationError, tTime, **self.KW_tXMTime)
+        self.assertRaises(pyxb_114.AbstractInstantiationError, tTime, **self.KW_tXMTime)
         t = make_tTime(**self.KW_tXMTime)
         self.assertTrue(isinstance(t, tTime))
         self.assertTrue(isinstance(t, tXMTime))

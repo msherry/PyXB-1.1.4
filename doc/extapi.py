@@ -97,7 +97,7 @@ def ticket_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
     """
     Role `:ticket:` generates references to Trac tickets.
     """
-    trac_root = 'https://sourceforge.net/apps/trac/pyxb'
+    trac_root = 'https://sourceforge.net/apps/trac/pyxb_114'
 
     # assume module is references
     

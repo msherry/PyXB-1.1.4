@@ -3,9 +3,9 @@
 import time
 import urllib2
 import ndfd.dwGML
-import pyxb.bundles.opengis.gml
-import pyxb.bundles.opengis.ows
-import pyxb.binding.datatypes as xsd
+import pyxb_114.bundles.opengis.gml
+import pyxb_114.bundles.opengis.ows
+import pyxb_114.binding.datatypes as xsd
 import sys
 
 # Coordinates for which weather is requested.  See examples/geocoder
@@ -36,7 +36,7 @@ file('forecast.xml', 'w').write(xmls)
 print '# Parsing response'
 res = ndfd.dwGML.CreateFromDocument(xmls)
 
-if res._element() == pyxb.bundles.opengis.ows.ExceptionReport:
+if res._element() == pyxb_114.bundles.opengis.ows.ExceptionReport:
     for ex in res.Exception:
         print '%s (%s): %s' % (ex.exceptionCode, ex.locator, ''.join([_txt for _txt in ex.ExceptionText]))
     sys.exit(1)
@@ -52,12 +52,12 @@ for fm in res.featureMember:
     fc = obs.resultOf.Object
     for fcv in fc.content():
         ln = fcv._element().name().localName()
-        if isinstance(fcv, pyxb.bundles.opengis.gml.MeasureType):
+        if isinstance(fcv, pyxb_114.bundles.opengis.gml.MeasureType):
             print ' %s: %s %s' % (ln, fcv.value(), fcv.uom)
-        elif isinstance(fcv, pyxb.bundles.opengis.gml.CodeOrNullListType):
+        elif isinstance(fcv, pyxb_114.bundles.opengis.gml.CodeOrNullListType):
             for v in fcv.value():
                 print ' %s: %s' % (ln, v)
-        elif isinstance(fcv, pyxb.binding.datatypes.anyURI):
+        elif isinstance(fcv, pyxb_114.binding.datatypes.anyURI):
             print ' %s: %s' % (ln, fcv)
         else:
             print ' %s type %s' % (fcv._element().name(), type(fcv))

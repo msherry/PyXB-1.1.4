@@ -1,5 +1,5 @@
 import unittest
-from pyxb.utils.unicode import *
+from pyxb_114.utils.unicode import *
 
 class TestCodePointSet (unittest.TestCase):
     def testConstructor (self):

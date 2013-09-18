@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 
 import os.path
 schema_path = '%s/../schemas/absentns.xsd' % (os.path.dirname(__file__),)
@@ -11,7 +11,7 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
   <xs:include schemaLocation="%s"/>
   <xs:element name="anotherGlobalComplex" type="tns:structure"/>
 </xs:schema>''' % (schema_path,)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 rv = compile(code, 'test', 'exec')
 eval(rv)
 

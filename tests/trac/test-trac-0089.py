@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 
 import os.path
 xsd='''<?xml version="1.0" encoding="utf-8"?>
@@ -29,14 +29,14 @@ xsd='''<?xml version="1.0" encoding="utf-8"?>
 '''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -54,8 +54,8 @@ class TestTrac_0089 (unittest.TestCase):
             self.assertEqual(instance, base(ok))
         for nok in self.invalid:
             xmls = '<base>%s</base>' % (nok,)
-            self.assertRaises(pyxb.BadTypeValueError, CreateFromDocument, xmls)
-            self.assertRaises(pyxb.BadTypeValueError, base, nok)
+            self.assertRaises(pyxb_114.BadTypeValueError, CreateFromDocument, xmls)
+            self.assertRaises(pyxb_114.BadTypeValueError, base, nok)
         
     def testRestr (self):
         for ok in self.restr_valid:
@@ -65,8 +65,8 @@ class TestTrac_0089 (unittest.TestCase):
             self.assertEqual(instance, base(ok))
         for nok in self.invalid:
             xmls = '<base>%s</base>' % (nok,)
-            self.assertRaises(pyxb.BadTypeValueError, CreateFromDocument, xmls)
-            self.assertRaises(pyxb.BadTypeValueError, base, nok)
+            self.assertRaises(pyxb_114.BadTypeValueError, CreateFromDocument, xmls)
+            self.assertRaises(pyxb_114.BadTypeValueError, base, nok)
         
     def testAlt (self):
         xmls = '<altrestr>C</altrestr>'
@@ -74,8 +74,8 @@ class TestTrac_0089 (unittest.TestCase):
         self.assertEqual(instance, 'C')
         self.assertEqual(instance, altrestr('C'))
         xmls = '<altrestr>A</altrestr>'
-        self.assertRaises(pyxb.BadTypeValueError, CreateFromDocument, xmls)
-        self.assertRaises(pyxb.BadTypeValueError, altrestr, 'A')
+        self.assertRaises(pyxb_114.BadTypeValueError, CreateFromDocument, xmls)
+        self.assertRaises(pyxb_114.BadTypeValueError, altrestr, 'A')
 
 if __name__ == '__main__':
     unittest.main()

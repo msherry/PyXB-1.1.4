@@ -1,19 +1,19 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
 schema_path = '%s/../schemas/test-ctd-attr.xsd' % (os.path.dirname(__file__),)
-code = pyxb.binding.generate.GeneratePython(schema_location=schema_path)
+code = pyxb_114.binding.generate.GeneratePython(schema_location=schema_path)
 rv = compile(code, 'test', 'exec')
 eval(rv)
 Namespace.setPrefix('tca')
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
-from pyxb.utils import domutils
+from pyxb_114.utils import domutils
 def ToDOM (instance):
     return instance.toDOM().documentElement
 
@@ -26,9 +26,9 @@ class TestCTD (unittest.TestCase):
     # Make sure that name collisions are deconflicted in favor of the
     # element declaration.
     def testDeconflict (self):
-        self.assert_(isinstance(structure, pyxb.binding.basis.element))
-        self.assert_(issubclass(structure_, pyxb.binding.basis.complexTypeDefinition))
-        self.assert_(pyxb.binding.basis.complexTypeDefinition._CT_ELEMENT_ONLY == structure_._ContentTypeTag)
+        self.assert_(isinstance(structure, pyxb_114.binding.basis.element))
+        self.assert_(issubclass(structure_, pyxb_114.binding.basis.complexTypeDefinition))
+        self.assert_(pyxb_114.binding.basis.complexTypeDefinition._CT_ELEMENT_ONLY == structure_._ContentTypeTag)
 
     def testSimple (self):
         self.assertEqual('test', simple_('test').value())
@@ -46,12 +46,12 @@ class TestCTD (unittest.TestCase):
         self.assertEqual(xml, ToDOM(instance).toxml("utf-8"))
 
     def testString (self):
-        self.assertEqual('test', pyxb.binding.datatypes.string('test'))
+        self.assertEqual('test', pyxb_114.binding.datatypes.string('test'))
         rv = string('test')
-        self.assertTrue(isinstance(rv, pyxb.binding.datatypes.string))
+        self.assertTrue(isinstance(rv, pyxb_114.binding.datatypes.string))
         self.assertEqual('test', rv)
         rv = CreateFromDocument('<string xmlns="URN:testCTD">test</string>')
-        self.assertTrue(isinstance(rv, pyxb.binding.datatypes.string))
+        self.assertTrue(isinstance(rv, pyxb_114.binding.datatypes.string))
         # Temporarily fails because string is an element, not an elementBinding
         self.assertEqual(string, rv._element())
         self.assertEqual('test', rv)
@@ -86,7 +86,7 @@ class TestCTD (unittest.TestCase):
         self.assertEqual('irish', instance.language)
         self.assert_(instance.capitalized is None)
         self.assertEqual(5432, instance.port)
-        self.assertRaises(pyxb.MissingAttributeError, ToDOM, instance)
+        self.assertRaises(pyxb_114.MissingAttributeError, ToDOM, instance)
         instance.capitalized = False
         self.assertEqual('<tca:emptyWithAttr capitalized="false" xmlns:tca="URN:testCTD"/>', ToDOM(instance).toxml("utf-8"))
 
@@ -133,7 +133,7 @@ class TestCTD (unittest.TestCase):
 
     def testUnrecognizedAttribute (self):
         xml = '<emptyWithAttr capitalized="false" garbage="what is this" xmlns="URN:testCTD"/>'
-        doc = pyxb.utils.domutils.StringToDOM(xml)
+        doc = pyxb_114.utils.domutils.StringToDOM(xml)
         self.assertRaises(UnrecognizedAttributeError, emptyWithAttr.createFromDOM, doc.documentElement)
 
 if __name__ == '__main__':

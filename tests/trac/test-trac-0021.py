@@ -1,5 +1,5 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
@@ -19,13 +19,13 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 	</xs:complexType>
 </xs:schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -34,17 +34,17 @@ class TestTrac0021 (unittest.TestCase):
     elements in that group to not be generated."""
     def testEmpty (self):
         instance = empty()
-        self.assertRaises(pyxb.NotSimpleContentError, lambda: instance.value())
-        self.assertRaises(pyxb.NotComplexContentError, lambda: instance.content())
+        self.assertRaises(pyxb_114.NotSimpleContentError, lambda: instance.value())
+        self.assertRaises(pyxb_114.NotComplexContentError, lambda: instance.content())
 
     def testSimple (self):
         instance = simple("hi")
         self.assertEqual("hi", instance.value())
-        self.assertRaises(pyxb.NotComplexContentError, lambda: instance.content())
+        self.assertRaises(pyxb_114.NotComplexContentError, lambda: instance.content())
 
     def testComplex (self):
         instance = complex("hi")
-        self.assertRaises(pyxb.NotSimpleContentError, lambda: instance.value())
+        self.assertRaises(pyxb_114.NotSimpleContentError, lambda: instance.value())
         elt = instance.content()[0]
         self.assertTrue(isinstance(elt, basestring))
         self.assertEqual("hi", elt)

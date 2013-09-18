@@ -1,6 +1,6 @@
 import sys
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 
 
 xmls = '''<?xml version="1.0"?>
@@ -27,7 +27,7 @@ import unittest
 class TestTrac0123 (unittest.TestCase):
     def testEmpty (self):
         try:
-            import pyxb.bundles.wssplat.ds as dsig
+            import pyxb_114.bundles.wssplat.ds as dsig
         except ImportError, e:
             sys.stderr.write('%s: Skipping test, error importing dsig: %s\n' % (__file__, e))
             return

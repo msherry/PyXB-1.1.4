@@ -1,1 +1,1 @@
-from pyxb.bundles.wssplat.raw.wsrf_bf import *
+from pyxb_114.bundles.wssplat.raw.wsrf_bf import *

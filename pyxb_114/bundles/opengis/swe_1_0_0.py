@@ -1,1 +1,1 @@
-from pyxb.bundles.opengis.raw.swe_1_0_0 import *
+from pyxb_114.bundles.opengis.raw.swe_1_0_0 import *

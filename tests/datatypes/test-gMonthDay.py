@@ -1,5 +1,5 @@
 import unittest
-import pyxb.binding.datatypes as xsd
+import pyxb_114.binding.datatypes as xsd
 
 class Test_gMonthDay (unittest.TestCase):
     def testBasic (self):

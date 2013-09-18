@@ -1,8 +1,8 @@
 import tmstvd
-import pyxb.utils.domutils as domutils
+import pyxb_114.utils.domutils as domutils
 import xml.dom.minidom
-import pyxb.utils.saxdom
-import pyxb.binding.saxer
+import pyxb_114.utils.saxdom
+import pyxb_114.binding.saxer
 import time
 #import cProfile
 
@@ -40,7 +40,7 @@ mt4 = time.time()
 
 print 'Generating binding from %s with SAXDOM' % (xml_file,)
 dt1 = time.time()
-dom = pyxb.utils.saxdom.parseString(xmls, location_base=xml_file)
+dom = pyxb_114.utils.saxdom.parseString(xmls, location_base=xml_file)
 dt2 = time.time()
 #cProfile.run('tmstvd.CreateFromDOM(dom.documentElement)', 'saxdom.prf')
 saxdom_instance = tmstvd.CreateFromDOM(dom.documentElement)
@@ -49,7 +49,7 @@ dt3 = time.time()
 
 print 'Generating binding from %s with SAX' % (xml_file,)
 st1 = time.time()
-saxer = pyxb.binding.saxer.make_parser(location_base=xml_file)
+saxer = pyxb_114.binding.saxer.make_parser(location_base=xml_file)
 handler = saxer.getContentHandler()
 st2 = time.time()
 saxer.parse(open(xml_file))

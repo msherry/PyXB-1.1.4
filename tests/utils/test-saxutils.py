@@ -1,8 +1,8 @@
 import unittest
-from pyxb.utils.saxutils import *
+from pyxb_114.utils.saxutils import *
 from xml.dom import Node
 import xml.dom
-import pyxb.namespace
+import pyxb_114.namespace
 
 class TestState (SAXElementState):
     StateSequence = []
@@ -11,14 +11,14 @@ class TestState (SAXElementState):
         self.StateSequence.append(self)
         super(TestState, self).__init__(*args, **kw)
 
-BogusNamespace = pyxb.namespace.NamespaceInstance('urn:test-saxutils-bogus')
-books_ns = pyxb.namespace.NamespaceInstance('urn:loc.gov:books')
-isbn_ns = pyxb.namespace.NamespaceInstance('urn:ISBN:0-395-36341-6')
-xhtml_ns = pyxb.namespace.NamespaceInstance('http://www.w3.org/1999/xhtml')
+BogusNamespace = pyxb_114.namespace.NamespaceInstance('urn:test-saxutils-bogus')
+books_ns = pyxb_114.namespace.NamespaceInstance('urn:loc.gov:books')
+isbn_ns = pyxb_114.namespace.NamespaceInstance('urn:ISBN:0-395-36341-6')
+xhtml_ns = pyxb_114.namespace.NamespaceInstance('http://www.w3.org/1999/xhtml')
 
 class TestInScopeNames (unittest.TestCase):
     def show (self, node):
-        xmlns_map = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(node).inScopeNamespaces()
+        xmlns_map = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(node).inScopeNamespaces()
         #print '%s: %s' % (node.nodeName, ' ; '.join([ '%s=%s' % (_k, _v.uri()) for (_k, _v) in xmlns_map.items()]))
         return xmlns_map
 

@@ -1,4 +1,4 @@
-import pyxb.binding.datatypes as xs
+import pyxb_114.binding.datatypes as xs
 
 import unittest
 

@@ -1,5 +1,5 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
@@ -19,28 +19,28 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 
 </xs:schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
 class TestTrac0110 (unittest.TestCase):
     def tearDown (self):
-        pyxb.RequireValidWhenGenerating(True)
-        pyxb.RequireValidWhenParsing(True)
+        pyxb_114.RequireValidWhenGenerating(True)
+        pyxb_114.RequireValidWhenParsing(True)
 
     def testWithValidation (self):
         expect = '<tSingle><li>1 2 3</li></tSingle>'
         s = tSingle()
-        pyxb.RequireValidWhenGenerating(True)
+        pyxb_114.RequireValidWhenGenerating(True)
         s.li = intList([1,2,3])
         self.assertEqual(s.toxml("utf-8", root_only=True), expect)
-        pyxb.RequireValidWhenGenerating(False)
+        pyxb_114.RequireValidWhenGenerating(False)
         s.li = intList([1,2,3])
         self.assertEqual(s.toxml("utf-8", root_only=True), expect)
 

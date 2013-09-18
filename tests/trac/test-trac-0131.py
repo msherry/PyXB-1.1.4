@@ -4,10 +4,10 @@
 # http://www.evanjones.ca/python-utf8.html
 # http://bytes.com/topic/python/answers/41153-xml-unicode-what-am-i-doing-wrong
 
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 import xml.sax
 import StringIO
 
@@ -25,13 +25,13 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
     </xs:element>
 </xs:schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -47,10 +47,10 @@ class TestTrac0131 (unittest.TestCase):
     ExpectedUnicodeErrors = ( UnicodeEncodeError, xml.sax.SAXParseException )
 
     def setUp (self):
-        self.__xmlStyle = pyxb._XMLStyle
+        self.__xmlStyle = pyxb_114._XMLStyle
 
     def tearDown (self):
-        pyxb._SetXMLStyle(self.__xmlStyle)
+        pyxb_114._SetXMLStyle(self.__xmlStyle)
 
     def testRepresentation (self):
         self.assertEqual(self.texts, 'Sign of Leser-Tr\xc3\x83\xc2\xa9lat')
@@ -60,11 +60,11 @@ class TestTrac0131 (unittest.TestCase):
         xmls = xmlu.encode('utf-8')
         self.assertTrue(isinstance(xmlu, unicode))
         self.assertTrue(isinstance(xmls, str))
-        pyxb._SetXMLStyle(pyxb.XMLStyle_saxer)
+        pyxb_114._SetXMLStyle(pyxb_114.XMLStyle_saxer)
         self.assertRaises(self.ExpectedUnicodeErrors, CreateFromDocument, xmlu)
         instance = CreateFromDocument(xmls)
         self.assertEqual(instance.e, self.textu)
-        pyxb._SetXMLStyle(pyxb.XMLStyle_minidom)
+        pyxb_114._SetXMLStyle(pyxb_114.XMLStyle_minidom)
         if sys.version_info[:2] == (2, 7):
             self.assertRaises(self.ExpectedUnicodeErrors, CreateFromDocument, xmlu)
         else:
@@ -73,7 +73,7 @@ class TestTrac0131 (unittest.TestCase):
         instance = CreateFromDocument(xmls)
         self.assertEqual(instance.e, self.textu)
         # saxdom can handle Unicode representation
-        pyxb._SetXMLStyle(pyxb.XMLStyle_saxdom)
+        pyxb_114._SetXMLStyle(pyxb_114.XMLStyle_saxdom)
         instance = CreateFromDocument(xmlu)
         self.assertEqual(instance.e, self.textu)
         instance = CreateFromDocument(xmls)
@@ -84,16 +84,16 @@ class TestTrac0131 (unittest.TestCase):
         xmls = xmlu.encode('utf-8')
         self.assertTrue(isinstance(xmlu, unicode))
         self.assertTrue(isinstance(xmls, str))
-        pyxb._SetXMLStyle(pyxb.XMLStyle_saxer)
+        pyxb_114._SetXMLStyle(pyxb_114.XMLStyle_saxer)
         self.assertRaises(self.ExpectedUnicodeErrors, CreateFromDocument, xmlu)
         instance = CreateFromDocument(xmls)
         self.assertEqual(instance.e, self.textu)
-        pyxb._SetXMLStyle(pyxb.XMLStyle_minidom)
+        pyxb_114._SetXMLStyle(pyxb_114.XMLStyle_minidom)
         self.assertRaises(self.ExpectedUnicodeErrors, CreateFromDocument, xmlu)
         instance = CreateFromDocument(xmls)
         self.assertEqual(instance.e, self.textu)
         # saxdom can handle Unicode representation
-        pyxb._SetXMLStyle(pyxb.XMLStyle_saxdom)
+        pyxb_114._SetXMLStyle(pyxb_114.XMLStyle_saxdom)
         instance = CreateFromDocument(xmlu)
         self.assertEqual(instance.e, self.textu)
         instance = CreateFromDocument(xmls)

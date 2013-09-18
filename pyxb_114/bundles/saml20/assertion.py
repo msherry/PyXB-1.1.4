@@ -1,1 +1,1 @@
-from pyxb.bundles.saml20.raw.assertion import *
+from pyxb_114.bundles.saml20.raw.assertion import *

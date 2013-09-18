@@ -1,9 +1,9 @@
-import pyxb
+import pyxb_114
 
-print "\n".join([ str(_ns) for _ns in pyxb.namespace.AvailableNamespaces() ])
-ns = pyxb.namespace.NamespaceForURI('URN:shared-types', True)
+print "\n".join([ str(_ns) for _ns in pyxb_114.namespace.AvailableNamespaces() ])
+ns = pyxb_114.namespace.NamespaceForURI('URN:shared-types', True)
 ns.validateComponentModel()
-ns = pyxb.namespace.NamespaceForURI('URN:test-external', True)
+ns = pyxb_114.namespace.NamespaceForURI('URN:test-external', True)
 ns.validateComponentModel()
 
 import bindings.st as st

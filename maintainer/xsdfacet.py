@@ -1,13 +1,13 @@
 import sys
-import pyxb.xmlschema
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.xmlschema
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 
 files = sys.argv[1:]
 if 0 == len(files):
-    files = [ 'pyxb/standard/schemas/XMLSchema.xsd' ]
+    files = [ 'pyxb_114/standard/schemas/XMLSchema.xsd' ]
 
-rv = pyxb.binding.generate.GeneratePython(schema_location=files[0], generate_facets=True)
+rv = pyxb_114.binding.generate.GeneratePython(schema_location=files[0], generate_facets=True)
 print '''# ---------
 %s
 # -------------''' % (rv,)

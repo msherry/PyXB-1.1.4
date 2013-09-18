@@ -14,12 +14,12 @@
 
 """Classes and global objects related to built-in U{XML Namespaces<http://www.w3.org/TR/2006/REC-xml-names-20060816/index.html>}."""
 
-import pyxb
+import pyxb_114
 
 # A unique identifier for components that are built-in to the PyXB system
-BuiltInObjectUID = pyxb.utils.utility.UniqueIdentifier('PyXB-' + pyxb.__version__ + '-Builtin')
+BuiltInObjectUID = pyxb_114.utils.utility.UniqueIdentifier('PyXB-' + pyxb_114.__version__ + '-Builtin')
 
-from pyxb.namespace import Namespace
+from pyxb_114.namespace import Namespace
 
 class _XMLSchema_instance (Namespace):
     """Extension of L{Namespace} that pre-defines components available in the
@@ -79,7 +79,7 @@ class _XMLSchema_instance (Namespace):
         if value in (self.PT_strict, self.PT_lax, self.PT_skip):
             self.__processType = value
         elif value is not None:
-            raise pyxb.ValueError(value)
+            raise pyxb_114.ValueError(value)
         return self.__processType
     
     def _InterpretTypeAttribute (self, type_name, ns_ctx, fallback_namespace, type_class):
@@ -89,7 +89,7 @@ class _XMLSchema_instance (Namespace):
         @param ns_ctx: The NamespaceContext within which the type_name should be resolved
         @param fallback_namespace: The namespace that should be used if the type name has no prefix
         @param type_class: The value to return if the type name is missing or acceptably invalid
-        @raises L{pyxb.BadDocumentError}: if the processing type
+        @raises L{pyxb_114.BadDocumentError}: if the processing type
         configuration is L{PT_strict} and the type name fails to
         resolve to a type definition that is consistent with any
         provided type_class.
@@ -107,9 +107,9 @@ class _XMLSchema_instance (Namespace):
             alternative_type_class = None
         if self.PT_strict == pt:
             if alternative_type_class is None:
-                raise pyxb.BadDocumentError('No type binding for %s' % (type_name,))
+                raise pyxb_114.BadDocumentError('No type binding for %s' % (type_name,))
             if (type_class is not None) and (not (type_class._IsUrType() or issubclass(alternative_type_class, type_class))):
-                raise pyxb.BadDocumentError('%s value %s is not subclass of element type %s' % (type_name, type_en, type_class._ExpandedName))
+                raise pyxb_114.BadDocumentError('%s value %s is not subclass of element type %s' % (type_name, type_en, type_class._ExpandedName))
         if (self.PT_strict == pt) or ((self.PT_lax == pt) and (alternative_type_class is not None)):
             type_class = alternative_type_class
             did_replace = True
@@ -151,8 +151,8 @@ class _XML (Namespace):
         for this namespace. """
         
         assert structures_module is not None
-        import pyxb.binding.datatypes as xsd
-        import pyxb.binding.facets as xsdf
+        import pyxb_114.binding.datatypes as xsd
+        import pyxb_114.binding.facets as xsdf
         import archive
 
         self.configureCategories([archive.NamespaceArchive._AnonymousCategory()])
@@ -184,7 +184,7 @@ class _XMLSchema (Namespace):
     """Extension of L{Namespace} that pre-defines components available in the
     XMLSchema namespace.
 
-    The types are defined when L{pyxb.xmlschema.structures} is imported.
+    The types are defined when L{pyxb_114.xmlschema.structures} is imported.
     """
 
     def _defineBuiltins_ox (self, structures_module):
@@ -220,7 +220,7 @@ XMLNamespaces = Namespace('http://www.w3.org/2000/xmlns/',
 XMLSchema = _XMLSchema('http://www.w3.org/2001/XMLSchema',
                        description='XML Schema',
                        builtin_namespace='XMLSchema',
-                       builtin_module_path='pyxb.binding.datatypes',
+                       builtin_module_path='pyxb_114.binding.datatypes',
                        in_scope_namespaces = { 'xs' : None })
 """Namespace and URI for the XMLSchema namespace (often C{xs}, or C{xsd})"""
 
@@ -236,7 +236,7 @@ namespace in the XML schema, so define it."""
 XML = _XML('http://www.w3.org/XML/1998/namespace',
            description='XML namespace',
            builtin_namespace='XML',
-           builtin_module_path='pyxb.binding.xml_',
+           builtin_module_path='pyxb_114.binding.xml_',
            is_undeclared_namespace=True,
            bound_prefix='xml',
            default_namespace=XHTML,
@@ -265,10 +265,10 @@ BuiltInNamespaces = [
 __InitializedBuiltinNamespaces = False
 
 def _InitializeBuiltinNamespaces (structures_module):
-    """Invoked at the end of the L{pyxb.xmlschema.structures} module to
+    """Invoked at the end of the L{pyxb_114.xmlschema.structures} module to
     initialize the component models of the built-in namespaces.
 
-    @param structures_module: The L{pyxb.xmlschema.structures} module may not
+    @param structures_module: The L{pyxb_114.xmlschema.structures} module may not
     be importable by that name at the time this is invoked (because it is
     still being processed), so it gets passed in as a parameter."""
     global __InitializedBuiltinNamespaces

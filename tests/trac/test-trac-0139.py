@@ -2,10 +2,10 @@
 #
 
 import sys
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.saxutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.saxutils
 import tempfile
 import xml.sax
 
@@ -17,14 +17,14 @@ xsd=u'''<?xml version="1.0" encoding="utf-8"?>
 '''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code.encode('utf-8'), 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -74,10 +74,10 @@ class TestTrac_0139 (unittest.TestCase):
         os.remove(self.path_nihongo)
 
     def useLibXML2Parser (self):
-        pyxb.utils.saxutils.SetCreateParserModules(['drv_libxml2'])
+        pyxb_114.utils.saxutils.SetCreateParserModules(['drv_libxml2'])
 
     def tearDown (self):
-        pyxb.utils.saxutils.SetCreateParserModules(None)
+        pyxb_114.utils.saxutils.SetCreateParserModules(None)
 
     def __init__ (self, *args, **kw):
         self.SetUpClass()
@@ -92,16 +92,16 @@ class TestTrac_0139 (unittest.TestCase):
 
     # Make sure create parser modules is reset after each test
     def tearDown (self):
-        pyxb.utils.saxutils.SetCreateParserModules(None)
+        pyxb_114.utils.saxutils.SetCreateParserModules(None)
 
     def testParserTypes (self):
         self.assertEqual('ascii', sys.getdefaultencoding())
-        parser = pyxb.utils.saxutils.make_parser()
+        parser = pyxb_114.utils.saxutils.make_parser()
         self.assertTrue(isinstance(parser, xml.sax.expatreader.ExpatParser))
         if self.have_libxml2:
             import drv_libxml2
             self.useLibXML2Parser();
-            parser = pyxb.utils.saxutils.make_parser()
+            parser = pyxb_114.utils.saxutils.make_parser()
             self.assertTrue(isinstance(parser, drv_libxml2.LibXml2Reader))
 
     def testASCII_expat_str (self):

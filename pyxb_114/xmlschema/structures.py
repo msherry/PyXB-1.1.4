@@ -32,21 +32,21 @@ basic fields, though all these must support namespaces.
 """
 
 import traceback
-import pyxb
-import pyxb.xmlschema
+import pyxb_114
+import pyxb_114.xmlschema
 from xml.dom import Node
 import xml.dom
 import types
 import re
 
-import pyxb.namespace.archive
-import pyxb.namespace.resolution
+import pyxb_114.namespace.archive
+import pyxb_114.namespace.resolution
 
-from pyxb.binding import basis
-from pyxb.binding import datatypes
-from pyxb.binding import facets
-from pyxb.utils.domutils import *
-import pyxb.utils.utility
+from pyxb_114.binding import basis
+from pyxb_114.binding import datatypes
+from pyxb_114.binding import facets
+from pyxb_114.utils.domutils import *
+import pyxb_114.utils.utility
 import copy
 import urllib2
 import urlparse
@@ -56,12 +56,12 @@ import os.path
 _PastAddBuiltInTypes = False
 
 # Make it easier to check node names in the XMLSchema namespace
-from pyxb.namespace import XMLSchema as xsd
+from pyxb_114.namespace import XMLSchema as xsd
 
-class _SchemaComponent_mixin (pyxb.namespace._ComponentDependency_mixin,
-                              pyxb.namespace.archive._ArchivableObject_mixin,
-                              pyxb.utils.utility.PrivateTransient_mixin,
-                              pyxb.utils.utility.Locatable_mixin):
+class _SchemaComponent_mixin (pyxb_114.namespace._ComponentDependency_mixin,
+                              pyxb_114.namespace.archive._ArchivableObject_mixin,
+                              pyxb_114.utils.utility.PrivateTransient_mixin,
+                              pyxb_114.utils.utility.Locatable_mixin):
     """A mix-in that marks the class as representing a schema component.
 
     This exists so that we can determine the owning schema for any
@@ -82,7 +82,7 @@ class _SchemaComponent_mixin (pyxb.namespace._ComponentDependency_mixin,
         generally a reference to a namespace context associated with the DOM
         element node corresponding to this component."""
         if self.__namespaceContext is None:
-            raise pyxb.LogicError('Attempt to access missing namespace context for %s' % (self,))
+            raise pyxb_114.LogicError('Attempt to access missing namespace context for %s' % (self,))
         return self.__namespaceContext
     def _clearNamespaceContext (self):
         self.__namespaceContext = None
@@ -157,14 +157,14 @@ class _SchemaComponent_mixin (pyxb.namespace._ComponentDependency_mixin,
         node = kw.get('node')
         if self.__namespaceContext is None:
             if node is None:
-                raise pyxb.LogicError('Schema component constructor must be given namespace_context or node')
-            self.__namespaceContext = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(node)
+                raise pyxb_114.LogicError('Schema component constructor must be given namespace_context or node')
+            self.__namespaceContext = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(node)
         if self.__namespaceContext is None:
-            raise pyxb.LogicError('No namespace_context for schema component')
+            raise pyxb_114.LogicError('No namespace_context for schema component')
            
         super(_SchemaComponent_mixin, self).__init__(*args, **kw)
 
-        if isinstance(node, pyxb.utils.utility.Locatable_mixin):
+        if isinstance(node, pyxb_114.utils.utility.Locatable_mixin):
             self._setLocation(node._location())
 
         self._namespaceContext().targetNamespace()._associateComponent(self)
@@ -262,7 +262,7 @@ class _SchemaComponent_mixin (pyxb.namespace._ComponentDependency_mixin,
         # have an unassigned scope.  However, we do clone
         # non-declarations that contain cloned declarations.
         #assert (not isinstance(self, _ScopedDeclaration_mixin)) or self._scopeIsIndeterminate()
-        if isinstance(self, pyxb.namespace.resolution._Resolvable_mixin):
+        if isinstance(self, pyxb_114.namespace.resolution._Resolvable_mixin):
             assert self.isResolved()
 
         assert owner is not None
@@ -272,7 +272,7 @@ class _SchemaComponent_mixin (pyxb.namespace._ComponentDependency_mixin,
             self.__clones = set()
         self.__clones.add(that)
         that._resetClone_csc(owner=owner, origin=origin)
-        if isinstance(that, pyxb.namespace.resolution._Resolvable_mixin):
+        if isinstance(that, pyxb_114.namespace.resolution._Resolvable_mixin):
             assert that.isResolved()
         return that
 
@@ -316,7 +316,7 @@ class _SchemaComponent_mixin (pyxb.namespace._ComponentDependency_mixin,
         Python construct which serves as its binding.
 
         Type definitions have classes as their bindings.  Global element
-        declarations have instances of L{pyxb.binding.basis.element} as their
+        declarations have instances of L{pyxb_114.binding.basis.element} as their
         bindings."""
         return self.isTypeDefinition() or (isinstance(self, ElementDeclaration) and self._scopeIsGlobal())
 
@@ -337,7 +337,7 @@ class _SchemaComponent_mixin (pyxb.namespace._ComponentDependency_mixin,
             self.__nameInBinding = other.__nameInBinding
         return self
 
-class _Singleton_mixin (pyxb.cscRoot):
+class _Singleton_mixin (pyxb_114.cscRoot):
     """This class is a mix-in which guarantees that only one instance
     of the class will be created.  It is used to ensure that the
     ur-type instances are pointer-equivalent even when unpickling.
@@ -348,7 +348,7 @@ class _Singleton_mixin (pyxb.cscRoot):
             setattr(cls, singleton_property, super(_Singleton_mixin, cls).__new__(cls, *args, **kw))
         return cls.__dict__[singleton_property]
 
-class _Annotated_mixin (pyxb.cscRoot):
+class _Annotated_mixin (pyxb_114.cscRoot):
     """Mix-in that supports an optional single annotation that describes the component.
 
     Most schema components have annotations.  The ones that don't are
@@ -385,7 +385,7 @@ class _Annotated_mixin (pyxb.cscRoot):
     def annotation (self):
         return self.__annotation
 
-class _PickledAnonymousReference (pyxb.cscRoot):
+class _PickledAnonymousReference (pyxb_114.cscRoot):
     """A helper that encapsulates a reference to an anonymous type in a different namespace.
 
     Normally references to components in other namespaces can be made using
@@ -394,10 +394,10 @@ class _PickledAnonymousReference (pyxb.cscRoot):
     element declarations held in that type.  If these declarations are local
     to the base complex type, they cannot be identified by name.  This class
     provides a pickleable representation for them that behaves rather like an
-    L{pyxb.namespace.ExpandedName} instance in that it can be used to
+    L{pyxb_114.namespace.ExpandedName} instance in that it can be used to
     dereference various component types."""
 
-    __AnonymousCategory = pyxb.namespace.archive.NamespaceArchive._AnonymousCategory()
+    __AnonymousCategory = pyxb_114.namespace.archive.NamespaceArchive._AnonymousCategory()
 
     __namespace = None
     __anonymousName = None
@@ -405,7 +405,7 @@ class _PickledAnonymousReference (pyxb.cscRoot):
         """Create a new anonymous reference.
         
         @param namespace: The namespace in which the component is declared.
-        @type namespace: L{pyxb.namespace.Namespace}
+        @type namespace: L{pyxb_114.namespace.Namespace}
         @param anonymous_name: A generated name guaranteed to be unique within
         the namespace.  See L{_NamedComponent_mixin._anonymousName}.
         @type anonymous_name: C{basestring}.
@@ -420,7 +420,7 @@ class _PickledAnonymousReference (pyxb.cscRoot):
         regardless of whether it is a normal or anonymous reference."""
         if not isinstance(object_reference, _PickledAnonymousReference):
             assert isinstance(object_reference, tuple)
-            object_reference = pyxb.namespace.ExpandedName(object_reference)
+            object_reference = pyxb_114.namespace.ExpandedName(object_reference)
         return object_reference
 
     def namespace (self):
@@ -450,9 +450,9 @@ class _PickledAnonymousReference (pyxb.cscRoot):
 
     def __str__ (self):
         """Represent the anonymous reference in a form recognizable by a developer."""
-        return 'ANONYMOUS:%s' % (pyxb.namespace.ExpandedName(self.__namespace, self.__anonymousName),)
+        return 'ANONYMOUS:%s' % (pyxb_114.namespace.ExpandedName(self.__namespace, self.__anonymousName),)
     
-class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.cscRoot):
+class _NamedComponent_mixin (pyxb_114.utils.utility.PrivateTransient_mixin, pyxb_114.cscRoot):
     """Mix-in to hold the name and targetNamespace of a component.
 
     The name may be None, indicating an anonymous component.  The
@@ -500,7 +500,7 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
                 anon_name = 'ANON_IN_GROUP'
             if unique_id is not None:
                 anon_name = '%s_%s' % (anon_name, unique_id)
-            anon_name = pyxb.utils.utility.MakeUnique(anon_name, set(namespace.categoryMap(self.__AnonymousCategory).keys()))
+            anon_name = pyxb_114.utils.utility.MakeUnique(anon_name, set(namespace.categoryMap(self.__AnonymousCategory).keys()))
         self.__anonymousName = anon_name
         namespace.addCategoryObject(self.__AnonymousCategory, anon_name, self)
     def _anonymousName (self, namespace=None):
@@ -535,7 +535,7 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
         return self.__templateMap
     __templateMap = None
 
-    __AnonymousCategory = pyxb.namespace.archive.NamespaceArchive._AnonymousCategory()
+    __AnonymousCategory = pyxb_114.namespace.archive.NamespaceArchive._AnonymousCategory()
 
     def __needAnonymousSupport (self):
         # If this component doesn't have a name, or if it's in some scope in
@@ -597,10 +597,10 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
         return self.targetNamespace() in (ns, None)
 
     def expandedName (self):
-        """Return the L{pyxb.namespace.ExpandedName} of this object."""
+        """Return the L{pyxb_114.namespace.ExpandedName} of this object."""
         if self.name() is None:
             return None
-        return pyxb.namespace.ExpandedName(self.targetNamespace(), self.name())
+        return pyxb_114.namespace.ExpandedName(self.targetNamespace(), self.name())
 
     def __new__ (cls, *args, **kw):
         """Pickling support.
@@ -617,7 +617,7 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
         been validated (or that it be validated here).  That shouldn't
         be a problem, except for the dependency loop resulting from
         use of xml:lang in the XMLSchema namespace.  For that issue,
-        see pyxb.namespace._XMLSchema.
+        see pyxb_114.namespace._XMLSchema.
         """
 
         if 0 == len(args):
@@ -639,15 +639,15 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
                 assert 'typeDefinition' in scope_ref.namespace().categories()
             scope_ctd = scope_ref.typeDefinition()
             if scope_ctd is None:
-                raise pyxb.SchemaValidationError('Unable to resolve local scope %s' % (scope_ref,))
+                raise pyxb_114.SchemaValidationError('Unable to resolve local scope %s' % (scope_ref,))
             if issubclass(icls, AttributeDeclaration):
                 rv = scope_ctd.lookupScopedAttributeDeclaration(object_reference)
             elif issubclass(icls, ElementDeclaration):
                 rv = scope_ctd.lookupScopedElementDeclaration(object_reference)
             else:
-                raise pyxb.IncompleteImplementationError('Scope %s reference lookup of %s not implemented for type %s' % (scope_ref, object_reference, icls))
+                raise pyxb_114.IncompleteImplementationError('Scope %s reference lookup of %s not implemented for type %s' % (scope_ref, object_reference, icls))
             if rv is None:
-                raise pyxb.SchemaValidationError('Unable to resolve %s as %s in scope %s' % (object_reference, icls, scope_ref))
+                raise pyxb_114.SchemaValidationError('Unable to resolve %s as %s in scope %s' % (object_reference, icls, scope_ref))
         elif _ScopedDeclaration_mixin.ScopeIsGlobal(scope) or _ScopedDeclaration_mixin.ScopeIsIndeterminate(scope):
             if (issubclass(icls, SimpleTypeDefinition) or issubclass(icls, ComplexTypeDefinition)):
                 rv = object_reference.typeDefinition()
@@ -662,11 +662,11 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
             elif issubclass(icls, IdentityConstraintDefinition):
                 rv = object_reference.identityConstraintDefinition()
             else:
-                raise pyxb.IncompleteImplementationError('Reference lookup of %s not implemented for type %s' % (object_reference, icls))
+                raise pyxb_114.IncompleteImplementationError('Reference lookup of %s not implemented for type %s' % (object_reference, icls))
             if rv is None:
-                raise pyxb.SchemaValidationError('Unable to resolve %s as %s' % (object_reference, icls))
+                raise pyxb_114.SchemaValidationError('Unable to resolve %s as %s' % (object_reference, icls))
         else:
-            raise pyxb.IncompleteImplementationError('Unable to resolve reference %s, scope %s ns %s type %s, class %s' % (object_reference, scope, scope.targetNamespace(), type(scope), icls))
+            raise pyxb_114.IncompleteImplementationError('Unable to resolve reference %s, scope %s ns %s type %s, class %s' % (object_reference, scope, scope.targetNamespace(), type(scope), icls))
         return rv
 
     def __init__ (self, *args, **kw):
@@ -695,7 +695,7 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
         
         Anonymous components are inherently name inequivalent, except to
         themselves.  This relies on equivalence as defined for
-        pyxb.namespace.ExpandedName, for which None is not equivalent to any
+        pyxb_114.namespace.ExpandedName, for which None is not equivalent to any
         non-anonymous name."""
         # Note that unpickled objects 
         return (self == other) or ((not self.isAnonymous()) and (self.expandedName() == other.expandedName()))
@@ -727,7 +727,7 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
                 return True
             print 'Checking %s against %s' % (this, other)
             if not (this.isResolved() and other.isResolved()):
-                raise pyxb.IncompleteImplementationError('Oh fudge.  Somebody violated the assumptions in ElementDeclaration.isAdaptable.')
+                raise pyxb_114.IncompleteImplementationError('Oh fudge.  Somebody violated the assumptions in ElementDeclaration.isAdaptable.')
             if isinstance(self, ComplexTypeDefinition):
                 if self.DM_restriction != this.derivationMethod():
                     return False
@@ -735,7 +735,7 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
                 if self._DA_restriction != this._derivationAlternative():
                     return False
             else:
-                raise pyxb.IncompleteImplementationError('Need derivation consistency check for type %s' % (type(this),))
+                raise pyxb_114.IncompleteImplementationError('Need derivation consistency check for type %s' % (type(this),))
             this = this.baseTypeDefinition()
             if this.isUrTypeDefinition():
                 # Well, this certainly can't be a valid restriction of
@@ -756,7 +756,7 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
         # Get the namespace we're pickling.  If the namespace is None,
         # we're not pickling; we're probably cloning, and in that case
         # we don't want to use the reference state encoding.
-        pickling_archive = pyxb.namespace.archive.NamespaceArchive.PicklingArchive()
+        pickling_archive = pyxb_114.namespace.archive.NamespaceArchive.PicklingArchive()
         if pickling_archive is None:
             return False
         # If this thing is scoped in a complex type that belongs to the
@@ -820,7 +820,7 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
                     # this instance can be looked up by a unique identifier.
                     pass
                 else:
-                    raise pyxb.IncompleteImplementationError('pickling unrecognized scope %s type %s' % (self.scope(), type(self.scope())))
+                    raise pyxb_114.IncompleteImplementationError('pickling unrecognized scope %s type %s' % (self.scope(), type(self.scope())))
             else:
                 assert isinstance(self, _NamedComponent_mixin), 'Pickling unnamed component %s in indeterminate scope by reference' % (self,)
                 assert not isinstance(scope, ComplexTypeDefinition), '%s %s %s %s' % (self, self.name(), scope, self._objectOrigin())
@@ -855,7 +855,7 @@ class _NamedComponent_mixin (pyxb.utils.utility.PrivateTransient_mixin, pyxb.csc
         self._setObjectOrigin(origin, override=True)
         return rv
 
-class _ValueConstraint_mixin (pyxb.cscRoot):
+class _ValueConstraint_mixin (pyxb_114.cscRoot):
     """Mix-in indicating that the component contains a simple-type
     value that may be constrained."""
     
@@ -904,7 +904,7 @@ class _ValueConstraint_mixin (pyxb.cscRoot):
         self.__valueConstraint = None
         return self
         
-class _ScopedDeclaration_mixin (pyxb.cscRoot):
+class _ScopedDeclaration_mixin (pyxb_114.cscRoot):
     """Mix-in class for named components that have a scope.
 
     Scope is important when doing cross-namespace inheritance,
@@ -1023,7 +1023,7 @@ class _PluralityData (types.ListType):
                 elif isinstance(ed, Wildcard):
                     pass
                 else:
-                    raise pyxb.LogicError('Unexpected plurality index %s' % (ed,))
+                    raise pyxb_114.LogicError('Unexpected plurality index %s' % (ed,))
         return combined_plurality
 
     def __fromModelGroup (self, model_group):
@@ -1050,7 +1050,7 @@ class _PluralityData (types.ListType):
                     new_pd = stage_pd
                 self.extend(new_pd)
         else:
-            raise pyxb.LogicError('Unrecognized compositor value %s' % (model_group.compositor(),))
+            raise pyxb_114.LogicError('Unrecognized compositor value %s' % (model_group.compositor(),))
 
     def __fromParticle (self, particle):
         assert particle.isResolved()
@@ -1090,7 +1090,7 @@ class _PluralityData (types.ListType):
         elif isinstance(component, Wildcard):
             pass
         elif component is not None:
-            raise pyxb.IncompleteImplementationError("No support for plurality of component type %s" % (type(component),))
+            raise pyxb_114.IncompleteImplementationError("No support for plurality of component type %s" % (type(component),))
         # Elements get lost if there's a result set that doesn't have any
         # documents in it.
         if 0 == len(self):
@@ -1100,7 +1100,7 @@ class _PluralityData (types.ListType):
         super(_PluralityData, self).__init__()
         self.__setFromComponent(component)
 
-class _AttributeWildcard_mixin (pyxb.cscRoot):
+class _AttributeWildcard_mixin (pyxb_114.cscRoot):
     """Support for components that accept attribute wildcards.
 
     That is L{AttributeGroupDefinition} and L{ComplexTypeDefinition}.  The
@@ -1134,9 +1134,9 @@ class _AttributeWildcard_mixin (pyxb.cscRoot):
         C{attributeWildcard} is a single DOM node with XMLSchema name
         C{anyAttribute} (or C{None}, if no such node is present in the list).
 
-        @raise pyxb.SchemaValidationError: An C{attributeGroup} node is
+        @raise pyxb_114.SchemaValidationError: An C{attributeGroup} node is
         present but does not have the required C{ref} attribute.
-        @raise pyxb.SchemaValidationError: Multiple C{anyAttribute} nodes are
+        @raise pyxb_114.SchemaValidationError: Multiple C{anyAttribute} nodes are
         identified.
         """
         
@@ -1154,11 +1154,11 @@ class _AttributeWildcard_mixin (pyxb.cscRoot):
                 # This must be an attributeGroupRef
                 agd_attr = NodeAttribute(node, 'ref')
                 if agd_attr is None:
-                    raise pyxb.SchemaValidationError('Require ref attribute on internal attributeGroup elements')
+                    raise pyxb_114.SchemaValidationError('Require ref attribute on internal attributeGroup elements')
                 attribute_groups.append(agd_attr)
             elif xsd.nodeIsNamed(node, 'anyAttribute'):
                 if any_attribute is not None:
-                    raise pyxb.SchemaValidationError('Multiple anyAttribute children are not allowed')
+                    raise pyxb_114.SchemaValidationError('Multiple anyAttribute children are not allowed')
                 any_attribute = node
                 
         return (attributes, attribute_groups, any_attribute)
@@ -1168,7 +1168,7 @@ class _AttributeWildcard_mixin (pyxb.cscRoot):
         """Implement the algorithm as described the
         U{specification<http://www.w3.org/TR/xmlschema-1/#declare-type>}.
 
-        @param namespace_context: The L{pyxb.namespace.NamespaceContext} to be
+        @param namespace_context: The L{pyxb_114.namespace.NamespaceContext} to be
         associated with any created L{Wildcard} instance
         @param attribute_groups: A list of L{AttributeGroupDefinition} instances
         @param local_wildcard: A L{Wildcard} instance computed from a relevant
@@ -1199,7 +1199,7 @@ class _AttributeWildcard_mixin (pyxb.cscRoot):
                         namespace_constraint=Wildcard.IntensionalIntersection(agd_constraints),
                         namespace_context=namespace_context)
 
-class AttributeDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.namespace.resolution._Resolvable_mixin, _Annotated_mixin, _ValueConstraint_mixin, _ScopedDeclaration_mixin):
+class AttributeDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb_114.namespace.resolution._Resolvable_mixin, _Annotated_mixin, _ValueConstraint_mixin, _ScopedDeclaration_mixin):
     """An XMLSchema U{Attribute Declaration<http://www.w3.org/TR/xmlschema-1/#cAttribute_Declarations>} component.
     """
 
@@ -1267,7 +1267,7 @@ class AttributeDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
             # This is an anonymous declaration within an attribute use
             assert _ScopedDeclaration_mixin.ScopeIsIndeterminate(scope) or isinstance(scope, ComplexTypeDefinition)
         else:
-            raise pyxb.SchemaValidationError('Internal attribute declaration by reference')
+            raise pyxb_114.SchemaValidationError('Internal attribute declaration by reference')
 
         rv = cls(name=name, node=node, **kw)
         rv._annotationFromDOM(node)
@@ -1302,9 +1302,9 @@ class AttributeDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
         type_en = self._namespaceContext().interpretQName(self.__typeAttribute)
         self.__typeDefinition = type_en.typeDefinition()
         if self.__typeDefinition is None:
-            raise pyxb.SchemaValidationError('Type reference %s cannot be found' % (type_en,))
+            raise pyxb_114.SchemaValidationError('Type reference %s cannot be found' % (type_en,))
         if not isinstance(self.__typeDefinition, SimpleTypeDefinition):
-            raise pyxb.SchemaValidationError('Need %s to be a simple type' % (type_ln,))
+            raise pyxb_114.SchemaValidationError('Need %s to be a simple type' % (type_ln,))
 
         return self
 
@@ -1327,7 +1327,7 @@ class AttributeDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
         # The other STD should be an unresolved schema-defined type.
         # Mark this instance as unresolved so it is re-examined
         if not other.isResolved():
-            if pyxb.namespace.BuiltInObjectUID == self._objectOrigin().generationUID():
+            if pyxb_114.namespace.BuiltInObjectUID == self._objectOrigin().generationUID():
                 #assert self.isResolved(), 'Built-in %s is not resolved' % (self.expandedName(),)
                 print '**!!**!! Not destroying builtin %s: %s' % (self.expandedName(), self.__typeDefinition)
             else:
@@ -1339,7 +1339,7 @@ class AttributeDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
         """Attribute declarations require their type."""
         return frozenset([ self.__typeDefinition ])
 
-class AttributeUse (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvable_mixin, _ValueConstraint_mixin):
+class AttributeUse (_SchemaComponent_mixin, pyxb_114.namespace.resolution._Resolvable_mixin, _ValueConstraint_mixin):
     """An XMLSchema U{Attribute Use<http://www.w3.org/TR/xmlschema-1/#cAttribute_Use>} component."""
 
     # How this attribute can be used.  The component property
@@ -1434,7 +1434,7 @@ class AttributeUse (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvabl
             elif 'prohibited' == use:
                 rv.__use = cls.USE_prohibited
             else:
-                raise pyxb.SchemaValidationError('Unexpected value %s for attribute use attribute' % (use,))
+                raise pyxb_114.SchemaValidationError('Unexpected value %s for attribute use attribute' % (use,))
 
         rv._valueConstraintFromDOM(node)
 
@@ -1460,7 +1460,7 @@ class AttributeUse (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvabl
         ad_en = self._namespaceContext().interpretQName(self.__refAttribute)
         self.__attributeDeclaration = ad_en.attributeDeclaration()
         if self.__attributeDeclaration is None:
-            raise pyxb.SchemaValidationError('Attribute declaration %s cannot be found' % (ad_en,))
+            raise pyxb_114.SchemaValidationError('Attribute declaration %s cannot be found' % (ad_en,))
 
         assert isinstance(self.__attributeDeclaration, AttributeDeclaration)
 
@@ -1498,7 +1498,7 @@ class AttributeUse (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvabl
         return 'AU[%s]' % (self.attributeDeclaration(),)
 
 
-class ElementDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.namespace.resolution._Resolvable_mixin, _Annotated_mixin, _ValueConstraint_mixin, _ScopedDeclaration_mixin):
+class ElementDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb_114.namespace.resolution._Resolvable_mixin, _Annotated_mixin, _ValueConstraint_mixin, _ScopedDeclaration_mixin):
     """An XMLSchema U{Element Declaration<http://www.w3.org/TR/xmlschema-1/#cElement_Declarations>} component."""
 
     # Simple or complex type definition
@@ -1591,7 +1591,7 @@ class ElementDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.na
             # Scope may be None or a CTD.
             assert _ScopedDeclaration_mixin.ScopeIsIndeterminate(scope) or isinstance(scope, ComplexTypeDefinition)
         else:
-            raise pyxb.SchemaValidationError('Created reference as element declaration')
+            raise pyxb_114.SchemaValidationError('Created reference as element declaration')
         
         rv = cls(name=name, node=node, **kw)
         rv._annotationFromDOM(node)
@@ -1614,7 +1614,7 @@ class ElementDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.na
         complexType_node = LocateUniqueChild(node, 'complexType')
         if rv.__typeAttribute is not None:
             if (simpleType_node is not None) and (complexType_node is not None):
-                raise pyxb.SchemaValidationError('Cannot combine type attribute with simpleType or complexType child')
+                raise pyxb_114.SchemaValidationError('Cannot combine type attribute with simpleType or complexType child')
         if (rv.__typeDefinition is None) and (simpleType_node is not None):
             rv.__typeDefinition = SimpleTypeDefinition.CreateFromDOM(simpleType_node, **kw)
         if (rv.__typeDefinition is None) and (complexType_node is not None):
@@ -1624,7 +1624,7 @@ class ElementDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.na
                 # Scan for particle types which were supposed to be enclosed in a complexType
                 for cn in node.childNodes:
                     if Particle.IsParticleNode(cn):
-                        raise pyxb.SchemaValidationError('Node %s in element must be wrapped by complexType.' % (cn.localName,))
+                        raise pyxb_114.SchemaValidationError('Node %s in element must be wrapped by complexType.' % (cn.localName,))
                 rv.__typeDefinition = ComplexTypeDefinition.UrTypeDefinition()
         rv.__isResolved = (rv.__typeDefinition is not None) and (rv.__substitutionGroupAttribute is None)
         if not rv.__isResolved:
@@ -1726,7 +1726,7 @@ class ElementDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.na
             sg_en = self._namespaceContext().interpretQName(self.__substitutionGroupAttribute)
             sga = sg_en.elementDeclaration()
             if sga is None:
-                raise pyxb.SchemaValidationError('Element declaration refers to unrecognized substitution group %s' % (sg_en,))
+                raise pyxb_114.SchemaValidationError('Element declaration refers to unrecognized substitution group %s' % (sg_en,))
             self.__substitutionGroupAffiliation = sga
 
         if self.__typeDefinition is None:
@@ -1734,7 +1734,7 @@ class ElementDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.na
             type_en = self._namespaceContext().interpretQName(self.__typeAttribute)
             self.__typeDefinition = type_en.typeDefinition()
             if self.__typeDefinition is None:
-                raise pyxb.SchemaValidationError('Type declaration %s cannot be found' % (type_en,))
+                raise pyxb_114.SchemaValidationError('Type declaration %s cannot be found' % (type_en,))
 
         self.__isResolved = True
         return self
@@ -1745,7 +1745,7 @@ class ElementDeclaration (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.na
         return 'ED[%s:?]' % (self.name(),)
 
 
-class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.namespace.resolution._Resolvable_mixin, _Annotated_mixin, _AttributeWildcard_mixin):
+class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb_114.namespace.resolution._Resolvable_mixin, _Annotated_mixin, _AttributeWildcard_mixin):
     __PrivateTransient = set()
 
     # The type resolved from the base attribute.
@@ -1835,7 +1835,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
         elif isinstance(decl, AttributeDeclaration):
             scope_map = self.__scopedAttributeDeclarations
         else:
-            raise pyxb.LogicError('Unexpected instance of %s recording as local declaration' % (type(decl),))
+            raise pyxb_114.LogicError('Unexpected instance of %s recording as local declaration' % (type(decl),))
         decl_en = decl.expandedName()
         existing_decl = scope_map.setdefault(decl_en, decl)
         if decl != existing_decl:
@@ -1844,9 +1844,9 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
                 existing_type = existing_decl.typeDefinition()
                 pending_type = decl.typeDefinition()
                 if not pending_type.isDerivationConsistent(existing_type):
-                    raise pyxb.SchemaValidationError('Conflicting element declarations for %s: existing %s versus new %s' % (decl.expandedName(), existing_type, pending_type))
+                    raise pyxb_114.SchemaValidationError('Conflicting element declarations for %s: existing %s versus new %s' % (decl.expandedName(), existing_type, pending_type))
             elif isinstance(decl, AttributeDeclaration):
-                raise pyxb.SchemaValidationError('Multiple attribute declarations for %s' % (decl.expandedName(),))
+                raise pyxb_114.SchemaValidationError('Multiple attribute declarations for %s' % (decl.expandedName(),))
             else:
                 assert False, 'Unrecognized type %s' % (type(decl),)
         decl._baseDeclaration(existing_decl)
@@ -1899,7 +1899,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
             return 'Mixed [%s]' % (particle,)
         if self.CT_ELEMENT_ONLY == tag:
             return 'Element [%s]' % (particle,)
-        raise pyxb.LogicError('Unhandled content type')
+        raise pyxb_114.LogicError('Unhandled content type')
 
     # Derived from the block and blockDefault attributes
     __prohibitedSubstitutions = DM_empty
@@ -1939,7 +1939,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
         super(ComplexTypeDefinition, self)._updateFromOther_csc(other)
 
         if not other.isResolved():
-            if pyxb.namespace.BuiltInObjectUID != self._objectOrigin().generationUID():
+            if pyxb_114.namespace.BuiltInObjectUID != self._objectOrigin().generationUID():
                 self.__derivationMethod = None
                 
         return self
@@ -1958,7 +1958,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
         # namespace for this run of the system.  Please, do not try to
         # allow this by clearing the type definition.
         #if in_builtin_definition and (cls.__UrTypeDefinition is not None):
-        #    raise pyxb.LogicError('Multiple definitions of UrType')
+        #    raise pyxb_114.LogicError('Multiple definitions of UrType')
         if cls.__UrTypeDefinition is None:
             # NOTE: We use a singleton subclass of this class
             assert schema is not None
@@ -2049,7 +2049,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
         # declaration which itself may be global, in a containing CTD, or in a
         # model group).
         if not (rv._scopeIsGlobal() or rv.isAnonymous()):
-            raise pyxb.LogicError('Attempt to create non-global complex type definition')
+            raise pyxb_114.LogicError('Attempt to create non-global complex type definition')
 
         kw.pop('node', None)
         kw['owner'] = rv
@@ -2077,7 +2077,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
                 ag_en = self._namespaceContext().interpretQName(ag_attr)
                 agd = ag_en.attributeGroupDefinition()
                 if agd is None:
-                    raise pyxb.SchemaValidationError('Attribute group %s cannot be found' % (ag_en,))
+                    raise pyxb_114.SchemaValidationError('Attribute group %s cannot be found' % (ag_en,))
                 if not agd.isResolved():
                     self._queueForResolution('unresolved attribute group', depends_on=agd)
                     return self
@@ -2142,7 +2142,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
             assert au.isResolved()
             ad_en = au.attributeDeclaration().expandedName()
             if ad_en in use_map:
-                raise pyxb.SchemaValidationError('Multiple definitions for %s in CTD %s' % (ad_en, self.expandedName()))
+                raise pyxb_114.SchemaValidationError('Multiple definitions for %s in CTD %s' % (ad_en, self.expandedName()))
             use_map[ad_en] = au
         
         # Past the last point where we might not resolve this instance.  Store
@@ -2244,7 +2244,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
         # Do content type.  Cache the keywords that need to be used
         # for newly created schema components.
         ckw = kw.copy()
-        ckw['namespace_context'] = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(type_node)
+        ckw['namespace_context'] = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(type_node)
 
         # Definition 1: effective mixed
         mixed_attr = None
@@ -2268,7 +2268,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
                 continue
             if xsd.nodeIsNamed(cn, 'simpleContent', 'complexContent'):
                 # Should have found the content node earlier.
-                raise pyxb.LogicError('Missed explicit wrapper in complexType content')
+                raise pyxb_114.LogicError('Missed explicit wrapper in complexType content')
             if Particle.IsTypedefNode(cn):
                 typedef_node = cn
                 test_2_1_1 = False
@@ -2417,7 +2417,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
                 # Not one of the wrappers; use implicit wrapper around
                 # the children
                 if not Particle.IsParticleNode(first_elt, 'attributeGroup', 'attribute', 'anyAttribute'):
-                    raise pyxb.SchemaValidationError('Unexpected element %s at root of complexType' % (first_elt.nodeName,))
+                    raise pyxb_114.SchemaValidationError('Unexpected element %s at root of complexType' % (first_elt.nodeName,))
             if have_content:
                 # Repeat the search to verify that only the one child is present.
                 content_node = LocateFirstChildElement(node, require_unique=True)
@@ -2437,10 +2437,10 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
                 elif xsd.nodeIsNamed(ions, 'extension'):
                     method = self.DM_extension
                 else:
-                    raise pyxb.SchemaValidationError('Expected restriction or extension as sole child of %s in %s' % (content_node.nodeName, self.name()))
+                    raise pyxb_114.SchemaValidationError('Expected restriction or extension as sole child of %s in %s' % (content_node.nodeName, self.name()))
                 self.__baseAttribute = NodeAttribute(ions, 'base')
                 if self.__baseAttribute is None:
-                    raise pyxb.SchemaValidationError('Element %s missing base attribute' % (ions.nodeName,))
+                    raise pyxb_114.SchemaValidationError('Element %s missing base attribute' % (ions.nodeName,))
                 self.__baseTypeDefinition = None
                 # The content is defined by the restriction/extension element
                 definition_node_list = ions.childNodes
@@ -2496,7 +2496,7 @@ class ComplexTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb
             base_en = self._namespaceContext().interpretQName(self.__baseAttribute)
             base_type = base_en.typeDefinition()
             if base_type is None:
-                raise pyxb.SchemaValidationError('Cannot locate %s: need import?' % (base_en,))
+                raise pyxb_114.SchemaValidationError('Cannot locate %s: need import?' % (base_en,))
             if not base_type.isResolved():
                 # Have to delay resolution until the type this
                 # depends on is available.
@@ -2557,7 +2557,7 @@ class _UrTypeDefinition (ComplexTypeDefinition, _Singleton_mixin):
         return self._setDerivationMethod(self.DM_restriction)
  
 
-class AttributeGroupDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.namespace.resolution._Resolvable_mixin, _Annotated_mixin, _AttributeWildcard_mixin):
+class AttributeGroupDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb_114.namespace.resolution._Resolvable_mixin, _Annotated_mixin, _AttributeWildcard_mixin):
     """An XMLSchema U{Attribute Group Definition<http://www.w3.org/TR/xmlschema-1/#cAttribute_Group_Definitions>} component."""
     __PrivateTransient = set()
     
@@ -2610,7 +2610,7 @@ class AttributeGroupDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, p
         # Attribute group definitions must not be references
         rv.__refAttribute = NodeAttribute(node, 'ref')
         if rv.__refAttribute is not None:
-            raise pyxb.SchemaValidationError('Attribute reference at top level')
+            raise pyxb_114.SchemaValidationError('Attribute reference at top level')
 
         kw.pop('node', None)
         kw['owner'] = rv
@@ -2643,7 +2643,7 @@ class AttributeGroupDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, p
             ag_en = self._namespaceContext().interpretQName(ag_attr)
             agd = ag_en.attributeGroupDefinition()
             if agd is None:
-                raise pyxb.SchemaValidationError('Attribute group %s cannot be found' % (ag_en,))
+                raise pyxb_114.SchemaValidationError('Attribute group %s cannot be found' % (ag_en,))
             attribute_groups.append(agd)
             uses = uses.union(agd.attributeUses())
 
@@ -2885,7 +2885,7 @@ class ModelGroup (_SchemaComponent_mixin, _Annotated_mixin):
         elif xsd.nodeIsNamed(node, 'sequence'):
             compositor = cls.C_SEQUENCE
         else:
-            raise pyxb.IncompleteImplementationError('ModelGroup: Got unexpected %s' % (node.nodeName,))
+            raise pyxb_114.IncompleteImplementationError('ModelGroup: Got unexpected %s' % (node.nodeName,))
         particles = []
         # Remove the owner from particle constructor arguments: we need to set it later
         kw.pop('owner', None)
@@ -2896,7 +2896,7 @@ class ModelGroup (_SchemaComponent_mixin, _Annotated_mixin):
                 # NB: Ancestor of particle is set in the ModelGroup constructor
                 particles.append(Particle.CreateFromDOM(node=cn, **kw))
             elif not xsd.nodeIsNamed(cn, 'annotation'):
-                raise pyxb.SchemaValidationError('Unexpected element %s in model group' % (cn.nodeName,))
+                raise pyxb_114.SchemaValidationError('Unexpected element %s in model group' % (cn.nodeName,))
         rv = cls(compositor, particles, node=node, **kw)
         for p in particles:
             p._setOwner(rv)
@@ -2951,7 +2951,7 @@ class ModelGroup (_SchemaComponent_mixin, _Annotated_mixin):
             comp = 'SEQUENCE'
         return '%s:(%s)' % (comp, ",".join( [ str(_p) for _p in self.particles() ] ) )
 
-class Particle (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvable_mixin):
+class Particle (_SchemaComponent_mixin, pyxb_114.namespace.resolution._Resolvable_mixin):
     """An XMLSchema U{Particle<http://www.w3.org/TR/xmlschema-1/#cParticle>} component."""
 
     # The minimum number of times the term may appear.
@@ -2989,7 +2989,7 @@ class Particle (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvable_mi
             return [ self.__term ]
         if isinstance(self.__term, Wildcard):
             return [ ]
-        raise pyxb.LogicError('Unexpected term type %s' % (self.__term,))
+        raise pyxb_114.LogicError('Unexpected term type %s' % (self.__term,))
 
     def pluralityData (self):
         """Return the plurality data for this component.
@@ -3061,7 +3061,7 @@ class Particle (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvable_mi
         self.__maxOccurs = max_occurs
         if self.__maxOccurs is not None:
             if self.__minOccurs > self.__maxOccurs:
-                raise pyxb.LogicError('Particle minOccurs %s is greater than maxOccurs %s on creation' % (min_occurs, max_occurs))
+                raise pyxb_114.LogicError('Particle minOccurs %s is greater than maxOccurs %s on creation' % (min_occurs, max_occurs))
     
     # res:Particle
     def _resolve (self):
@@ -3074,7 +3074,7 @@ class Particle (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvable_mi
             ref_en = self._namespaceContext().interpretQName(self.__refAttribute)
             group_decl = ref_en.modelGroupDefinition()
             if group_decl is None:
-                raise pyxb.SchemaValidationError('Model group reference %s cannot be found' % (ref_en,))
+                raise pyxb_114.SchemaValidationError('Model group reference %s cannot be found' % (ref_en,))
 
             self.__pendingTerm = group_decl.modelGroup()
             assert self.__pendingTerm is not None
@@ -3087,7 +3087,7 @@ class Particle (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvable_mi
                 ref_en = self._namespaceContext().interpretQName(self.__refAttribute)
                 self.__pendingTerm = ref_en.elementDeclaration()
                 if self.__pendingTerm is None:
-                    raise pyxb.SchemaValidationError('Unable to locate element referenced by %s' % (ref_en,))
+                    raise pyxb_114.SchemaValidationError('Unable to locate element referenced by %s' % (ref_en,))
             assert self.__pendingTerm is not None
 
             # Whether this is a local declaration or one pulled in from the
@@ -3129,7 +3129,7 @@ class Particle (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvable_mi
                   , 'node' : node })
                
         if not Particle.IsParticleNode(node):
-            raise pyxb.LogicError('Attempted to create particle from illegal element %s' % (node.nodeName,))
+            raise pyxb_114.LogicError('Attempted to create particle from illegal element %s' % (node.nodeName,))
         attr_val = NodeAttribute(node, 'minOccurs')
         if attr_val is not None:
             kw['min_occurs'] = datatypes.nonNegativeInteger(attr_val)
@@ -3153,7 +3153,7 @@ class Particle (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvable_mi
             # inside a particle is a groupRef.  If there is no group
             # with that name, this throws an exception as expected.
             if rv.__refAttribute is None:
-                raise pyxb.SchemaValidationError('group particle without reference')
+                raise pyxb_114.SchemaValidationError('group particle without reference')
             rv.__resolvableType = ModelGroup
         elif xsd.nodeIsNamed(node, 'element'):
             if rv.__refAttribute is None:
@@ -3181,7 +3181,7 @@ class Particle (_SchemaComponent_mixin, pyxb.namespace.resolution._Resolvable_mi
             # of all)
             rv.__term = ModelGroup.CreateFromDOM(node, **kw)
         else:
-            raise pyxb.LogicError('Unhandled node in Particle.CreateFromDOM: %s' % (node.toxml("utf-8"),))
+            raise pyxb_114.LogicError('Unhandled node in Particle.CreateFromDOM: %s' % (node.toxml("utf-8"),))
         
         if not rv.isResolved():
             rv._queueForResolution('creation')
@@ -3247,7 +3247,7 @@ class Wildcard (_SchemaComponent_mixin, _Annotated_mixin):
          - set(of_namespaces)
 
         Note that namespace are represented by
-        L{Namespace<pyxb.namespace.Namespace>} instances, not the URIs that
+        L{Namespace<pyxb_114.namespace.Namespace>} instances, not the URIs that
         actually define a namespace.  Absence of a namespace is represented by
         C{None}, both in the "not" pair and in the set.
         """
@@ -3300,7 +3300,7 @@ class Wildcard (_SchemaComponent_mixin, _Annotated_mixin):
                     continue
                 # 5.3
                 if None in c_set:
-                    raise pyxb.SchemaValidationError('Union of wildcard namespace constraints not expressible')
+                    raise pyxb_114.SchemaValidationError('Union of wildcard namespace constraints not expressible')
                 o1 = c_tuple
                 continue
             # 6
@@ -3334,7 +3334,7 @@ class Wildcard (_SchemaComponent_mixin, _Annotated_mixin):
                 ns2 = o2[1]
                 # 5
                 if (ns1 is not None) and (ns2 is not None) and (ns1 != ns2):
-                    raise pyxb.SchemaValidationError('Intersection of wildcard namespace constraints not expressible')
+                    raise pyxb_114.SchemaValidationError('Intersection of wildcard namespace constraints not expressible')
                 # 6
                 assert (ns1 is None) or (ns2 is None)
                 if ns1 is None:
@@ -3400,7 +3400,7 @@ class Wildcard (_SchemaComponent_mixin, _Annotated_mixin):
     # CFD:Wildcard
     @classmethod
     def CreateFromDOM (cls, node, **kw):
-        namespace_context = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(node)
+        namespace_context = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(node)
         assert xsd.nodeIsNamed(node, 'any', 'anyAttribute')
         nc = NodeAttribute(node, 'namespace')
         if nc is None:
@@ -3418,7 +3418,7 @@ class Wildcard (_SchemaComponent_mixin, _Annotated_mixin):
                     elif cls.NC_targetNamespace == ns_uri:
                         ncs.add(namespace_context.targetNamespace())
                     else:
-                        ncs.add(pyxb.namespace.NamespaceForURI(ns_uri, create_if_missing=True))
+                        ncs.add(pyxb_114.namespace.NamespaceForURI(ns_uri, create_if_missing=True))
                 namespace_constraint = frozenset(ncs)
 
         pc = NodeAttribute(node, 'processContents')
@@ -3428,14 +3428,14 @@ class Wildcard (_SchemaComponent_mixin, _Annotated_mixin):
             if pc in [ cls.PC_skip, cls.PC_lax, cls.PC_strict ]:
                 process_contents = pc
             else:
-                raise pyxb.SchemaValidationError('illegal value "%s" for any processContents attribute' % (pc,))
+                raise pyxb_114.SchemaValidationError('illegal value "%s" for any processContents attribute' % (pc,))
 
         rv = cls(node=node, namespace_constraint=namespace_constraint, process_contents=process_contents, **kw)
         rv._annotationFromDOM(node)
         return rv
 
 # 3.11.1
-class IdentityConstraintDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, _Annotated_mixin, pyxb.namespace.resolution._Resolvable_mixin):
+class IdentityConstraintDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, _Annotated_mixin, pyxb_114.namespace.resolution._Resolvable_mixin):
     """An XMLSchema U{Identity Constraint Definition<http://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions>} component."""
 
     ICC_KEY = 0x01
@@ -3476,24 +3476,24 @@ class IdentityConstraintDefinition (_SchemaComponent_mixin, _NamedComponent_mixi
             icc = rv.ICC_KEYREF
             rv.__referAttribute = NodeAttribute(node, 'refer')
             if rv.__referAttribute is None:
-                raise pyxb.SchemaValidationError('Require refer attribute on keyref elements')
+                raise pyxb_114.SchemaValidationError('Require refer attribute on keyref elements')
             rv.__isResolved = False
         elif xsd.nodeIsNamed(node, 'unique'):
             icc = rv.ICC_UNIQUE
         else:
-            raise pyxb.LogicError('Unexpected identity constraint node %s' % (node.toxml("utf-8"),))
+            raise pyxb_114.LogicError('Unexpected identity constraint node %s' % (node.toxml("utf-8"),))
         rv.__icc = icc
 
         cn = LocateUniqueChild(node, 'selector')
         rv.__selector = NodeAttribute(cn, 'xpath')
         if rv.__selector is None:
-            raise pyxb.SchemaValidationError('selector element missing xpath attribute')
+            raise pyxb_114.SchemaValidationError('selector element missing xpath attribute')
 
         rv.__fields = []
         for cn in LocateMatchingChildren(node, 'field'):
             xp_attr = NodeAttribute(cn, 'xpath')
             if xp_attr is None:
-                raise pyxb.SchemaValidationError('field element missing xpath attribute')
+                raise pyxb_114.SchemaValidationError('field element missing xpath attribute')
             rv.__fields.append(xp_attr)
 
         rv._annotationFromDOM(node)
@@ -3669,7 +3669,7 @@ class Annotation (_SchemaComponent_mixin):
             return ''
 
 # Section 3.14.
-class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.namespace.resolution._Resolvable_mixin, _Annotated_mixin):
+class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb_114.namespace.resolution._Resolvable_mixin, _Annotated_mixin):
     """An XMLSchema U{Simple Type Definition<http://www.w3.org/TR/xmlschema-1/#Simple_Type_Definitions>} component."""
 
     # Reference to the SimpleTypeDefinition on which this is based.
@@ -3760,27 +3760,27 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
     def primitiveTypeDefinition (self, throw_if_absent=True):
         if throw_if_absent:
             if self.variety() != self.VARIETY_atomic:
-                raise pyxb.BadPropertyError('[%s] primitiveTypeDefinition only defined for atomic types' % (self.name(), self.variety()))
+                raise pyxb_114.BadPropertyError('[%s] primitiveTypeDefinition only defined for atomic types' % (self.name(), self.variety()))
             if self.__primitiveTypeDefinition is None:
-                raise pyxb.LogicError('Expected primitive type for %s in %s', self, self.targetNamespace())
+                raise pyxb_114.LogicError('Expected primitive type for %s in %s', self, self.targetNamespace())
         return self.__primitiveTypeDefinition
 
     # For list variety only, the type of items in the list
     __itemTypeDefinition = None
     def itemTypeDefinition (self):
         if self.VARIETY_list != self.variety():
-            raise pyxb.BadPropertyError('itemTypeDefinition only defined for list types')
+            raise pyxb_114.BadPropertyError('itemTypeDefinition only defined for list types')
         if self.__itemTypeDefinition is None:
-            raise pyxb.LogicError('Expected item type')
+            raise pyxb_114.LogicError('Expected item type')
         return self.__itemTypeDefinition
 
     # For union variety only, the sequence of candidate members
     __memberTypeDefinitions = None
     def memberTypeDefinitions (self):
         if self.VARIETY_union != self.variety():
-            raise pyxb.BadPropertyError('memberTypeDefinitions only defined for union types')
+            raise pyxb_114.BadPropertyError('memberTypeDefinitions only defined for union types')
         if self.__memberTypeDefinitions is None:
-            raise pyxb.LogicError('Expected member types')
+            raise pyxb_114.LogicError('Expected member types')
         return self.__memberTypeDefinitions
 
     # bR:STD
@@ -3805,7 +3805,7 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
             assert self not in self.memberTypeDefinitions()
             type_definitions.update(self.memberTypeDefinitions())
         else:
-            raise pyxb.LogicError('Unable to identify dependent types: variety %s' % (self.variety(),))
+            raise pyxb_114.LogicError('Unable to identify dependent types: variety %s' % (self.variety(),))
         # NB: This type also depends on the value type definitions for
         # any facets that apply to it.  This fact only matters when
         # generating the datatypes_facets source.  That, and the fact
@@ -3860,7 +3860,7 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
         else:
             # Gets here if the type has not been resolved.
             elts.append('?')
-            #raise pyxb.LogicError('Unexpected variety %s' % (self.variety(),))
+            #raise pyxb_114.LogicError('Unexpected variety %s' % (self.variety(),))
         if self.__facets:
             felts = []
             for (k, v) in self.__facets.items():
@@ -3913,7 +3913,7 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
         See section 3.14.7."""
 
         #if in_builtin_definition and (cls.__SimpleUrTypeDefinition is not None):
-        #    raise pyxb.LogicError('Multiple definitions of SimpleUrType')
+        #    raise pyxb_114.LogicError('Multiple definitions of SimpleUrType')
         if cls.__SimpleUrTypeDefinition is None:
             # Note: We use a singleton subclass
             assert schema is not None
@@ -3950,19 +3950,19 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
         For example, xml:space is a restriction of NCName; xml:lang is a union.
 
         """
-        import pyxb.binding.xml_
+        import pyxb_114.binding.xml_
         kw = { 'schema' : schema,
                'binding_namespace' : schema.targetNamespace(),
                'namespace_context' : schema.targetNamespace().initialNamespaceContext(),
                'scope' : _ScopedDeclaration_mixin.SCOPE_global,
                'variety' : cls.VARIETY_atomic }
-        ns_ctx = pyxb.namespace.XML.initialNamespaceContext()
+        ns_ctx = pyxb_114.namespace.XML.initialNamespaceContext()
         if 'space' == name:
             bi = cls(**kw)
             bi.__derivationAlternative = cls._DA_restriction
             bi.__baseTypeDefinition = datatypes.NCName.SimpleTypeDefinition()
             bi.__primitiveTypeDefinition = bi.__baseTypeDefinition.__primitiveTypeDefinition
-            bi._setPythonSupport(pyxb.binding.xml_.STD_ANON_space)
+            bi._setPythonSupport(pyxb_114.binding.xml_.STD_ANON_space)
             bi.setNameInBinding('STD_ANON_space')
         elif 'lang' == name:
             bi = cls(**kw)
@@ -3970,10 +3970,10 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
             bi.__memberTypes = [ datatypes.language.SimpleTypeDefinition() ]
             bi.__derivationAlternative = cls._DA_union
             bi.__primitiveTypeDefinition = bi
-            bi._setPythonSupport(pyxb.binding.xml_.STD_ANON_lang)
+            bi._setPythonSupport(pyxb_114.binding.xml_.STD_ANON_lang)
             bi.setNameInBinding('STD_ANON_lang')
         else:
-            raise pyxb.IncompleteImplementationError('No implementation for %s' % (name,))
+            raise pyxb_114.IncompleteImplementationError('No implementation for %s' % (name,))
         bi.__facets = { }
         for v in bi.pythonSupport().__dict__.values():
             if isinstance(v, facets.ConstrainingFacet):
@@ -4077,7 +4077,7 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
         """(Placeholder) Create a union simple type in the target namespace.
 
         This function has not been implemented."""
-        raise pyxb.IncompleteImplementationError('No support for built-in union types')
+        raise pyxb_114.IncompleteImplementationError('No support for built-in union types')
 
     def __singleSimpleTypeChild (self, body, other_elts_ok=False):
         simple_type_child = None
@@ -4086,11 +4086,11 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
                 if not xsd.nodeIsNamed(cn, 'simpleType'):
                     if other_elts_ok:
                         continue
-                    raise pyxb.SchemaValidationError('Context requires element to be xs:simpleType')
+                    raise pyxb_114.SchemaValidationError('Context requires element to be xs:simpleType')
                 assert not simple_type_child
                 simple_type_child = cn
         if simple_type_child is None:
-            raise pyxb.SchemaValidationError('Content requires an xs:simpleType member (or a base attribute)')
+            raise pyxb_114.SchemaValidationError('Content requires an xs:simpleType member (or a base attribute)')
         return simple_type_child
 
     # The __initializeFrom* methods are responsible for identifying
@@ -4184,17 +4184,17 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
             for cn in ai.childNodes:
                 if Node.ELEMENT_NODE != cn.nodeType:
                     continue
-                if pyxb.namespace.XMLSchema_hfp.nodeIsNamed(cn, 'hasFacet'):
-                    facet_name = NodeAttribute(cn, 'name')# , pyxb.namespace.XMLSchema_hfp)
+                if pyxb_114.namespace.XMLSchema_hfp.nodeIsNamed(cn, 'hasFacet'):
+                    facet_name = NodeAttribute(cn, 'name')# , pyxb_114.namespace.XMLSchema_hfp)
                     if facet_name is None:
-                        raise pyxb.SchemaValidationError('hasFacet missing name attribute in %s' % (cn,))
+                        raise pyxb_114.SchemaValidationError('hasFacet missing name attribute in %s' % (cn,))
                     if facet_name in seen_facets:
-                        raise pyxb.SchemaValidationError('Multiple hasFacet specifications for %s' % (facet_name,))
+                        raise pyxb_114.SchemaValidationError('Multiple hasFacet specifications for %s' % (facet_name,))
                     seen_facets.add(facet_name)
                     facet_class = facets.ConstrainingFacet.ClassForFacet(facet_name)
                     #facet_map[facet_class] = facet_class(base_type_definition=self)
                     facet_map[facet_class] = None
-                if pyxb.namespace.XMLSchema_hfp.nodeIsNamed(cn, 'hasProperty'):
+                if pyxb_114.namespace.XMLSchema_hfp.nodeIsNamed(cn, 'hasProperty'):
                     fundamental_facets.add(facets.FundamentalFacet.CreateFromDOM(cn, self))
         if 0 < len(facet_map):
             assert self.__baseTypeDefinition == self.SimpleUrTypeDefinition()
@@ -4226,8 +4226,8 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
                         kw[str(attr.localName)] = attr.value
                     try:
                         fi.setFromKeywords(**kw)
-                    except pyxb.PyXBException, e:
-                        raise pyxb.SchemaValidationError('Error assigning facet %s in %s: %s' % (fc.Name(), self.expandedName(), e))
+                    except pyxb_114.PyXBException, e:
+                        raise pyxb_114.SchemaValidationError('Error assigning facet %s in %s: %s' % (fc.Name(), self.expandedName(), e))
                 local_facets[fc] = fi
         self.__localFacets = local_facets
 
@@ -4281,7 +4281,7 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
             base_en = self._namespaceContext().interpretQName(self.__baseAttribute)
             base_type = base_en.typeDefinition()
             if not isinstance(base_type, SimpleTypeDefinition):
-                raise pyxb.SchemaValidationError('Unable to locate base type %s' % (base_en,))
+                raise pyxb_114.SchemaValidationError('Unable to locate base type %s' % (base_en,))
             self.__baseTypeDefinition = base_type
         # If the base type exists but has not yet been resolved,
         # delay processing this type until the one it depends on
@@ -4315,11 +4315,11 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
                     it_en = self._namespaceContext().interpretQName(self.__itemTypeAttribute)
                     self.__itemTypeDefinition = it_en.typeDefinition()
                     if not isinstance(self.__itemTypeDefinition, SimpleTypeDefinition):
-                        raise pyxb.SchemaValidationError('Unable to locate STD %s for items' % (it_en,))
+                        raise pyxb_114.SchemaValidationError('Unable to locate STD %s for items' % (it_en,))
             elif self._DA_restriction == alternative:
                 self.__itemTypeDefinition = self.__baseTypeDefinition.__itemTypeDefinition
             else:
-                raise pyxb.LogicError('completeResolution list variety with alternative %s' % (alternative,))
+                raise pyxb_114.LogicError('completeResolution list variety with alternative %s' % (alternative,))
         elif self.VARIETY_union == variety:
             if self._DA_union == alternative:
                 # First time we try to resolve, create the member type
@@ -4336,7 +4336,7 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
                             mn_en = self._namespaceContext().interpretQName(mn)
                             std = mn_en.typeDefinition()
                             if std is None:
-                                raise pyxb.SchemaValidationError('Unable to locate member type %s' % (mn_en,))
+                                raise pyxb_114.SchemaValidationError('Unable to locate member type %s' % (mn_en,))
                             # Note: We do not need these to be resolved (here)
                             assert isinstance(std, SimpleTypeDefinition)
                             mtd.append(std)
@@ -4367,11 +4367,11 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
                 mtd = self.__baseTypeDefinition.__memberTypeDefinitions
                 assert mtd is not None
             else:
-                raise pyxb.LogicError('completeResolution union variety with alternative %s' % (alternative,))
+                raise pyxb_114.LogicError('completeResolution union variety with alternative %s' % (alternative,))
             # Save a unique copy
             self.__memberTypeDefinitions = mtd[:]
         else:
-            raise pyxb.LogicError('completeResolution with variety 0x%02x' % (variety,))
+            raise pyxb_114.LogicError('completeResolution with variety 0x%02x' % (variety,))
 
         # Determine what facets, if any, apply to this type.  This
         # should only do something if this is a primitive type.
@@ -4454,14 +4454,14 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
                 bad_instance = True
 
         if self.__baseTypeDefinition is None:
-            raise pyxb.SchemaValidationError('xs:simpleType must have list, union, or restriction as child')
+            raise pyxb_114.SchemaValidationError('xs:simpleType must have list, union, or restriction as child')
 
         if self._schema() is not None:
             self.__final = self._schema().finalForNode(node, self._STD_Map)
 
         # It is NOT an error to fail to resolve the type.
         if bad_instance:
-            raise pyxb.SchemaValidationError('Expected exactly one of list, restriction, union as child of simpleType')
+            raise pyxb_114.SchemaValidationError('Expected exactly one of list, restriction, union as child of simpleType')
 
         return self
 
@@ -4503,7 +4503,7 @@ class SimpleTypeDefinition (_SchemaComponent_mixin, _NamedComponent_mixin, pyxb.
 
     def pythonSupport (self):
         if self.__pythonSupport is None:
-            raise pyxb.LogicError('%s: No support defined' % (self.name(),))
+            raise pyxb_114.LogicError('%s: No support defined' % (self.name(),))
         return self.__pythonSupport
 
     def stringToPython (self, string):
@@ -4527,7 +4527,7 @@ class _ImportElementInformationItem (_Annotated_mixin):
     __id = None
 
     def namespace (self):
-        """The L{pyxb.namespace.Namespace} instance corresponding to the value
+        """The L{pyxb_114.namespace.Namespace} instance corresponding to the value
         of the C{namespace} attribute from the import statement."""
         return self.__namespace
     __namespace = None
@@ -4555,7 +4555,7 @@ class _ImportElementInformationItem (_Annotated_mixin):
         available.
 
         Normally C{import} statements will be fulfilled by loading components
-        from a L{namespace archive<pyxb.namespace.NamespaceArchive>} in which
+        from a L{namespace archive<pyxb_114.namespace.NamespaceArchive>} in which
         the corresponding namespace is marked as public.  Where there are
         cycles in the namespace dependency graph, or the schema for a
         namespace are associated with a restricted profile of another
@@ -4568,7 +4568,7 @@ class _ImportElementInformationItem (_Annotated_mixin):
         """Gather the information relative to an C{import} statement.
 
         This examines the L{available
-        namespaces<pyxb.namespace.archive.AvailableForLoad>} to see whether
+        namespaces<pyxb_114.namespace.archive.AvailableForLoad>} to see whether
         the imported namespace can be loaded.  If so, the C{schemaLocation}
         attribute is ignored.  Otherwise, it attempts to retrieve and parse
         the corresponding schema (if this has not already been done).
@@ -4585,17 +4585,17 @@ class _ImportElementInformationItem (_Annotated_mixin):
         super(_ImportElementInformationItem, self).__init__(**kw)
         uri = NodeAttribute(node, 'namespace')
         if uri is None:
-            raise pyxb.IncompleteImplementationError('import statements without namespace not supported')
-        schema_location = pyxb.utils.utility.NormalizeLocation(NodeAttribute(node, 'schemaLocation'), importing_schema.location())
+            raise pyxb_114.IncompleteImplementationError('import statements without namespace not supported')
+        schema_location = pyxb_114.utils.utility.NormalizeLocation(NodeAttribute(node, 'schemaLocation'), importing_schema.location())
         self.__schemaLocation = schema_location
-        ns = self.__namespace = pyxb.namespace.NamespaceForURI(uri, create_if_missing=True)
+        ns = self.__namespace = pyxb_114.namespace.NamespaceForURI(uri, create_if_missing=True)
         need_schema = not (ns.isLoadable() or ns.isBuiltinNamespace())
         if not need_schema:
             # Discard location if we expect to be able to learn about this
             # namespace from an archive or a built-in description
             self.__schemaLocation = None
 
-        ns_ctx = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(node)
+        ns_ctx = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(node)
         if self.schemaLocation() is not None:
             # @todo: NOTICE
             # print 'import %s + %s = %s' % (importing_schema.location(), self.__schemaLocation, schema_location)
@@ -4618,7 +4618,7 @@ class _ImportElementInformationItem (_Annotated_mixin):
         # namespace.
         if self.__schema is not None:
             if ns != self.__schema.targetNamespace():
-                raise pyxb.SchemaValidationError('Import expected namespace %s but got %s' % (ns, self.__schema.targetNamespace()))
+                raise pyxb_114.SchemaValidationError('Import expected namespace %s but got %s' % (ns, self.__schema.targetNamespace()))
 
         self.__prefix = ns_ctx.prefixForNamespace(self.namespace())
 
@@ -4628,7 +4628,7 @@ class Schema (_SchemaComponent_mixin):
     """An XMLSchema U{Schema<http://www.w3.org/TR/xmlschema-1/#Schemas>}."""
 
     def __getstate__ (self):
-        raise pyxb.LogicError('Attempt to serialize Schema instance')
+        raise pyxb_114.LogicError('Attempt to serialize Schema instance')
 
     # List of annotations
     __annotations = None
@@ -4705,19 +4705,19 @@ class Schema (_SchemaComponent_mixin):
     _UNQUALIFIED = "unqualified"
     
     # Default values for standard recognized schema attributes
-    __attributeMap = { pyxb.namespace.ExpandedName(None, 'attributeFormDefault') : _UNQUALIFIED
-                     , pyxb.namespace.ExpandedName(None, 'elementFormDefault') : _UNQUALIFIED
-                     , pyxb.namespace.ExpandedName(None, 'blockDefault') : ''
-                     , pyxb.namespace.ExpandedName(None, 'finalDefault') : ''
-                     , pyxb.namespace.ExpandedName(None, 'id') : None
-                     , pyxb.namespace.ExpandedName(None, 'targetNamespace') : None
-                     , pyxb.namespace.ExpandedName(None, 'version') : None
-                     , pyxb.namespace.XML.createExpandedName('lang') : None
+    __attributeMap = { pyxb_114.namespace.ExpandedName(None, 'attributeFormDefault') : _UNQUALIFIED
+                     , pyxb_114.namespace.ExpandedName(None, 'elementFormDefault') : _UNQUALIFIED
+                     , pyxb_114.namespace.ExpandedName(None, 'blockDefault') : ''
+                     , pyxb_114.namespace.ExpandedName(None, 'finalDefault') : ''
+                     , pyxb_114.namespace.ExpandedName(None, 'id') : None
+                     , pyxb_114.namespace.ExpandedName(None, 'targetNamespace') : None
+                     , pyxb_114.namespace.ExpandedName(None, 'version') : None
+                     , pyxb_114.namespace.XML.createExpandedName('lang') : None
                      } 
 
     def _setAttributeFromDOM (self, attr):
         """Override the schema attribute with the given DOM value."""
-        self.__attributeMap[pyxb.namespace.ExpandedName(attr.name)] = attr.nodeValue
+        self.__attributeMap[pyxb_114.namespace.ExpandedName(attr.name)] = attr.nodeValue
         return self
 
     def _setAttributesFromMap (self, attr_map):
@@ -4728,7 +4728,7 @@ class Schema (_SchemaComponent_mixin):
     def schemaHasAttribute (self, attr_name):
         """Return True iff the schema has an attribute with the given (nc)name."""
         if isinstance(attr_name, basestring):
-            attr_name = pyxb.namespace.ExpandedName(None, attr_name)
+            attr_name = pyxb_114.namespace.ExpandedName(None, attr_name)
         return self.__attributeMap.has_key(attr_name)
 
     def schemaAttribute (self, attr_name):
@@ -4740,7 +4740,7 @@ class Schema (_SchemaComponent_mixin):
         @raise KeyError: C{attr_name} is not a valid attribute for a C{schema} element.
         """
         if isinstance(attr_name, basestring):
-            attr_name = pyxb.namespace.ExpandedName(None, attr_name)
+            attr_name = pyxb_114.namespace.ExpandedName(None, attr_name)
         return self.__attributeMap[attr_name]
 
     __SchemaCategories = ( 'typeDefinition', 'attributeGroupDefinition', 'modelGroupDefinition',
@@ -4754,7 +4754,7 @@ class Schema (_SchemaComponent_mixin):
     def __init__ (self, *args, **kw):
         # Force resolution of available namespaces if not already done
         if not kw.get('_bypass_preload', False):
-            pyxb.namespace.archive.NamespaceArchive.PreLoadArchives()
+            pyxb_114.namespace.archive.NamespaceArchive.PreLoadArchives()
 
         assert 'schema' not in kw
         self.__uriContentArchiveDirectory = kw.get('uri_content_archive_directory')
@@ -4768,7 +4768,7 @@ class Schema (_SchemaComponent_mixin):
         self.__generationUID = kw.get('generation_uid')
         if self.__generationUID is None:
             print 'WARNING: No generationUID provided'
-            self.__generationUID = pyxb.utils.utility.UniqueIdentifier()
+            self.__generationUID = pyxb_114.utils.utility.UniqueIdentifier()
 
         self.__signature = kw.get('schema_signature')
         #print 'Schema at %s signature %s uid %s' % (self.location(), self.signature(), self.generationUID())
@@ -4778,10 +4778,10 @@ class Schema (_SchemaComponent_mixin):
         self.__includedSchema = set()
         self.__importedSchema = set()
         self.__targetNamespace = self._namespaceContext().targetNamespace()
-        if not isinstance(self.__targetNamespace, pyxb.namespace.Namespace):
-            raise pyxb.LogicError('Schema constructor requires valid Namespace instance as target_namespace')
+        if not isinstance(self.__targetNamespace, pyxb_114.namespace.Namespace):
+            raise pyxb_114.LogicError('Schema constructor requires valid Namespace instance as target_namespace')
 
-        # NB: This will raise pyxb.SchemaUniquenessError if it appears this
+        # NB: This will raise pyxb_114.SchemaUniquenessError if it appears this
         # schema has already been incorporated into the target namespace.
         self.__originRecord = self.__targetNamespace.addSchema(self)
 
@@ -4807,7 +4807,7 @@ class Schema (_SchemaComponent_mixin):
     @classmethod
     def CreateFromDocument (cls, xmls, **kw):
         if not ('schema_signature' in kw):
-            kw['schema_signature'] = pyxb.utils.utility.HashForText(xmls)
+            kw['schema_signature'] = pyxb_114.utils.utility.HashForText(xmls)
         return cls.CreateFromDOM(StringToDOM(xmls, **kw), **kw)
 
     @classmethod
@@ -4819,17 +4819,17 @@ class Schema (_SchemaComponent_mixin):
 
         @keyword schema_location: A file path or a URI.  If this is a relative
         URI and C{parent_uri} is present, the actual location will be
-        L{normallzed<pyxb.utils.utility.NormalizeLocation>}.
+        L{normallzed<pyxb_114.utils.utility.NormalizeLocation>}.
         @keyword parent_uri: The context within which schema_location will be
         normalized, if necessary.
         @keyword absolute_schema_location: A file path or URI.  This value is
         not normalized, and supersedes C{schema_location}.
         """
-        schema_location = kw.pop('absolute_schema_location', pyxb.utils.utility.NormalizeLocation(kw.get('schema_location'), kw.get('parent_uri'), kw.get('prefix_map')))
+        schema_location = kw.pop('absolute_schema_location', pyxb_114.utils.utility.NormalizeLocation(kw.get('schema_location'), kw.get('parent_uri'), kw.get('prefix_map')))
         kw['location_base'] = kw['schema_location'] = schema_location
         assert isinstance(schema_location, basestring), 'Unexpected value %s type %s for schema_location' % (schema_location, type(schema_location))
         uri_content_archive_directory = kw.get('uri_content_archive_directory')
-        return cls.CreateFromDocument(pyxb.utils.utility.TextFromURI(schema_location, archive_directory=uri_content_archive_directory), **kw)
+        return cls.CreateFromDocument(pyxb_114.utils.utility.TextFromURI(schema_location, archive_directory=uri_content_archive_directory), **kw)
 
     @classmethod
     def CreateFromStream (cls, stream, **kw):
@@ -4851,21 +4851,21 @@ class Schema (_SchemaComponent_mixin):
         if Node.DOCUMENT_NODE == node.nodeType:
             root_node = root_node.documentElement
         if Node.ELEMENT_NODE != root_node.nodeType:
-            raise pyxb.LogicError('Must be given a DOM node of type ELEMENT')
+            raise pyxb_114.LogicError('Must be given a DOM node of type ELEMENT')
 
-        assert (namespace_context is None) or isinstance(namespace_context, pyxb.namespace.resolution.NamespaceContext)
-        ns_ctx = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(root_node,
+        assert (namespace_context is None) or isinstance(namespace_context, pyxb_114.namespace.resolution.NamespaceContext)
+        ns_ctx = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(root_node,
                                                                            parent_context=namespace_context,
                                                                            including_context=including_context)
 
         tns = ns_ctx.targetNamespace()
         if tns is None:
-            raise pyxb.SchemaValidationError('No targetNamespace associated with content (not a schema?)')
+            raise pyxb_114.SchemaValidationError('No targetNamespace associated with content (not a schema?)')
         schema = cls(namespace_context=ns_ctx, schema_location=schema_location, schema_signature=schema_signature, generation_uid=generation_uid, **kw)
         schema.__namespaceData = ns_ctx
             
         if schema.targetNamespace() != ns_ctx.targetNamespace():
-            raise pyxb.SchemaValidationError('targetNamespace %s conflicts with %s' % (schema.targetNamespace(), ns_ctx.targetNamespace()))
+            raise pyxb_114.SchemaValidationError('targetNamespace %s conflicts with %s' % (schema.targetNamespace(), ns_ctx.targetNamespace()))
 
         # Update the attribute map
         for ai in range(root_node.attributes.length):
@@ -4873,7 +4873,7 @@ class Schema (_SchemaComponent_mixin):
 
         # Verify that the root node is an XML schema element
         if not xsd.nodeIsNamed(root_node, 'schema'):
-            raise pyxb.SchemaValidationError('Root node %s of document is not an XML schema element' % (root_node.nodeName,))
+            raise pyxb_114.SchemaValidationError('Root node %s of document is not an XML schema element' % (root_node.nodeName,))
 
         for cn in root_node.childNodes:
             if Node.ELEMENT_NODE == cn.nodeType:
@@ -4958,7 +4958,7 @@ class Schema (_SchemaComponent_mixin):
 
         @param dom_node: The node defining an element or attribute declaration
         @param declaration_type: Either L{AttributeDeclaration} or L{ElementDeclaration}
-        @return: L{pyxb.namespace.Namespace} or None
+        @return: L{pyxb_114.namespace.Namespace} or None
         """
 
         form_type = NodeAttribute(dom_node, 'form')
@@ -4968,7 +4968,7 @@ class Schema (_SchemaComponent_mixin):
             elif declaration_type == AttributeDeclaration:
                 form_type = self.schemaAttribute('attributeFormDefault')
             else:
-                raise pyxb.LogicError('Expected ElementDeclaration or AttributeDeclaration: got %s' % (declaration_type,))
+                raise pyxb_114.LogicError('Expected ElementDeclaration or AttributeDeclaration: got %s' % (declaration_type,))
         tns = None
         if (self._QUALIFIED == form_type):
             tns = self.targetNamespace()
@@ -4976,7 +4976,7 @@ class Schema (_SchemaComponent_mixin):
                 tns = None
         else:
             if (self._UNQUALIFIED != form_type):
-                raise pyxb.SchemaValidationError('Form type neither %s nor %s' % (self._QUALIFIED, self._UNQUALIFIED))
+                raise pyxb_114.SchemaValidationError('Form type neither %s nor %s' % (self._QUALIFIED, self._UNQUALIFIED))
         return tns
 
     def __requireInProlog (self, node_name):
@@ -4986,12 +4986,12 @@ class Schema (_SchemaComponent_mixin):
         
         if self.__pastProlog:
             print '%s past prolog' % (object.__str__(self),)
-            raise pyxb.SchemaValidationError('Unexpected node %s after prolog' % (node_name,))
+            raise pyxb_114.SchemaValidationError('Unexpected node %s after prolog' % (node_name,))
 
     def __processInclude (self, node):
         self.__requireInProlog(node.nodeName)
         # See section 4.2.1 of Structures.
-        abs_uri = pyxb.utils.utility.NormalizeLocation(NodeAttribute(node, 'schemaLocation'), self.__location)
+        abs_uri = pyxb_114.utils.utility.NormalizeLocation(NodeAttribute(node, 'schemaLocation'), self.__location)
         #print 'include %s + %s = %s' % (self.__location, rel_uri, abs_uri)
         (has_schema, schema_instance) = self.targetNamespace().lookupSchemaByLocation(abs_uri)
         if not has_schema:
@@ -5012,7 +5012,7 @@ class Schema (_SchemaComponent_mixin):
         #print 'Included %s, back to %s' % (included_schema.location(), self.location())
         if schema_instance:
             if self.targetNamespace() != schema_instance.targetNamespace():
-                raise pyxb.SchemaValidationError('Included namespace %s not consistent with including namespace %s' % (schema_instance.targetNamespace(), self.targetNamespace()))
+                raise pyxb_114.SchemaValidationError('Included namespace %s not consistent with including namespace %s' % (schema_instance.targetNamespace(), self.targetNamespace()))
             self.__includedSchema.add(schema_instance)
         return node
 
@@ -5038,7 +5038,7 @@ class Schema (_SchemaComponent_mixin):
 
     def __processRedefine (self, node):
         self.__requireInProlog(node.nodeName)
-        raise pyxb.IncompleteImplementationError('redefine not implemented')
+        raise pyxb_114.IncompleteImplementationError('redefine not implemented')
 
     def __processAnnotation (self, node):
         an = self._addAnnotation(Annotation.CreateFromDOM(node))
@@ -5066,7 +5066,7 @@ class Schema (_SchemaComponent_mixin):
                    'owner' : self }
             return self._addNamedComponent(component.CreateFromDOM(node, **kw))
 
-        raise pyxb.SchemaValidationError('Unexpected top-level element %s' % (node.nodeName,))
+        raise pyxb_114.SchemaValidationError('Unexpected top-level element %s' % (node.nodeName,))
 
     def _addAnnotation (self, annotation):
         self.__annotations.append(annotation)
@@ -5076,9 +5076,9 @@ class Schema (_SchemaComponent_mixin):
         tns = self.targetNamespace()
         assert tns is not None
         if not isinstance(nc, _NamedComponent_mixin):
-            raise pyxb.LogicError('Attempt to add unnamed %s instance to dictionary' % (nc.__class__,))
+            raise pyxb_114.LogicError('Attempt to add unnamed %s instance to dictionary' % (nc.__class__,))
         if nc.isAnonymous():
-            raise pyxb.LogicError('Attempt to add anonymous component to dictionary: %s', (nc.__class__,))
+            raise pyxb_114.LogicError('Attempt to add anonymous component to dictionary: %s', (nc.__class__,))
         if isinstance(nc, _ScopedDeclaration_mixin):
             assert _ScopedDeclaration_mixin.SCOPE_global == nc.scope()
         #print 'Adding %s as %s' % (nc.__class__.__name__, nc.name())
@@ -5096,7 +5096,7 @@ class Schema (_SchemaComponent_mixin):
             return tns.addCategoryObject('notationDeclaration', nc.name(), nc)
         if isinstance(nc, IdentityConstraintDefinition):
             return tns.addCategoryObject('identityConstraintDefinition', nc.name(), nc)
-        raise pyxb.IncompleteImplementationError('No support to record named component of type %s' % (nc.__class__,))
+        raise pyxb_114.IncompleteImplementationError('No support to record named component of type %s' % (nc.__class__,))
 
     def __addTypeDefinition (self, td):
         local_name = td.name()
@@ -5105,10 +5105,10 @@ class Schema (_SchemaComponent_mixin):
         old_td = tns.typeDefinitions().get(local_name)
         if (old_td is not None) and (old_td != td):
             if isinstance(td, ComplexTypeDefinition) != isinstance(old_td, ComplexTypeDefinition):
-                raise pyxb.SchemaValidationError('Name %s used for both simple and complex types' % (td.name(),))
+                raise pyxb_114.SchemaValidationError('Name %s used for both simple and complex types' % (td.name(),))
 
             if not old_td._allowUpdateFromOther(td):
-                raise pyxb.SchemaValidationError('Attempt to re-define non-builtin type definition %s' % (tns.createExpandedName(local_name),))
+                raise pyxb_114.SchemaValidationError('Attempt to re-define non-builtin type definition %s' % (tns.createExpandedName(local_name),))
 
             # Copy schema-related information from the new definition
             # into the old one, and continue to use the old one.
@@ -5125,7 +5125,7 @@ class Schema (_SchemaComponent_mixin):
         old_ad = tns.attributeDeclarations().get(local_name)
         if (old_ad is not None) and (old_ad != ad):
             if not old_ad._allowUpdateFromOther(ad):
-                raise pyxb.SchemaValidationError('Attempt to re-define non-builtin attribute declaration %s' % (tns.createExpandedName(local_name),))
+                raise pyxb_114.SchemaValidationError('Attempt to re-define non-builtin attribute declaration %s' % (tns.createExpandedName(local_name),))
 
             # Copy schema-related information from the new definition
             # into the old one, and continue to use the old one.
@@ -5142,7 +5142,7 @@ class Schema (_SchemaComponent_mixin):
         old_agd = tns.attributeGroupDefinitions().get(local_name)
         if (old_agd is not None) and (old_agd != agd):
             if not old_agd._allowUpdateFromOther(agd):
-                raise pyxb.SchemaValidationError('Attempt to re-define non-builtin attribute group definition %s' % (tns.createExpandedName(local_name),))
+                raise pyxb_114.SchemaValidationError('Attempt to re-define non-builtin attribute group definition %s' % (tns.createExpandedName(local_name),))
                 
             # Copy schema-related information from the new definition
             # into the old one, and continue to use the old one.
@@ -5158,11 +5158,11 @@ class Schema (_SchemaComponent_mixin):
 
 def _AddSimpleTypes (namespace):
     """Add to the schema the definitions of the built-in types of XMLSchema.
-    This should only be invoked by L{pyxb.namespace} when the built-in
+    This should only be invoked by L{pyxb_114.namespace} when the built-in
     namespaces are initialized. """
     # Add the ur type
     #schema = namespace.schema()
-    schema = Schema(namespace_context=pyxb.namespace.XMLSchema.initialNamespaceContext(), schema_location='URN:noLocation:PyXB:XMLSchema', generation_uid=pyxb.namespace.BuiltInObjectUID, _bypass_preload=True)
+    schema = Schema(namespace_context=pyxb_114.namespace.XMLSchema.initialNamespaceContext(), schema_location='URN:noLocation:PyXB:XMLSchema', generation_uid=pyxb_114.namespace.BuiltInObjectUID, _bypass_preload=True)
     td = schema._addNamedComponent(ComplexTypeDefinition.UrTypeDefinition(schema, in_builtin_definition=True))
     assert td.isResolved()
     # Add the simple ur type
@@ -5197,8 +5197,8 @@ def _AddSimpleTypes (namespace):
     return schema
 
 import sys
-import pyxb.namespace.builtin
-pyxb.namespace.builtin._InitializeBuiltinNamespaces(sys.modules[__name__])
+import pyxb_114.namespace.builtin
+pyxb_114.namespace.builtin._InitializeBuiltinNamespaces(sys.modules[__name__])
 
 ## Local Variables:
 ## fill-column:78

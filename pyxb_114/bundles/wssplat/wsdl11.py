@@ -12,42 +12,42 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from pyxb.bundles.wssplat.raw.wsdl11 import *
-import pyxb.bundles.wssplat.raw.wsdl11 as raw_wsdl11
+from pyxb_114.bundles.wssplat.raw.wsdl11 import *
+import pyxb_114.bundles.wssplat.raw.wsdl11 as raw_wsdl11
 
-import pyxb.namespace
-import pyxb.utils.domutils as domutils
+import pyxb_114.namespace
+import pyxb_114.utils.domutils as domutils
 import xml.dom
 
 def ImportRelatedNamespaces ():
     """Import modules for related namespaces so they are available to
     create binding instances from the WSDL sources."""
     try:
-        import pyxb.bundles.wssplat.soapbind11
+        import pyxb_114.bundles.wssplat.soapbind11
     except ImportError:
         pass
     try:
-        import pyxb.bundles.wssplat.soapbind12
+        import pyxb_114.bundles.wssplat.soapbind12
     except ImportError:
         pass
     try:
-        import pyxb.bundles.wssplat.soap11
+        import pyxb_114.bundles.wssplat.soap11
     except ImportError:
         pass
     try:
-        import pyxb.bundles.wssplat.soap12
+        import pyxb_114.bundles.wssplat.soap12
     except ImportError:
         pass
     try:
-        import pyxb.bundles.wssplat.soapenv
+        import pyxb_114.bundles.wssplat.soapenv
     except ImportError:
         pass
     try:
-        import pyxb.bundles.wssplat.httpbind
+        import pyxb_114.bundles.wssplat.httpbind
     except ImportError:
         pass
     try:
-        import pyxb.bundles.wssplat.mimebind
+        import pyxb_114.bundles.wssplat.mimebind
     except ImportError:
         pass
 
@@ -199,14 +199,14 @@ class tDefinitions (raw_wsdl11.tDefinitions):
         # Import standard bindings.  If we do this, then wildcard
         # binding, port, and operation elements will be recognized and
         # converted into bindings.
-        import pyxb.bundles.wssplat.soapbind11
-        import pyxb.bundles.wssplat.soapbind12
-        import pyxb.bundles.wssplat.httpbind
+        import pyxb_114.bundles.wssplat.soapbind11
+        import pyxb_114.bundles.wssplat.soapbind12
+        import pyxb_114.bundles.wssplat.httpbind
 
         # Ensure we have definitions for any externally-referenced
         # things we might need.  @todo: This might have to
         # chronologically precede the import above.
-        pyxb.namespace.archive.NamespaceArchive.PreLoadArchives()
+        pyxb_114.namespace.archive.NamespaceArchive.PreLoadArchives()
 
         raw_wsdl11.Namespace.validateComponentModel()
         state = ( kw.pop('process_schema', False),
@@ -217,8 +217,8 @@ class tDefinitions (raw_wsdl11.tDefinitions):
     def _postFactory_vx (self, state):
         (process_schema, generation_uid, dom_node) = state
         assert isinstance(dom_node, xml.dom.Node)
-        node_en = pyxb.namespace.ExpandedName(dom_node)
-        self.__namespaceContext = pyxb.namespace.resolution.NamespaceContext.GetNodeContext(dom_node)
+        node_en = pyxb_114.namespace.ExpandedName(dom_node)
+        self.__namespaceContext = pyxb_114.namespace.resolution.NamespaceContext.GetNodeContext(dom_node)
         self.__buildMaps()
         if process_schema:
             self.__processSchema(generation_uid)
@@ -268,8 +268,8 @@ class tDefinitions (raw_wsdl11.tDefinitions):
                         break
 
     def __processSchema (self, generation_uid):
-        global pyxb
-        import pyxb.xmlschema
+        global pyxb_114
+        import pyxb_114.xmlschema
 
         print 'PS %s' % (generation_uid,)
         if self.__schema is not None:
@@ -277,7 +277,7 @@ class tDefinitions (raw_wsdl11.tDefinitions):
             return self.__schema
         for t in self.types:
             for wc in t.wildcardElements():
-                if isinstance(wc, xml.dom.Node) and pyxb.namespace.XMLSchema.nodeIsNamed(wc, 'schema'):
+                if isinstance(wc, xml.dom.Node) and pyxb_114.namespace.XMLSchema.nodeIsNamed(wc, 'schema'):
                     # Try to load component models for any namespace referenced by this.
                     # Probably shouldn't need to do this except for imported ones.
                     for ns in self.namespaceContext().inScopeNamespaces().values():
@@ -285,8 +285,8 @@ class tDefinitions (raw_wsdl11.tDefinitions):
                             ns.validateComponentModel()
                         except Exception, e:
                             print 'Error validating component model for %s: %s' % (ns.uri(), e)
-                    self.__schema = pyxb.xmlschema.schema.CreateFromDOM(wc, namespace_context=self.namespaceContext(), generation_uid=generation_uid)
-                elif isinstance(wc, pyxb.xmlschema.schema):
+                    self.__schema = pyxb_114.xmlschema.schema.CreateFromDOM(wc, namespace_context=self.namespaceContext(), generation_uid=generation_uid)
+                elif isinstance(wc, pyxb_114.xmlschema.schema):
                     self.__schema = wc
                 else:
                     print 'No match: %s %s' % (wc.namespaceURI, namespace.localName)
@@ -307,4 +307,4 @@ class tDefinitions (raw_wsdl11.tDefinitions):
 
 raw_wsdl11.tDefinitions._SetSupersedingClass(tDefinitions)
 
-pyxb.namespace.resolution.NamespaceContext._AddTargetNamespaceAttribute(raw_wsdl11.Namespace.createExpandedName('definitions'), pyxb.namespace.ExpandedName('targetNamespace'))
+pyxb_114.namespace.resolution.NamespaceContext._AddTargetNamespaceAttribute(raw_wsdl11.Namespace.createExpandedName('definitions'), pyxb_114.namespace.ExpandedName('targetNamespace'))

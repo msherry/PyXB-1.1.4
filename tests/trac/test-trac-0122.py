@@ -1,5 +1,5 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
@@ -14,13 +14,13 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
   </element>
 </schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -53,13 +53,13 @@ class TestTrac0122 (unittest.TestCase):
         self.setRequired(instance, 'one')
         self.setOptional(instance, 'two')
         self.assertRaises(AttributeError, self.setProhibitedNaive, instance, 'three')
-        self.assertRaises(pyxb.ProhibitedAttributeError, self.setProhibited, instance, 'three')
+        self.assertRaises(pyxb_114.ProhibitedAttributeError, self.setProhibited, instance, 'three')
         self.assertEqual('one', instance.Required)
         self.assertEqual('two', instance.Optional)
         self.assertEqual(None, self.getProhibited(instance))
 
         instance.Optional = None
-        self.assertRaises(pyxb.MissingAttributeError, self.setRequired, instance, None)
+        self.assertRaises(pyxb_114.MissingAttributeError, self.setRequired, instance, None)
         self.setProhibited(instance, None)
         self.assertEqual('one', instance.Required)
         self.assertEqual(None, instance.Optional)

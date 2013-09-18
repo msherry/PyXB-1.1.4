@@ -1,7 +1,7 @@
 import unittest
 import binascii
-import pyxb
-import pyxb.binding.datatypes as xsd
+import pyxb_114
+import pyxb_114.binding.datatypes as xsd
 
 class Test_base64Binary (unittest.TestCase):
     RFC4648_S9 = ( ('14fb9c03d97e', 'FPucA9l+'),
@@ -25,13 +25,13 @@ class Test_base64Binary (unittest.TestCase):
             self.assertEqual(xsd.base64Binary(ciphertext, _from_xml=True), plaintext)
 
     def testInvalid (self):
-        self.assertRaises(pyxb.BadTypeValueError, xsd.base64Binary, 'Z', _from_xml=True)
-        self.assertRaises(pyxb.BadTypeValueError, xsd.base64Binary, 'Zg', _from_xml=True)
-        self.assertRaises(pyxb.BadTypeValueError, xsd.base64Binary, 'Zg=', _from_xml=True)
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.base64Binary, 'Z', _from_xml=True)
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.base64Binary, 'Zg', _from_xml=True)
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.base64Binary, 'Zg=', _from_xml=True)
         self.assertEqual('f', xsd.base64Binary('Zg==', _from_xml=True))
-        self.assertRaises(pyxb.BadTypeValueError, xsd.base64Binary, 'ZZZ=', _from_xml=True)
-        self.assertRaises(pyxb.BadTypeValueError, xsd.base64Binary, 'ZZ==', _from_xml=True)
-        self.assertRaises(pyxb.BadTypeValueError, xsd.base64Binary, 'ZE==', _from_xml=True)
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.base64Binary, 'ZZZ=', _from_xml=True)
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.base64Binary, 'ZZ==', _from_xml=True)
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.base64Binary, 'ZE==', _from_xml=True)
 
 if __name__ == '__main__':
     unittest.main()

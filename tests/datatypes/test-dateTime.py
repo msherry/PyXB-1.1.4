@@ -1,7 +1,7 @@
-import pyxb
+import pyxb_114
 import unittest
-import pyxb.binding.datatypes as xsd
-from pyxb.utils.utility import UTCOffsetTimeZone
+import pyxb_114.binding.datatypes as xsd
+from pyxb_114.utils.utility import UTCOffsetTimeZone
 import datetime
 
 class Test_dateTime (unittest.TestCase):
@@ -21,10 +21,10 @@ class Test_dateTime (unittest.TestCase):
         self.assertEqual(with_tzinfo, dt.tzinfo is not None)
 
     def testBad (self):
-        self.assertRaises(pyxb.BadTypeValueError, xsd.dateTime, '2002-10-27 12:14:32  ')
-        self.assertRaises(pyxb.BadTypeValueError, xsd.dateTime, '2002-10-27 12:14:32.Z')
-        self.assertRaises(pyxb.BadTypeValueError, xsd.dateTime, '2002-10-27 12:14:32.123405:00')
-        self.assertRaises(pyxb.BadTypeValueError, xsd.dateTime, '2002-10-27 12:14:32.1234+05')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.dateTime, '2002-10-27 12:14:32  ')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.dateTime, '2002-10-27 12:14:32.Z')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.dateTime, '2002-10-27 12:14:32.123405:00')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.dateTime, '2002-10-27 12:14:32.1234+05')
         
     def testFromText (self):
         self.verifyTime(xsd.dateTime('  2002-10-27T12:14:32', _from_xml=True), with_usec=False, with_tzinfo=False)
@@ -38,7 +38,7 @@ class Test_dateTime (unittest.TestCase):
 
     def testYear (self):
         # This test can't succeed because Python doesn't support negative years.
-        self.assertRaises(pyxb.BadTypeValueError, xsd.dateTime, '-0024-01-01T00:00:00')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.dateTime, '-0024-01-01T00:00:00')
 
     def testXsdLiteral (self):
         dt = xsd.dateTime('2002-10-27T12:14:32Z')

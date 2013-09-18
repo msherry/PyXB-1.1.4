@@ -1,8 +1,8 @@
 import types
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
@@ -20,13 +20,13 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 </schema>'''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -39,11 +39,11 @@ import unittest
 class TestTrac_0087 (unittest.TestCase):
     def testReservedWords (self):
         # Element global
-        self.assertTrue(isinstance(global_, pyxb.binding.basis.element));
+        self.assertTrue(isinstance(global_, pyxb_114.binding.basis.element));
         # Complex type class
-        self.assertTrue(issubclass(class_, pyxb.binding.basis.complexTypeDefinition))
+        self.assertTrue(issubclass(class_, pyxb_114.binding.basis.complexTypeDefinition))
         # Simple type def
-        self.assertTrue(issubclass(def_, pyxb.binding.datatypes.string))
+        self.assertTrue(issubclass(def_, pyxb_114.binding.datatypes.string))
         
     def testPyxbSymbols (self):
         xmls = '<tgt:global value="text" xmlns:tgt="urn:tgt"/>'

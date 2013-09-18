@@ -1,6 +1,6 @@
-import pyxb
+import pyxb_114
 import unittest
-import pyxb.binding.datatypes as xsd
+import pyxb_114.binding.datatypes as xsd
 import datetime
 
 class Test_time (unittest.TestCase):
@@ -15,10 +15,10 @@ class Test_time (unittest.TestCase):
         self.assertEqual(with_tzinfo, tm.tzinfo is not None)
 
     def testBad (self):
-        self.assertRaises(pyxb.BadTypeValueError, xsd.time, '12: 14: 32')
-        self.assertRaises(pyxb.BadTypeValueError, xsd.time, '12:14:32.Z')
-        self.assertRaises(pyxb.BadTypeValueError, xsd.time, '12:14:32.123405:00')
-        self.assertRaises(pyxb.BadTypeValueError, xsd.time, '12:14:32.1234+05')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.time, '12: 14: 32')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.time, '12:14:32.Z')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.time, '12:14:32.123405:00')
+        self.assertRaises(pyxb_114.BadTypeValueError, xsd.time, '12:14:32.1234+05')
         
     def testFromText (self):
         self.verifyTime(xsd.time('12:14:32'), with_usec=False, with_tzinfo=False)

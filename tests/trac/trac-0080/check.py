@@ -1,7 +1,7 @@
 import mr
 import unittest
-import pyxb
-import pyxb.binding.datatypes as xsd
+import pyxb_114
+import pyxb_114.binding.datatypes as xsd
 
 class TestTrac0080 (unittest.TestCase):
 
@@ -18,7 +18,7 @@ class TestTrac0080 (unittest.TestCase):
         au = i4._AttributeMap.get('anAttribute')
         self.assertEqual(au.dataType(), xsd.normalizedString)
         self.assertFalse(au.required())
-        self.assertRaises(pyxb.BadTypeValueError, self.assignAttribute_, i4, self._NotANormalizedString)
+        self.assertRaises(pyxb_114.BadTypeValueError, self.assignAttribute_, i4, self._NotANormalizedString)
 
     def testType3 (self): # restrict type
         i3 = mr.Type3()
@@ -26,7 +26,7 @@ class TestTrac0080 (unittest.TestCase):
         self.assertEqual(au.dataType(), xsd.token)
         self.assertNotEqual(au, mr.Type4._AttributeMap.get(au.name()))
         self.assertFalse(au.required())
-        #self.assertRaises(pyxb.BadTypeValueError, self.assignAttribute_, i3, self._NotAToken)
+        #self.assertRaises(pyxb_114.BadTypeValueError, self.assignAttribute_, i3, self._NotAToken)
         self.assignAttribute_(i3, self._NotAnNCName)
         self.assertEqual(self._NotAnNCName, i3.anAttribute)
 
@@ -44,8 +44,8 @@ class TestTrac0080 (unittest.TestCase):
         self.assertFalse(au.required())
         # The whiteSpace facet on xsd:token is collapse, which does
         # not remove the interior space.
-        self.assertRaises(pyxb.BadTypeValueError, self.assignAttribute_, i1, self._NotAToken)
-        self.assertRaises(pyxb.BadTypeValueError, self.assignAttribute_, i1, self._NotAnNCName)
+        self.assertRaises(pyxb_114.BadTypeValueError, self.assignAttribute_, i1, self._NotAToken)
+        self.assertRaises(pyxb_114.BadTypeValueError, self.assignAttribute_, i1, self._NotAnNCName)
         self.assignAttribute_(i1, self._NCName)
         self.assertEqual(self._NCName, i1.anAttribute)
 
@@ -55,7 +55,7 @@ class TestTrac0080 (unittest.TestCase):
         au = rt._AttributeMap.get('anAttribute')
         self.assertEqual(au.dataType(), xsd.NCName)
         self.assertTrue(au.required())
-        self.assertRaises(pyxb.MissingAttributeError, r.validateBinding)
+        self.assertRaises(pyxb_114.MissingAttributeError, r.validateBinding)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,6 @@
 # Declare xml namespace
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
@@ -13,23 +13,23 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
   <xs:element name="instance" type="structure"/>
 </xs:schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
 class TestTrac0023 (unittest.TestCase):
     def testBasic (self):
         self.assertEqual(4, len(structure._AttributeMap))
-        self.assertEqual(pyxb.binding.xml_.STD_ANON_lang, structure._AttributeMap[pyxb.namespace.XML.createExpandedName('lang')].dataType())
-        self.assertEqual(pyxb.binding.xml_.STD_ANON_space, structure._AttributeMap[pyxb.namespace.XML.createExpandedName('space')].dataType())
-        self.assertEqual(pyxb.binding.datatypes.anyURI, structure._AttributeMap[pyxb.namespace.XML.createExpandedName('base')].dataType())
-        self.assertEqual(pyxb.binding.datatypes.ID, structure._AttributeMap[pyxb.namespace.XML.createExpandedName('id')].dataType())
+        self.assertEqual(pyxb_114.binding.xml_.STD_ANON_lang, structure._AttributeMap[pyxb_114.namespace.XML.createExpandedName('lang')].dataType())
+        self.assertEqual(pyxb_114.binding.xml_.STD_ANON_space, structure._AttributeMap[pyxb_114.namespace.XML.createExpandedName('space')].dataType())
+        self.assertEqual(pyxb_114.binding.datatypes.anyURI, structure._AttributeMap[pyxb_114.namespace.XML.createExpandedName('base')].dataType())
+        self.assertEqual(pyxb_114.binding.datatypes.ID, structure._AttributeMap[pyxb_114.namespace.XML.createExpandedName('id')].dataType())
 
 if __name__ == '__main__':
     unittest.main()

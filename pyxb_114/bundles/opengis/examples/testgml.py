@@ -1,8 +1,8 @@
-#  PYTHONPATH=../..:. PYXB_ARCHIVE_PATH=opengis/iso19139:+ ../../scripts/pyxbgen -u gmlapp.xsd -m gmlapp
+#  PYTHONPATH=../..:. PYXB_ARCHIVE_PATH=opengis/iso19139:+ ../../scripts/pyxb_114gen -u gmlapp.xsd -m gmlapp
 
-import pyxb.bundles.opengis.gml_3_2 as gml
+import pyxb_114.bundles.opengis.gml_3_2 as gml
 import gmlapp
-import pyxb.utils.domutils
+import pyxb_114.utils.domutils
 
 limits = gml.GridLimitsType(gml.GridEnvelopeType([0, 0], [4, 4]))
 origin = gml.PointPropertyType(gml.Point(gml.pos([-93.25, 43.5]), id='_origin'))
@@ -20,7 +20,7 @@ range = gml.rangeSet(DataBlock=gml.DataBlockType(gml.rangeParameters(cv), data))
 rgc = gml.RectifiedGridCoverage(domain, range)
 rgc.id = '_%x' % (id(rgc),)
 
-bds = pyxb.utils.domutils.BindingDOMSupport(namespace_prefix_map={ gml.Namespace : 'gml' , gmlapp.Namespace : 'app' })
+bds = pyxb_114.utils.domutils.BindingDOMSupport(namespace_prefix_map={ gml.Namespace : 'gml' , gmlapp.Namespace : 'app' })
 
 xml = rgc.toxml("utf-8", bds=bds)
 instance = gml.CreateFromDocument(xml)

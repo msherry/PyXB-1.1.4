@@ -106,12 +106,12 @@ class StructuralBadDocumentError (BadDocumentError):
     """Raised when processing document and the content model is not satisfied."""
     @property
     def element_use (self):
-        """The L{pyxb.binding.content.ElementUse} instance to which the content should conform, if available."""
+        """The L{pyxb_114.binding.content.ElementUse} instance to which the content should conform, if available."""
         return self.__elementUse
 
     @property
     def container (self):
-        """The L{pyxb.binding.basis.complexTypeDefinition} instance to which the content would belong, if available."""
+        """The L{pyxb_114.binding.basis.complexTypeDefinition} instance to which the content would belong, if available."""
         return self.__container
 
     @property
@@ -153,7 +153,7 @@ class UnrecognizedElementError (UnrecognizedContentError):
 
     @property
     def element_name (self):
-        """The L{pyxb.namespace.ExpandedName} of the element that was not recognized."""
+        """The L{pyxb_114.namespace.ExpandedName} of the element that was not recognized."""
         return self.__elementName
 
     @property
@@ -171,8 +171,8 @@ class UnrecognizedElementError (UnrecognizedContentError):
         self.__elementName = kw.get('element_name')
         if self.__elementName is None:
             if self.__domNode is not None:
-                import pyxb.namespace
-                self.__elementName = pyxb.namespace.ExpandedName(self.__domNode.namespaceURI, self.__domNode.localName)
+                import pyxb_114.namespace
+                self.__elementName = pyxb_114.namespace.ExpandedName(self.__domNode.namespaceURI, self.__domNode.localName)
             else:
                 raise LogicError('No source for element_name  in UnrecognizedElementError')
         kw['content'] = self.__domNode
@@ -202,19 +202,19 @@ class NotAnElementError (UnrecognizedContentError):
 
     @property
     def element_name (self):
-        """The L{pyxb.namespace.ExpandedName} of the element that was not recognized."""
+        """The L{pyxb_114.namespace.ExpandedName} of the element that was not recognized."""
         return self.__elementName
 
     @property
     def containing_type (self):
-        """The L{pyxb.binding.content.complexTypeDefinition} in which the element was unrecognized."""
+        """The L{pyxb_114.binding.content.complexTypeDefinition} in which the element was unrecognized."""
         return self.__containingType
 
     def __init__ (self, element_name, containing_type, **kw):
         """Raised when a document inner element is recognized as a type rather than an element.
 
         @param element_name : The name of the inner element from the document
-        @param containing_type : The L{pyxb.binding.content.complexTypeDefinition} class in which the lookup failed
+        @param containing_type : The L{pyxb_114.binding.content.complexTypeDefinition} class in which the lookup failed
         """
         self.__elementName = element_name
         self.__containingType = containing_type

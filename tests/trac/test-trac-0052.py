@@ -1,7 +1,7 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.binding.basis
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.binding.basis
+import pyxb_114.utils.domutils
 
 import os.path
 xsd='''<?xml version="1.0" encoding="UTF-8"?>
@@ -16,14 +16,14 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 </xs:schema>'''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 import xml.dom
@@ -36,7 +36,7 @@ class TestTrac_0052 (unittest.TestCase):
         wc2 = instance.wildcardElements()[1]
         self.assertTrue(isinstance(wc2, xml.dom.Node))
         self.assertEqual(xml.dom.Node.ELEMENT_NODE, wc2.nodeType)
-        self.assertEqual('3', wc2.attributes.get(pyxb.namespace.ExpandedName('wca').uriTuple()))
+        self.assertEqual('3', wc2.attributes.get(pyxb_114.namespace.ExpandedName('wca').uriTuple()))
         
 
 if __name__ == '__main__':

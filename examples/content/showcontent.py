@@ -1,4 +1,4 @@
-from pyxb import BIND
+from pyxb_114 import BIND
 import content
 
 v = content.numbers(1, BIND(2), attribute=3)

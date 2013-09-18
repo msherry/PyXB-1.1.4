@@ -23,15 +23,15 @@ value spaces.
 """
 
 from xml.dom import Node
-import pyxb
+import pyxb_114
 import types
 import datatypes
 import basis
-from pyxb.utils import utility
-from pyxb.utils import domutils
+from pyxb_114.utils import utility
+from pyxb_114.utils import domutils
 import re
 
-class Facet (pyxb.cscRoot):
+class Facet (pyxb_114.cscRoot):
     """The base class for facets.
 
     This provides association with STDs, a name, and a value for the facet.
@@ -139,7 +139,7 @@ class Facet (pyxb.cscRoot):
             name = name.split(':', 1)[1]
         facet_class = globals().get('%s_%s' % (cls._FacetPrefix, name), None)
         if facet_class is None:
-            raise pyxb.LogicError('Unrecognized facet name %s: expect %s' % (name, ','.join([_f._Name for _f in cls.Facets])))
+            raise pyxb_114.LogicError('Unrecognized facet name %s: expect %s' % (name, ','.join([_f._Name for _f in cls.Facets])))
         assert facet_class is not None
         return facet_class
 
@@ -175,7 +175,7 @@ class ConstrainingFacet (Facet):
         super(ConstrainingFacet, self).__init__(**kw)
 
     def _validateConstraint_vx (self, value):
-        raise pyxb.LogicError("Facet %s does not implement constraints" % (self.Name(),))
+        raise pyxb_114.LogicError("Facet %s does not implement constraints" % (self.Name(),))
 
     def validateConstraint (self, value):
         """Return True iff the given value satisfies the constraint represented by this facet instance.
@@ -202,7 +202,7 @@ class ConstrainingFacet (Facet):
         self.__setFromKeywords(**kw)
         return rv
         
-class _LateDatatype_mixin (pyxb.cscRoot):
+class _LateDatatype_mixin (pyxb_114.cscRoot):
     """Marker class to indicate that the facet instance must be told
     its datatype when it is constructed.
 
@@ -227,7 +227,7 @@ class _LateDatatype_mixin (pyxb.cscRoot):
         used, or True if the base type definition of the proposed
         datatype should be used."""
         if cls._LateDatatypeBindsSuperclass is None:
-            raise pyxb.LogicError('Class %s did not set _LateDatatypeBindsSuperclass variable.')
+            raise pyxb_114.LogicError('Class %s did not set _LateDatatypeBindsSuperclass variable.')
         return cls._LateDatatypeBindsSuperclass
 
     @classmethod
@@ -240,7 +240,7 @@ class _LateDatatype_mixin (pyxb.cscRoot):
         type hierarchy is used.
         """
         
-        import pyxb.xmlschema.structures as structures
+        import pyxb_114.xmlschema.structures as structures
         if isinstance(value_type, structures.SimpleTypeDefinition):
             # Back up until we find something that actually has a
             # datatype
@@ -255,7 +255,7 @@ class _LateDatatype_mixin (pyxb.cscRoot):
     def bindValueDatatype (self, value_datatype):
         self.setFromKeywords(_constructor=True, value_datatype=self.BindingValueDatatype(value_datatype))
 
-class _Fixed_mixin (pyxb.cscRoot):
+class _Fixed_mixin (pyxb_114.cscRoot):
     """Mix-in to a constraining facet that adds support for the 'fixed' property."""
     __fixed = None
     def fixed (self): return self.__fixed
@@ -277,7 +277,7 @@ class _Fixed_mixin (pyxb.cscRoot):
         super_fn = getattr(super(_Fixed_mixin, self), '_setFromKeywords_vb', lambda *a,**kw: self)
         return super_fn(**kw)
     
-class _CollectionFacet_mixin (pyxb.cscRoot):
+class _CollectionFacet_mixin (pyxb_114.cscRoot):
     """Mix-in to handle facets whose values are collections, not scalars.
 
     For example, the enumeration and pattern facets maintain a list of
@@ -354,7 +354,7 @@ class CF_maxLength (ConstrainingFacet, _Fixed_mixin):
         value_length = value.xsdValueLength()
         return (value_length is None) or (self.value() is None) or (value_length <= self.value())
 
-import pyxb.utils.xmlre
+import pyxb_114.utils.xmlre
 
 class _PatternElement (utility.PrivateTransient_mixin):
     """This class represents individual patterns that appear within a CF_pattern collection."""
@@ -382,7 +382,7 @@ class _PatternElement (utility.PrivateTransient_mixin):
         assert isinstance(pattern, types.StringTypes)
         self.pattern = pattern
         self.annotation = annotation
-        self.__pythonExpression = pyxb.utils.xmlre.XMLToPython(pattern)
+        self.__pythonExpression = pyxb_114.utils.xmlre.XMLToPython(pattern)
         #print 'Translated pattern %s to %s' % (pattern.encode('ascii', 'xmlcharrefreplace'),
         #                                       self.__pythonExpression.encode('ascii', 'xmlcharrefreplace'))
 
@@ -506,7 +506,7 @@ class CF_enumeration (ConstrainingFacet, _CollectionFacet_mixin, _LateDatatype_m
     """Capture a constraint that restricts valid values to a fixed set.
 
     A STD that has an enumeration restriction should mix-in
-    L{pyxb.binding.basis.enumeration_mixin}, and should have a class
+    L{pyxb_114.binding.basis.enumeration_mixin}, and should have a class
     variable titled C{_CF_enumeration} that is an instance of this
     class.
 
@@ -562,7 +562,7 @@ class CF_enumeration (ConstrainingFacet, _CollectionFacet_mixin, _LateDatatype_m
         kw['enumeration'] = self
         ee = _EnumerationElement(**kw)
         if ee.tag in self.__tagToElement:
-            raise pyxb.IncompleteImplementationError('Duplicate enumeration tags')
+            raise pyxb_114.IncompleteImplementationError('Duplicate enumeration tags')
         self.__tagToElement[ee.tag()] = ee
         self.__unicodeToElement[ee.unicodeValue()] = ee
         value = ee.value()
@@ -599,7 +599,7 @@ class CF_enumeration (ConstrainingFacet, _CollectionFacet_mixin, _LateDatatype_m
                 return True
         return False
 
-class _Enumeration_mixin (pyxb.cscRoot):
+class _Enumeration_mixin (pyxb_114.cscRoot):
     """Marker class to indicate that the generated binding has enumeration members."""
     @classmethod
     def valueForUnicode (cls, ustr):
@@ -749,7 +749,7 @@ class FundamentalFacet (Facet):
 
     def updateFromDOM (self, node):
         if not node.hasAttribute('name'):
-            raise pyxb.SchemaValidationError('No name attribute in facet')
+            raise pyxb_114.SchemaValidationError('No name attribute in facet')
         assert node.getAttribute('name') == self.Name()
         self._updateFromDOM(node)
 

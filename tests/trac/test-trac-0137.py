@@ -1,5 +1,5 @@
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
 import xml.dom
 
 import os.path
@@ -24,23 +24,23 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 '''
 
 #file('schema.xsd', 'w').write(xsd)
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
 class TestTrac_0137 (unittest.TestCase):
     def tearDown (self):
-        pyxb.RequireValidWhenParsing(True)
+        pyxb_114.RequireValidWhenParsing(True)
 
     def validate (self):
         xmls = '<wrapper><first/><second/><third><selt>text</selt></third></wrapper>'
-        doc = pyxb.utils.domutils.StringToDOM(xmls)
+        doc = pyxb_114.utils.domutils.StringToDOM(xmls)
         instance = wrapper.createFromDOM(doc.documentElement)
         self.assertEqual(1, len(instance.wildcardElements()))
         third = instance.wildcardElements()[0]
@@ -49,11 +49,11 @@ class TestTrac_0137 (unittest.TestCase):
         self.assertEqual('third', third.localName)
 
     def testWithValidation (self):
-        pyxb.RequireValidWhenParsing(True)
+        pyxb_114.RequireValidWhenParsing(True)
         self.validate()
 
     def testWithoutValidation (self):
-        pyxb.RequireValidWhenParsing(False)
+        pyxb_114.RequireValidWhenParsing(False)
         self.validate()
 
 if __name__ == '__main__':

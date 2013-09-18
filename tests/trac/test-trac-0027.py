@@ -1,7 +1,7 @@
 # Undeclared XML namespace
-import pyxb.binding.generate
-import pyxb.binding.datatypes as xs
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.binding.datatypes as xs
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
@@ -63,13 +63,13 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
 -->
 </xs:schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
@@ -86,18 +86,18 @@ class TestTrac0027 (unittest.TestCase):
     def testRequired (self):
         self.assertEqual(2, len(req_struct._AttributeMap))
         i = ireq_struct()
-        self.assertRaises(pyxb.MissingAttributeError, i.validateBinding)
+        self.assertRaises(pyxb_114.MissingAttributeError, i.validateBinding)
         self.assertTrue(i.rattr is None)
         i.rattr = -4
         self.assertEqual(-4, i.rattr)
         self.assertTrue(i._AttributeMap['rattr'].provided(i))
 
-        self.assertRaises(pyxb.MissingAttributeError, i.validateBinding) # Should fail because rattr_fixed was not explicitly set
+        self.assertRaises(pyxb_114.MissingAttributeError, i.validateBinding) # Should fail because rattr_fixed was not explicitly set
 
         self.assertFalse(i._AttributeMap['rattr_fixed'].provided(i))
         self.assertEqual(30, i.rattr_fixed)
 
-        self.assertRaises(pyxb.AttributeChangeError, self.setRattr_fixed, i, 41)
+        self.assertRaises(pyxb_114.AttributeChangeError, self.setRattr_fixed, i, 41)
         self.assertFalse(i._AttributeMap['rattr_fixed'].provided(i))
 
         i.rattr_fixed = 30
@@ -105,13 +105,13 @@ class TestTrac0027 (unittest.TestCase):
         self.assertEqual(30, i.rattr_fixed)
         self.assertTrue(i.validateBinding())
 
-        self.assertRaises(pyxb.AttributeChangeError, self.setRattr_fixed, i, 41)
+        self.assertRaises(pyxb_114.AttributeChangeError, self.setRattr_fixed, i, 41)
 
     def testRequiredCTor (self):
         i = ireq_struct(rattr=11, rattr_fixed=30)
         self.assertTrue(i.validateBinding())
 
-        self.assertRaises(pyxb.AttributeChangeError, ireq_struct, rattr=11, rattr_fixed=31)
+        self.assertRaises(pyxb_114.AttributeChangeError, ireq_struct, rattr=11, rattr_fixed=31)
 
     def testOptional (self):
         self.assertEqual(3, len(opt_struct._AttributeMap))
@@ -130,7 +130,7 @@ class TestTrac0027 (unittest.TestCase):
         self.assertFalse(i._AttributeMap['attr_fixed'].provided(i))
         self.assertEqual(20, i.attr_fixed)
 
-        self.assertRaises(pyxb.AttributeChangeError, self.setAttr_fixed, i, 21)
+        self.assertRaises(pyxb_114.AttributeChangeError, self.setAttr_fixed, i, 21)
         self.assertFalse(i._AttributeMap['attr_fixed'].provided(i))
         self.assertEqual(20, i.attr_fixed)
 
@@ -143,7 +143,7 @@ class TestTrac0027 (unittest.TestCase):
 
     def testOptionalCtor (self):
         self.assertEqual(3, len(opt_struct._AttributeMap))
-        self.assertRaises(pyxb.AttributeChangeError, opt_struct, attr_fixed=21)
+        self.assertRaises(pyxb_114.AttributeChangeError, opt_struct, attr_fixed=21)
 
         i = iopt_struct(attr=1, attr_def=2, attr_fixed=20)
         self.assertTrue(i.validateBinding())
@@ -171,7 +171,7 @@ class TestTrac0027 (unittest.TestCase):
         self.assertRaises(AttributeError, lambda: i.attr)
 
     def testOptProCtor (self):
-        self.assertRaises(pyxb.ProhibitedAttributeError, opt_pro, attr=1)
+        self.assertRaises(pyxb_114.ProhibitedAttributeError, opt_pro, attr=1)
         
     def testOptRest (self):
         self.assertEqual(3, len(opt_rest._AttributeMap))
@@ -182,7 +182,7 @@ class TestTrac0027 (unittest.TestCase):
         self.assertEqual(opt_struct._AttributeMap['attr_def'], opt_rest._AttributeMap['attr_def'])
         self.assertEqual(opt_struct._AttributeMap['attr_fixed'], opt_rest._AttributeMap['attr_fixed'])
 
-        self.assertRaises(pyxb.BadTypeValueError, self.setAttr, i, 1000)
+        self.assertRaises(pyxb_114.BadTypeValueError, self.setAttr, i, 1000)
 
 if __name__ == '__main__':
     unittest.main()

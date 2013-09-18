@@ -1,6 +1,6 @@
 import dict
 import urllib2
-import pyxb.utils.domutils as domutils
+import pyxb_114.utils.domutils as domutils
 import sys
 
 word = 'xml'

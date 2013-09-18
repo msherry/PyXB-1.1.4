@@ -1,4 +1,4 @@
-import pyxb
+import pyxb_114
 import ipo
 import xml.dom.minidom
 import time
@@ -14,7 +14,7 @@ for item in order.items().item():
 # Give Mary more
 try:
     item.setQuantity(100)
-except pyxb.BadTypeValueError, e:
+except pyxb_114.BadTypeValueError, e:
     print 'Too many: %s' % (e,)
     item.setQuantity(10)
 print 'Increased quantity to %d' % (item.quantity(),)

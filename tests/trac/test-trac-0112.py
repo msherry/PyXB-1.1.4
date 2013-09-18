@@ -1,5 +1,5 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
@@ -40,20 +40,20 @@ xmls = '''<?xml version="1.0" encoding="UTF-8"?>
 </Element>'''
 
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #print code
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
 class TestTrac0112 (unittest.TestCase):
     def testExample (self):
         print "NOTE: THIS TEST ACTUALLY FAILS (we're validating that it does fail)"
-        self.assertRaises(pyxb.BindingValidationError, CreateFromDocument, xmls)
+        self.assertRaises(pyxb_114.BindingValidationError, CreateFromDocument, xmls)
 
 
 if __name__ == '__main__':

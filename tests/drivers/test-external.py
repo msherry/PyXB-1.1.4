@@ -1,13 +1,13 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
-import pyxb.namespace
+import pyxb_114.namespace
 import sys
 import imp
 
 import os.path
 
-te_generator = pyxb.binding.generate.Generator(allow_absent_module=True, generate_to_files=False)
+te_generator = pyxb_114.binding.generate.Generator(allow_absent_module=True, generate_to_files=False)
 te_generator.setSchemaRoot(os.path.realpath('%s/../schemas' % (os.path.dirname(__file__),)))
 te_generator.addSchemaLocation('test-external.xsd')
 
@@ -20,7 +20,7 @@ sys.modules['st'] = st
 # Now get the code for the shared types bindings, and evaluate it
 # within the new module.
 
-st_generator = pyxb.binding.generate.Generator(allow_absent_module=True, generate_to_files=False)
+st_generator = pyxb_114.binding.generate.Generator(allow_absent_module=True, generate_to_files=False)
 st_generator.setSchemaRoot(os.path.realpath('%s/../schemas' % (os.path.dirname(__file__),)))
 st_generator.addSchemaLocation('shared-types.xsd')
 
@@ -32,7 +32,7 @@ rv = compile(code, 'shared-types', 'exec')
 exec code in st.__dict__
 
 # Set the path by which we expect to reference the module
-stns = pyxb.namespace.NamespaceForURI('URN:shared-types', create_if_missing=True)
+stns = pyxb_114.namespace.NamespaceForURI('URN:shared-types', create_if_missing=True)
 module_record = stns.lookupModuleRecordByUID(st_generator.generationUID())
 assert module_record is not None, 'Unable to find %s in ns %s' % (st_generator.generationUID(), stns)
 module_record.setModulePath('st')
@@ -48,9 +48,9 @@ file('te.py', 'w').write(code)
 rv = compile(code, 'test-external', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
-from pyxb.utils import domutils
+from pyxb_114.utils import domutils
 def ToDOM (instance):
     return instance.toDOM().documentElement
 
@@ -103,16 +103,16 @@ class TestExternal (unittest.TestCase):
         self.assertEqual(st.extendedName._ElementMap['generation'], restExtName._ElementMap['generation'])
 
         xml = '<personName><surname>Smith</surname></personName>'
-        dom = pyxb.utils.domutils.StringToDOM(xml)
+        dom = pyxb_114.utils.domutils.StringToDOM(xml)
         instance = st.personName.Factory(_dom_node=dom.documentElement)
         xml = '<personName><surname>Smith</surname><generation>Jr.</generation></personName>'
-        dom = pyxb.utils.domutils.StringToDOM(xml)
+        dom = pyxb_114.utils.domutils.StringToDOM(xml)
         self.assertRaises(ExtraContentError, st.personName.Factory, _dom_node=dom.documentElement)
         xml = xml.replace('personName', 'extendedName')
-        dom = pyxb.utils.domutils.StringToDOM(xml)
+        dom = pyxb_114.utils.domutils.StringToDOM(xml)
         instance = st.extendedName.Factory(_dom_node=dom.documentElement)
         xml = xml.replace('extendedName', 'restExtName')
-        dom = pyxb.utils.domutils.StringToDOM(xml)
+        dom = pyxb_114.utils.domutils.StringToDOM(xml)
         instance = restExtName.Factory(_dom_node=dom.documentElement)
 
     def testUnionExtension (self):

@@ -30,7 +30,7 @@ class update_version (Command):
 
     # Files in the distribution that need to be rewritten when the
     # version number changes
-    files = ( 'README.txt', 'pyxb/__init__.py', 'doc/conf.py' )
+    files = ( 'README.txt', 'pyxb_114/__init__.py', 'doc/conf.py' )
 
     # The substitutions (key braced by @ signs)
     substitutions = { 'VERSION' : version,
@@ -163,7 +163,7 @@ class test (Command):
 
 import glob
 import sys
-import pyxb.utils.utility
+import pyxb_114.utils.utility
 
 packages = [
         'pyxb_114', 'pyxb_114.namespace', 'pyxb_114.binding',
@@ -176,7 +176,7 @@ init_re = re.compile('^__init__\.py$')
 wxs_re = re.compile('^.*\.wxs$')
 
 setup_path = os.path.dirname(__file__)
-bundle_base = os.path.join(setup_path, 'pyxb', 'bundles')
+bundle_base = os.path.join(setup_path, 'pyxb_114', 'bundles')
 possible_bundles = []
 try:
     possible_bundles.extend(os.listdir(bundle_base))
@@ -188,7 +188,7 @@ for possible_bundle in possible_bundles:
         continue
     b_packages = []
     b_data = { }
-    for fp in pyxb.utils.utility.GetMatchingFiles('%s//' % (bundle_root,), init_re):
+    for fp in pyxb_114.utils.utility.GetMatchingFiles('%s//' % (bundle_root,), init_re):
         bundle_path = os.path.dirname(os.path.normpath(fp))
         try:
             package_relpath = os.path.relpath(bundle_path, setup_path)
@@ -196,7 +196,7 @@ for possible_bundle in possible_bundles:
             package_relpath = bundle_path
         package = package_relpath.replace(os.path.sep, '.')
         b_packages.append(package)
-        wxs_files = [os.path.basename(_f) for _f in pyxb.utils.utility.GetMatchingFiles(bundle_path, wxs_re) ]
+        wxs_files = [os.path.basename(_f) for _f in pyxb_114.utils.utility.GetMatchingFiles(bundle_path, wxs_re) ]
         if wxs_files:
             b_data[package] = wxs_files
     if 0 < len(b_data):
@@ -208,8 +208,8 @@ setup(name='PyXB',
       description = 'PyXB ("pixbee") is a pure Python package that generates Python source code for classes that correspond to data structures defined by XMLSchema.',
       author='Peter A. Bigot',
       author_email='pabigot@users.sourceforge.net',
-      url='http://pyxb.sourceforge.net',
-      # Also change in README.TXT, pyxb/__init__.py, and doc/conf.py
+      url='http://pyxb_114.sourceforge.net',
+      # Also change in README.TXT, pyxb_114/__init__.py, and doc/conf.py
       version=version,
       license='Apache License 2.0',
       long_description='''PyXB is a pure `Python <http://www.python.org>`_ package that generates
@@ -246,8 +246,8 @@ The major goals of PyXB are:
       package_data=package_data,
       # I normally keep these in $purelib, but distutils won't tell me where that is.
       # We don't need them in the installation anyway.
-      #data_files= [ ('pyxb/standard/schemas', glob.glob(os.path.join(*'pyxb/standard/schemas/*.xsd'.split('/'))) ) ],
-      scripts=[ 'scripts/pyxbgen', 'scripts/pyxbwsdl', 'scripts/pyxbdump' ],
+      #data_files= [ ('pyxb_114/standard/schemas', glob.glob(os.path.join(*'pyxb_114/standard/schemas/*.xsd'.split('/'))) ) ],
+      scripts=[ 'scripts/pyxb_114gen', 'scripts/pyxb_114wsdl', 'scripts/pyxb_114dump' ],
       cmdclass = { 'test' : test,
                    'update_version' : update_version },
       classifiers = [ 'Development Status :: 5 - Production/Stable'

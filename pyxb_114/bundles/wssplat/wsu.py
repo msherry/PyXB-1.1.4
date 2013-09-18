@@ -1,1 +1,1 @@
-from pyxb.bundles.wssplat.raw.wsu import *
+from pyxb_114.bundles.wssplat.raw.wsu import *

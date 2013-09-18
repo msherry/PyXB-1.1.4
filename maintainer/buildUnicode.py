@@ -20,7 +20,7 @@ You'll need these files:
  - U{http://www.unicode.org/Public/3.1-Update/Blocks-4.txt}
 
 Invoke this script, redirecting the output to
-C{pyxb/utils/unicode_data.py}.
+C{pyxb_114/utils/unicode_data.py}.
 
 """
 

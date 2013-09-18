@@ -1,5 +1,5 @@
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 from xml.dom import Node
 
 import os.path
@@ -21,40 +21,40 @@ xsd='''<?xml version="1.0" encoding="UTF-8"?>
   </xs:element>
 </xs:schema>'''
 
-code = pyxb.binding.generate.GeneratePython(schema_text=xsd)
+code = pyxb_114.binding.generate.GeneratePython(schema_text=xsd)
 #file('code.py', 'w').write(code)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
 
-from pyxb.exceptions_ import *
+from pyxb_114.exceptions_ import *
 
 import unittest
 
 class TestTrac0117 (unittest.TestCase):
     def tearDown (self):
-        pyxb.RequireValidWhenGenerating(True)
-        pyxb.RequireValidWhenParsing(True)
+        pyxb_114.RequireValidWhenGenerating(True)
+        pyxb_114.RequireValidWhenParsing(True)
 
     def testRequired (self):
         xmls = '<Element/>'
-        pyxb.RequireValidWhenParsing(True)
+        pyxb_114.RequireValidWhenParsing(True)
         self.assertRaises(MissingAttributeError, CreateFromDocument, xmls)
-        pyxb.RequireValidWhenParsing(False)
-        self.assertFalse(pyxb._ParsingRequiresValid)
+        pyxb_114.RequireValidWhenParsing(False)
+        self.assertFalse(pyxb_114._ParsingRequiresValid)
         instance = CreateFromDocument(xmls)
         self.assertEqual(None, instance.attr)
 
     def testEnumeration (self):
-        pyxb.RequireValidWhenParsing(True)
+        pyxb_114.RequireValidWhenParsing(True)
         xmls = '<Element Required="true" attr="Q"/>'
-        self.assertRaises(pyxb.BadTypeValueError, CreateFromDocument, xmls)
-        pyxb.RequireValidWhenParsing(False)
+        self.assertRaises(pyxb_114.BadTypeValueError, CreateFromDocument, xmls)
+        pyxb_114.RequireValidWhenParsing(False)
         instance = CreateFromDocument(xmls)
         self.assertEqual('Q', instance.attr)
 
     def testGood (self):
-        pyxb.RequireValidWhenParsing(True)
+        pyxb_114.RequireValidWhenParsing(True)
         xmls = '<Element Required="true" attr="D"/>'
         instance = CreateFromDocument(xmls)
         self.assertEqual('D', instance.attr)

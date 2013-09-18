@@ -1,24 +1,24 @@
-"""PyXB stands for Python U{W3C XML
+"""Pyxb_114 stands for Python U{W3C XML
 Schema<http://www.w3.org/XML/Schema>} Bindings, and is pronounced
 "pixbee".  It enables translation between XML instance documents and
 Python objects following rules specified by an XML Schema document.
 
-This is the top-level entrypoint to the PyXB system.  Importing this
-gets you all the L{exceptions<pyxb.exceptions_.PyXBException>}, and
-L{pyxb.namespace}.  For more functionality, delve into these
+This is the top-level entrypoint to the Pyxb_114 system.  Importing this
+gets you all the L{exceptions<pyxb_114.exceptions_.Pyxb_114Exception>}, and
+L{pyxb_114.namespace}.  For more functionality, delve into these
 submodules:
 
- - L{pyxb.xmlschema} Module holding the
-   L{structures<pyxb.xmlschema.structures>} that convert XMLSchema
+ - L{pyxb_114.xmlschema} Module holding the
+   L{structures<pyxb_114.xmlschema.structures>} that convert XMLSchema
    from a DOM model to a Python class model based on the XMLSchema
    components.  Use this when you need to operate on the component
    model.
 
- - L{pyxb.binding} Module used to generate the bindings and at runtime
+ - L{pyxb_114.binding} Module used to generate the bindings and at runtime
    to support the generated bindings.  Use this if you need to use the
    binding model or content model.
 
- - L{pyxb.utils} Common utilities used in parsing, generating, and
+ - L{pyxb_114.utils} Common utilities used in parsing, generating, and
    executing.  The submodules must be imported separately.
 
 """
@@ -32,7 +32,7 @@ class cscRoot (object):
     figure out how to do that, 'cuz the obvious solutions don't work),
     we'll just make this thing the root of all U{cooperative super
     calling<http://www.geocities.com/foetsch/python/new_style_classes.htm#super>}
-    hierarchies.  The standard syntax in PyXB for this pattern is::
+    hierarchies.  The standard syntax in Pyxb_114 for this pattern is::
 
       def method_csc (self, *args, **kw):
         super_fn = getattr(super(ThisClass, self), 'method_csc', lambda *a,**kw: self)
@@ -54,10 +54,10 @@ class cscRoot (object):
             super(cscRoot, self).__init__(*args)
 
 __version__ = '1.1.4'
-"""The version of PyXB"""
+"""The version of Pyxb_114"""
 
-__url__ = 'http://pyxb.sourceforge.net'
-"""The URL for PyXB's homepage"""
+__url__ = 'http://pyxb_114.sourceforge.net'
+"""The URL for Pyxb_114's homepage"""
 
 __license__ = 'Apache License 2.0'
 
@@ -103,15 +103,15 @@ XMLStyle_minidom = 0
 provide location information.  It produces DOM instances."""
 
 XMLStyle_saxdom = 1
-"""Use pyxb.utils.saxdom for XML processing.  This is the slowest, but both
+"""Use pyxb_114.utils.saxdom for XML processing.  This is the slowest, but both
 provides location information and generates a DOM instance."""
 
 XMLStyle_saxer = 2
-"""Use pyxb.binding.saxer when converting documents to binding instances.
+"""Use pyxb_114.binding.saxer when converting documents to binding instances.
 This style supports location information in the bindings.  It produces binding
 instances directly, without going through a DOM stage, so is faster than
-XMLStyle_saxdom.  However, since the pyxb.xmlschema.structures classes require
-a DOM model, XMLStyle_saxdom will be used for pyxb.utils.domutils.StringToDOM
+XMLStyle_saxdom.  However, since the pyxb_114.xmlschema.structures classes require
+a DOM model, XMLStyle_saxdom will be used for pyxb_114.utils.domutils.StringToDOM
 if this style is selected."""
 
 _XMLStyle = XMLStyle_saxer
@@ -122,14 +122,14 @@ _XMLStyleMap = { 'minidom' : XMLStyle_minidom,
                  'saxer' : XMLStyle_saxer }
 _XMLStyleMapReverse = dict([ (_v, _k) for (_k, _v) in _XMLStyleMap.items() ])
 
-_XMLStyle_envvar = 'PYXB_XML_STYLE'
+_XMLStyle_envvar = 'PYXB_114_XML_STYLE'
 
 def _SetXMLStyle (style=None):
     """Set the interface used to parse XML content.
 
     This can be invoked within code.  The system default of L{XMLStyle_saxer}
     can also be overridden at runtime by setting the environment variable
-    C{PYXB_XML_STYLE} to one of C{minidom}, C{saxdom}, or C{saxer}.
+    C{PYXB_114_XML_STYLE} to one of C{minidom}, C{saxdom}, or C{saxer}.
 
     @param style: One of L{XMLStyle_minidom}, L{XMLStyle_saxdom},
     L{XMLStyle_saxer}.  If not provided, the system default is used.
@@ -142,9 +142,9 @@ def _SetXMLStyle (style=None):
             style_name = 'saxer'
         style = _XMLStyleMap.get(style_name)
         if style is None:
-            raise PyXBException('Bad value "%s" for %s' % (style_name, _XMLStyle_envvar))
+            raise Pyxb_114Exception('Bad value "%s" for %s' % (style_name, _XMLStyle_envvar))
     if _XMLStyleMapReverse.get(style) is None:
-        raise PyXBException('Bad value %s for _SetXMLStyle' % (style,))
+        raise Pyxb_114Exception('Bad value %s for _SetXMLStyle' % (style,))
     _XMLStyle = style
     #print "XML style %s" % (_XMLStyleMapReverse.get(_XMLStyle),)
 
@@ -162,7 +162,7 @@ except:
 
 _CorruptionDetectionEnabled = not _OptimizationActive
 """If C{True}, blocks attempts to assign to attributes that are reserved for
-PyXB methods.
+Pyxb_114 methods.
 
 Applies only at compilation time; dynamic changes are ignored.
 """

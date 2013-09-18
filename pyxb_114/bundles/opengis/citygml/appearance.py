@@ -1,1 +1,1 @@
-from pyxb.bundles.opengis.citygml.raw.appearance import *
+from pyxb_114.bundles.opengis.citygml.raw.appearance import *

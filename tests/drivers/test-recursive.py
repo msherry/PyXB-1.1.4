@@ -1,12 +1,12 @@
-import pyxb
-import pyxb.binding.generate
-import pyxb.utils.domutils
+import pyxb_114
+import pyxb_114.binding.generate
+import pyxb_114.utils.domutils
 
 from xml.dom import Node
 
 import os.path
 schema_path = '%s/../schemas/test-recursive.xsd' % (os.path.dirname(__file__),)
-code = pyxb.binding.generate.GeneratePython(schema_location=schema_path)
+code = pyxb_114.binding.generate.GeneratePython(schema_location=schema_path)
 
 rv = compile(code, 'test', 'exec')
 eval(rv)
@@ -16,7 +16,7 @@ import unittest
 class TestXSIType (unittest.TestCase):
     def testSingleton (self):
         xml = '<node><data>singleton</data></node>'
-        doc = pyxb.utils.domutils.StringToDOM(xml)
+        doc = pyxb_114.utils.domutils.StringToDOM(xml)
         instance = node.createFromDOM(doc.documentElement)
         self.assertEqual('singleton', instance.data)
         self.assertTrue(instance.left is None)
@@ -29,7 +29,7 @@ class TestXSIType (unittest.TestCase):
 
     def testLeftOnly (self):
         xml = '<node><data>root</data><left><data>left</data></left></node>'
-        doc = pyxb.utils.domutils.StringToDOM(xml)
+        doc = pyxb_114.utils.domutils.StringToDOM(xml)
         instance = node.createFromDOM(doc.documentElement)
         self.assertEqual('root', instance.data)
         left = instance.left
@@ -47,7 +47,7 @@ class TestXSIType (unittest.TestCase):
     def testFiver (self):
         instance = node('root', node('left1', node('left2'), node('leftright')), node('right1', node('rightleft')))
         xml = '<node><data>root</data><left><data>left1</data><left><data>left2</data></left><right><data>leftright</data></right></left><right><data>right1</data><left><data>rightleft</data></left></right></node>'
-        doc = pyxb.utils.domutils.StringToDOM(xml)
+        doc = pyxb_114.utils.domutils.StringToDOM(xml)
         instance = node.createFromDOM(doc.documentElement)
         self.assertEqual('root', instance.data)
         self.assertEqual('left1', instance.left.data)
