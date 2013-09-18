@@ -247,7 +247,7 @@ The major goals of PyXB are:
       # I normally keep these in $purelib, but distutils won't tell me where that is.
       # We don't need them in the installation anyway.
       #data_files= [ ('pyxb_114/standard/schemas', glob.glob(os.path.join(*'pyxb_114/standard/schemas/*.xsd'.split('/'))) ) ],
-      scripts=[ 'scripts/pyxb_114gen', 'scripts/pyxb_114wsdl', 'scripts/pyxb_114dump' ],
+      scripts=[ 'scripts/pyxbgen', 'scripts/pyxbwsdl', 'scripts/pyxbdump' ],
       cmdclass = { 'test' : test,
                    'update_version' : update_version },
       classifiers = [ 'Development Status :: 5 - Production/Stable'
